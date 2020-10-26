@@ -1,0 +1,33 @@
+IndexIgnore *
+<IfModule mod_rewrite.c>
+
+    #Options +FollowSymLinks
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+
+
+<FilesMatch “.(ttf|otf|eot|woff)$”>
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin “*”
+    </IfModule>
+</FilesMatch>
+
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Video
+    ExpiresByType video/mp4 "access plus 1 year"
+    ExpiresByType video/mpeg "access plus 1 year"
+</IfModule>
+
+<ifModule mod_headers.c>
+    # One year for image and video files
+    <filesMatch ".(mp4|mpeg)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </filesMatch>
+</ifModule>

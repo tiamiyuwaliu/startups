@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
+    <link rel="shortcut icon" href="assets/favicon.png">
+
+    <link rel="apple-touch-icon-precomposed" href="assets/favicon.png">
+    <link rel="icon" href="assets/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/style.css" />
+    <title>SmartPost Documentation</title>
+</head>
+<body>
+<div class="page-container clearfix">
+    <div class="left">
+        <ul>
+            <li><a href="" class="active" onclick="return goTo('pane-0')"><span></span> Overview</a> </li>
+            <li><a href="" onclick="return goTo('pane-1')"><span></span> Requirements</a> </li>
+            <li><a href="" onclick="return goTo('pane-2')"><span></span> Installation</a> </li>
+
+            <li><a href="https://wesmartpost.com/documentation" ><span></span> More documentation</a> </li>
+        </ul>
+    </div>
+    <div class="right">
+        <img src="assets/logo.png" class="logo"/>
+        <div class="each pane-0" style="display: block;">
+            <h1 class="title">Welcome</h1>
+            <div class="content">
+                <p>
+                    Welcome to SmartPost documentation <br/>
+                </p>
+
+                <p>
+                    We have taken our time to write this documentation to make it easier for you to setup smartPost within 5 minutes and get up quickly
+                </p>
+
+                <p>
+                    <a href="" onclick="return goTo('pane-1')" class="btn btn-sm btn-primary">Next: Requirements</a>
+                </p>
+            </div>
+        </div>
+        <div class="each pane-2">
+            <h1 class="title">Installation</h1>
+            <div class="content">
+                <p>
+                    Follow the following steps to upload our script to your server <br/>
+                </p>
+
+                <p>
+                    Upload the app.zip to your server and extract it where you want to install SmartPost
+                </p>
+
+                <p>
+                    After successful upload of the script , go to the installation screen  by going to <span>http://yourdomain.com/install</span>
+                </p>
+
+                <p>
+                    Follow the install screen and fill out the requested details to finish the installation
+                </p>
+
+                <p>
+                    Provide your purchase code
+                </p>
+                <p>Enter your database details</p>
+                <p>Also enter your admin accounts and make you take note of your password and email address</p>
+                <p>
+                    <img src="assets/images/2.png" style="width: 100%;,margin:20px 0"/>
+                </p>
+                <p>
+                    <a href="https://wesmartpost.com/documentation"  class="btn btn-sm btn-primary">See more documentation</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="each pane-1">
+            <h1 class="title">Requirements</h1>
+            <div class="content">
+                You will be require to meet the following requirements in other to install SmartPost
+
+                <img src="assets/images/1.png" style="width: 100%;,margin:20px 0"/>
+
+                <p>
+                    <a href="" onclick="return goTo('pane-2')" class="btn btn-sm btn-primary">Next: Installation</a>
+                </p>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script src="assets/script.js"></script>
+<script>
+    function goTo(c) {
+
+        $('.each').hide();
+
+        $('.'+c).fadeIn();
+        $(".left a").removeClass('active');
+        $(".left a").each(function() {
+            var h = $(this).attr('onclick');
+            if(h!== undefined && h.match("'"+c+"'")) $(this).addClass('active')
+        })
+        return false;
+    }
+
+
+</script>
+</body>
+</html>

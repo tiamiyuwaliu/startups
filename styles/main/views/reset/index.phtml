@@ -1,0 +1,24 @@
+<div class="pane-pages-container">
+    <div class="container">
+        <div class="content-pane">
+            <?php if($expired):?>
+                <div class="alert alert-danger"><?php _l('reset-link-expired')?> <a href="<?php echo url('forgot')?>" data-ajax="true" class="color-black bolder"><?php _l('forgot-password')?></a> </div>
+            <?php else:?>
+                <div class="title"><?php _l('reset-password')?></div>
+
+                <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+                    <div class="form-group">
+                        <label><?php _l('new-password')?></label>
+                        <input type="password" class="form-control" name="val[password]"/>
+                    </div>
+                    <div class="form-group">
+                        <label><?php _l('confirm-password')?></label>
+                        <input type="password" class="form-control" name="val[confirm]"/>
+                    </div>
+
+                    <button class="btn  btn-primary"><?php _l('submit')?></button>
+                </form>
+            <?php endif?>
+        </div>
+    </div>
+</div>

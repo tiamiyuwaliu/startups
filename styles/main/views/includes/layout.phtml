@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="<?php echo output_content($description)?>">
+    <meta name="keywords" content="<?php echo output_content($keywords)?>">
+    <title><?php echo output_content($title)?></title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo output_content($favicon)?>">
+    <link rel="shortcut icon" href="<?php echo output_content($favicon)?>">
+
+    <link rel="apple-touch-icon-precomposed" href="<?php echo output_content($favicon)?>">
+    <link rel="icon" href="<?php echo output_content($favicon)?>">
+    <link href="<?php echo assetUrl('assets/css/plugin.css')?>?time=<?php echo fileatime(path('assets/css/plugin.css'))?>" rel="stylesheet">
+    <link href="<?php echo assetUrl('assets/js/trumbowyg/ui/trumbowyg.min.css')?>" rel="stylesheet">
+
+    <?php if($pageType == 'frontend'):?>
+        <link href="<?php echo assetUrl('styles/main/css/style.css')?>?time=<?php echo fileatime(path('styles/main/css/style.css'))?>" rel="stylesheet">
+    <?php elseif($pageType == 'admincp'):?>
+        <link href="<?php echo assetUrl('styles/main/css/admincp.css')?>?time=<?php echo fileatime(path('styles/main/css/admincp.css'))?>" rel="stylesheet">
+    <?php else:?>
+        <link href="<?php echo assetUrl('styles/main/css/app.css')?>?time=<?php echo fileatime(path('styles/main/css/app.css'))?>" rel="stylesheet">
+    <?php endif?>
+    <?php echo $header_content?>
+    <meta name="twitter:card" content="<?php echo config('site-title')?>" />
+    <meta property="twitter:site" content="<?php echo url()?>">
+    <meta property="og:site_name" content="<?php echo config('site-title')?>">
+
+    <meta property="twitter:title" content="<?php echo config('site-title')?>">
+    <meta property="twitter:description" content="<?php echo output_content($description)?>">
+    <meta property="twitter:image" content="<?php echo assetUrl(config('site_logo', 'assets/images/logo.png'))?>">
+    <meta property="og:url" content="<?php echo url()?>">
+    <meta property="og:type" content="Website">
+    <meta property="og:title" content="<?php echo config('site-title')?>">
+    <meta property="og:description" content="<?php echo output_content($description)?>">
+    <meta property="og:image" content="<?php echo assetUrl(config('site_logo', 'assets/images/logo.png'))?>">
+    <?php Hook::getInstance()->fire("header.after.css")?>
+
+
+    <?php if(config('google-analytics-id')):?>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo config('google-analytics-id')?>"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '<?php echo config('google-analytics-id')?>');
+        </script>
+
+    <?php endif?>
+
+    <?php if($pageType == 'backend'):$design = model('admin')->getPageDesign();$data = perfectUnserialize($design['data']);?>
+
+    <style>
+
+
+    </style>
+
+    <?php endif?>
+
+
+</head>
+
+<body>
+    <div id="cover-loader"><img src="<?php echo assetUrl('styles/main/images/loader.gif')?>"/> </div>
+    <div id="top-loading"></div>
+    <div id="page-container">
+        <?php echo $content?>
+    </div>
+    <div id="backtotop"><a href="#"></a></div>
+
+    <?php if(config('enable-gdpr', true)):?>
+        <div class="gdpr-container" data-aos="fade-right" data-aos-duration="1000">
+            <div><?php _l('gdpr-text')?></div>
+            <div class="buttons mt-2">
+                <a href="" onclick="return acceptCookie()" class="btn btn-primary"><?php _l('got-it')?></a>
+            </div>
+        </div>
+    <?php endif?>
+    <?php if ($pageType != 'frontend'):?>
+        <div id="image-editor-overlay">
+            <a href="" onclick="return closeImageEditor()" class="close-btn"><i class="las la-times"></i></a>
+            <div class="content"></div>
+        </div>
+    <?php endif?>
+</body>
+
+<script>
+    var baseUrl = '<?php echo url()?>';
+    var permaLink = <?php echo config('permalink', false) ? 1 : 0?>;
+    var isLoggedIn = <?php echo $C->model('user')->isLoggedIn() ? 'true' : 'false'?>;
+    var strings = {
+        are_your_sure: "<?php _l("are-you-sure")?>",
+        ok : "<?php _l("ok")?>",
+        close : "<?php _l("close")?>",
+        notImageError : "<?php echo l("not-image-error")." : ". config("image-file-types", "jpg,png,gif,jpeg")?>",
+        allowVideoSizeError : "<?php echo l("video-size-error")." : ". config("video-file-size", 55)?>MB",
+        processing : "<?php _l("processing")?>",
+        select_all : "<?php _l('select-all')?>",
+        deselect : "<?php _l('deselect')?>",
+        allowFileSizeError: "<?php _l('allow-upload-file-size-error')?> <?php echo model('user')->getAllowSize()?>MB",
+        notImageVideoError: "<?php _l('not-image-video-file-error')?>",
+        challenge_required: "<?php _l('challenge_required')?>",
+        verification_required: "<?php _l('verification-required')?>",
+        add_account: "<?php _l('add-account')?>",
+        select_an_account_to_continue: "<?php _l('select_an_account_to_continue')?>",
+        please_select_image: "<?php _l('please_select_image')?>",
+        please_select_video: "<?php _l('please_select_video')?>",
+
+        <?php Hook::getInstance()->fire("js.translation")?>
+    };
+    var supportImagesType = "<?php echo config("image-file-types", "jpg,png,gif,jpeg")?>";
+    var supportVideoType = "<?php echo (config('ffmpeg-path', '') == '') ? 'mp4' : 'mp4'?>";
+    var allowPhotoSize = <?php echo model('user')->getAllowSize() * 1024 * 1000?>;
+    var allowFileSize = <?php echo model('user')->getAllowSize() * 1024 * 1000?>;
+    var lastTime = <?php echo time()?>;
+    var siteTitle = "<?php echo config("site-title")?>";
+    var logo = "<?php echo assetUrl(config('site_short_icon', 'assets/images/short-logo.png'))?>";
+    var loaderImage = "<?php echo assetUrl('styles/main/images/loader.gif')?>";
+    var stripeKey = "<?php echo config("stripe-publishable-key", "")?>";
+    var enableWelcomeStemps = 0;
+    <?php if($pageType != 'frontend' and config('google-api-key', '') !=''):?>
+        var googleDriveDeveloperKey = "<?php echo config('google-api-key', '')?>";
+        var googleDriveClientId = "<?php echo config('google-drive-client-id', '')?>";
+        var scope = ['https://www.googleapis.com/auth/drive.file'];
+        var pickerApiLoaded = false;
+    <?php endif?>
+
+    <?php if($pageType != 'frontend'):?>
+        // The Client ID obtained from the Google Developers Console. Replace with your own Client ID.
+
+        var dateFormat = '<?php echo getAdminDateFormat(true)?>';
+        var dateFormatId = '<?php echo getSelectedDateFormat()?>';
+        var oauthToken;
+
+
+    <?php endif?>
+</script>
+<script src="<?php echo assetUrl('assets/js/plugin.js')?>?time=<?php echo fileatime(path('assets/js/plugin.js'))?>"></script>
+<script src="<?php echo assetUrl('assets/js/trumbowyg/trumbowyg.min.js')?>"></script>
+
+<script src="<?php echo assetUrl('styles/main/js/main.js')?>?time=<?php echo fileatime(path('styles/main/js/main.js'))?>"></script>
+<?php Hook::getInstance()->fire("footer.after.js")?>
+<?php if($pageType != 'frontend'):?>
+    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+    <?php if(config('dropbox-api-key')):?>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="<?php echo config('dropbox-api-key')?>"></script>
+    <?php endif?>
+
+    <?php if(config('onedrive-client-id')):?>
+        <script>
+            var onedriveKey = "<?php echo config('onedrive-client-id')?>"
+        </script>
+        <script type="text/javascript" src="https://js.live.net/v7.0/OneDrive.js"></script>
+    <?php endif?>
+    <?php if(config('beamer-id', '')):?>
+        <script>
+            var beamer_config = {
+                product_id : "<?php echo config('beamer-id', '')?>",
+                button_position: 'top-right'
+            };
+        </script>
+        <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
+    <?php endif?>
+<?php else:?>
+    <script src="<?php echo assetUrl('styles/main/js/animate.js')?>"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <?php if(config('enable-captcha', false)):?>
+        <script>
+            var  onloadCallback = function() {
+                window.captchIsLoaded = true
+            }
+        </script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+                async defer>
+        </script>
+    <?php endif?>
+
+<?php endif?>
+
+<?php echo str_replace('&#39;', "'", config('embed-code', ''))?>
+</body>
+</html>

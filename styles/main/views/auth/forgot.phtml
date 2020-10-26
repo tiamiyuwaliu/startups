@@ -1,0 +1,26 @@
+<div class="clearfix">
+    <a href="<?php echo url('login')?>" data-ajax="true" class="auth-btn float-right btn btn-outline-primary rounded"><?php _l('login')?></a>
+</div>
+
+<div class="welcome-title">
+    <h5><?php _l('forgot-password')?> !</h5>
+    <h6><?php _l('forgot-password-note')?></h6>
+</div>
+
+<form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+    <div class="alert alert-warning " style="display: none;" id="activationEmailSuccess">
+        <strong><?php _l('email-sent-successful')?></strong><br/>
+        <span><?php _l('reset-email-check')?></span>
+    </div>
+    <div class="form-group">
+
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="la la-mail-bulk"></i></div>
+            </div>
+            <input type="text" placeholder="<?php _l('email-address')?>" class="form-control" name="val[email]" >
+        </div>
+    </div>
+
+    <button class="btn btn-block btn-primary btn-lg mt-3"><?php _l('submit')?></button>
+</form>
