@@ -4,8 +4,8 @@ return array(
      * Provide your MYSQL database credentials
      */
     'db_host' => 'localhost',
-    'db_username' => '',
-    'db_name' => '',
+    'db_username' => 'root',
+    'db_name' => 'gr8coda',
     'db_password' => '',
     'c' => '',
 
@@ -42,9 +42,9 @@ return array(
 
     'demo' => false,
 
-    'site-title' => 'SmartPost',
-    'site-keywords' => 'Instagram, autpost, social marketing tool',
-    'site-description' => 'Instagram social marketing tool',
+    'site-title' => 'Gr8Coda',
+    'site-keywords' => 'Gr8Coda software framework',
+    'site-description' => 'Gr8Coda software framework',
 
     /** Default email templates end */
     'max-image-size' => '10000000',

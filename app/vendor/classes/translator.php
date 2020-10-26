@@ -61,7 +61,7 @@ class Translator {
 
     public function loadDatabaseStrings() {
 
-        $query  = Database::getInstance()->query("SELECT id,translated FROM translations WHERE lang=? ", $this->lang);
+        $query  = Database::getInstance()->query("SELECT id,translated FROM languages_translations WHERE lang=? ", $this->lang);
         while($string = $query->fetch(PDO::FETCH_ASSOC)) {
             $this->dbLoaded[$string['id']] = $string['translated'];
         }
