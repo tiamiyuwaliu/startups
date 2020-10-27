@@ -63,7 +63,7 @@
         <div class="box">
             <span class="chip"><i class="chip-icon">L</i><?php _l('latest-members')?></span>
 
-            <?php foreach(model('user')->getRecentUsers() as $user):?>
+            <?php foreach(model('user')->getRecentUsers(4) as $user):?>
                 <div class="media mt-3">
                     <img class="mr-3" style="width: 40px" src="<?php echo model('user')->getAvatar($user)?>" alt="Generic placeholder image">
                     <div class="media-body">

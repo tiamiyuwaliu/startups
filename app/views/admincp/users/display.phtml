@@ -1,0 +1,116 @@
+<form action="<?php echo getFullUrl(true)?>" class="general-form" method="post" id="users-list-form">
+    <input type="hidden" value="1" name="val[bulk_action]"/>
+    <div class="modern-table">
+        <div class="table-head clearfix">
+            <div class="each" style="width:10%;">
+                <a href="javascript:void(0)" onclick="submitForm('#users-list-form', 'bulk')" class="btn btn-light"><i class="la la-trash"></i></a>
+            </div>
+            <div class="each" style="width: 10%;">
+                <?php _l('options')?>
+            </div>
+            <div class="each" style="width: 25%;">
+                <?php _l('name')?>
+            </div>
+            <div class="each" style="width: 25%;">
+                <?php _l('email-address')?>
+            </div>
+            <div class="each" style="width: 10%;">
+                <?php _l('status')?>
+            </div>
+            <div class="each" style="width: 20%;">
+                <?php _l('created')?>
+            </div>
+        </div>
+
+
+        <div class="table-body" >
+
+            <?php foreach($users->results() as $user):?>
+                <div class="table-row clearfix shadow-0">
+                    <div class="each clearfix" style="width: 10%;">
+                        <div class="left">
+
+                        </div>
+                        <div class="right">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="val[id][]" value="<?php echo $user['id']?>" class="custom-control-input" id="customCheck<?php echo $user['id']?>">
+                                <label class="custom-control-label" for="customCheck<?php echo $user['id']?>"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 10%;">
+                        <div class="left">
+                            <?php _l('options')?>
+                        </div>
+                        <div class="right">
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                <a href="<?php echo url('admin/user/edit/'.$user['id'])?>" data-ajax="true" class="btn btn-light btn-sm"><i class="la la-pencil-alt"></i></a>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn  dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('admin/users',array('action' => 'delete','id' => $user['id']))?>"><?php _l('delete')?></a>
+                                        <a class="dropdown-item confirm" data-ajax-action="true"  href="<?php echo url('admin/users',array('action' => 'access','id' => $user['id']))?>"><?php _l('view-as-user')?></a>
+
+                                        <?php if($user['status']):?>
+                                            <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('admin/users',array('action' => 'disable','id' => $user['id']))?>"><?php _l('disable')?></a>
+                                        <?php else:?>
+                                            <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('admin/users',array('action' => 'enable','id' => $user['id']))?>"><?php _l('enable')?></a>
+                                        <?php endif?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 25%;">
+                        <div class="left">
+                            <?php _l('name')?>
+                        </div>
+                        <div class="right">
+                            <strong><?php echo $user['full_name']?></strong>
+                            <?php Hook::getInstance()->fire('admin.user.name.extend', null, array($user))?>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 25%;">
+                        <div class="left">
+                            <?php _l('email-address')?>
+                        </div>
+                        <div class="right">
+                            <?php echo $user['email']?>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 10%;">
+                        <div class="left">
+                            <?php _l('status')?>
+                        </div>
+                        <div class="right">
+                            <?php if($user['status']):?>
+                                <span class="badge badge-success"><?php _l('active')?></span>
+                            <?php else:?>
+                                <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                            <?php endif?>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 20%;">
+                        <div class="left">
+                            <?php _l('created')?>
+                        </div>
+                        <div class="right">
+                            <?php echo date('M d, Y', $user['created'])?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+</form>
+
+<?php if($users->total < 1):?>
+    <div class="empty-content">
+        <i class="la la-fill"></i>
+        <span><?php _l('no-contents-show')?></span>
+    </div>
+<?php else:?>
+    <?php echo $users->links(array('term' => $C->request->input('term')))?>
+<?php endif?>

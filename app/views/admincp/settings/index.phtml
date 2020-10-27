@@ -1,0 +1,321 @@
+<div class="content-top with-tabs">
+    <div class="clearfix">
+        <div class="float-left">
+            <h3><?php _l('site-settings')?> </h3>
+            <p class="text-muted sub-title"><?php _l('manage-site-settings-here')?>
+        </div>
+    </div>
+    <ul class="nav nav-justified nav-tabs" id="justifiedTab" role="tablist">
+        <li class="nav-item">
+            <a aria-controls="general" aria-selected="true" class="nav-link active" data-toggle="tab" href="#general" id="home-tab" role="tab"><?php _l('general')?></a>
+        </li>
+        <li class="nav-item">
+            <a aria-controls="logos" aria-selected="false" class="nav-link" data-toggle="tab" href="#logos" id="" role="tab"><?php _l('site-logos')?></a>
+        </li>
+        <li class="nav-item">
+            <a aria-controls="authentication" aria-selected="false" class="nav-link" data-toggle="tab" href="#authentication" id="contact-tab" role="tab"><?php _l('authentication')?></a>
+        </li>
+        <li class="nav-item">
+            <a aria-controls="others" aria-selected="false" class="nav-link" data-toggle="tab" href="#others" id="contact-tab" role="tab"><?php _l('others')?></a>
+        </li>
+    </ul>
+</div>
+
+<div class="content-body">
+    <div class="tab-content " id="justifiedTabContent">
+        <div aria-labelledby="home-tab" class="tab-pane fade show active" id="general" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <form enctype="multipart/form-data" class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+                        <div class="form-group floating-label has-value">
+                            <label><?php _l('site-name')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('site-title','SmartPost')?>" name="val[site-title]"/>
+                        </div>
+                        <div class="form-group floating-label has-value">
+                            <label><?php _l('server-timezone')?></label>
+
+                            <select class="form-control select-timezone" name="val[timezone]">
+                                <option value=""><?php _l('select-timezone')?></option>
+                                <?php foreach(getTimezones() as $key => $name):?>
+                                    <option <?php echo config('timezone') == $key ? 'selected' : null?> value="<?php echo $key?>"><?php echo $name?></option>
+                                <?php endforeach?>
+                            </select>
+                        </div>
+
+                        <div class="form-group floating-label has-value">
+                            <label><?php _l('default-date-format')?></label>
+                            <select class="form-control " name="val[admin-date-format]">
+                                <?php foreach(getDateFormats() as $key => $value):?>
+                                    <option <?php echo (config('admin-date-format', 1) == $key) ? 'selected':null?> value="<?php echo $key?>"><?php echo $value?></option>
+                                <?php endforeach?>
+                            </select>
+                        </div>
+
+                        <div class="form-group floating-label has-value">
+                            <label><?php _l('calendar-start-day')?></label>
+                            <select class="form-control " name="val[calender-start-day]">
+                                <?php foreach(array('0' => 'Sunday', '1' => 'Monday') as $key => $value):?>
+                                    <option <?php echo (config('calender-start-day', 0) == $key) ? 'selected':null?> value="<?php echo $key?>"><?php echo $value?></option>
+                                <?php endforeach?>
+                            </select>
+                        </div>
+
+
+                        <hr/>
+                        <div class="form-group floating-label has-value">
+                            <label><?php _l('site-description')?></label>
+                            <textarea class="form-control" rows="5" name="val[site-description]"><?php echo config('site-description')?></textarea>
+                        </div>
+                        <div class="form-group floating-label has-value">
+                            <label><?php _l('keywords')?></label>
+                            <textarea class="form-control" rows="5" name="val[site-keywords]"><?php echo config('site-keywords')?></textarea>
+                        </div>
+
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.general')?>
+
+                        <div class="floating-button">
+                            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div aria-labelledby="profile-tab" class="tab-pane fade" id="logos" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <form enctype="multipart/form-data" class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+                        <input type="hidden" class="form-control" value="<?php echo config('site-title')?>" name="val[site-title]"/>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <div class="float-left"><label><?php _l('site-logo')?></label></div>
+                                <div class="float-right">
+                                    <img src="<?php echo assetUrl(config('site_logo','assets/images/logo.png'))?>" style="width: 100px;"/>
+                                </div>
+                            </div>
+                            <input type="hidden" name="img[site_logo]" value="<?php echo config('site_logo','assets/images/logo.png')?>"/>
+                            <input type="file"  name="site_logo" class="form-control " ">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <div class="float-left"><label><?php _l('site-logo-light')?></label></div>
+                                <div class="float-right">
+                                    <img src="<?php echo assetUrl(config('site_logo_light','assets/images/logo-dark.png'))?>" style="width: 100px;"/>
+                                </div>
+                            </div>
+                            <input type="hidden" name="img[site_logo_light]" value="<?php echo config('site_logo_light','assets/images/logo-dark.png')?>"/>
+                            <input type="file"  name="site_logo_light" class="form-control " ">
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <div class="clearfix">
+                                <div class="float-left"><label><?php _l('site-short-icon')?></label></div>
+                                <div class="float-right">
+                                    <img src="<?php echo assetUrl(config('site_short_icon','assets/images/short-logo.png'))?>" style="width: 20px;"/>
+                                </div>
+                            </div>
+                            <input type="hidden" name="img[site_short_icon]" value="<?php echo config('site_short_icon','assets/images/short-logo.png')?>"/>
+                            <input type="file"  name="site_short_icon" class="form-control " ">
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="clearfix">
+                                <div class="float-left"><label><?php _l('favicon')?></label></div>
+                                <div class="float-right">
+                                    <img src="<?php echo assetUrl(config('favicon','favicon.png'))?>" style="width: 20px;"/>
+                                </div>
+                            </div>
+                            <input type="hidden" name="img[favicon]" value="<?php echo config('favicon','favicon.png')?>"/>
+                            <input type="file"  name="favicon" class="form-control " ">
+                        </div>
+
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.logo.type')?>
+
+                        <div class="floating-button">
+                            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div aria-labelledby="contact-tab" class="tab-pane fade" id="authentication" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[user-signup]" value="0"/>
+                            <input type="checkbox" name="val[user-signup]" <?php echo config('user-signup', true) ? 'checked' : null?> class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1"><?php _l('enable-signup')?></label>
+                        </div>
+
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[email-verification]" value="0"/>
+                            <input type="checkbox" name="val[email-verification]" <?php echo config('email-verification', false) ? 'checked' : null?> class="custom-control-input" id="customCheck2">
+                            <label class="custom-control-label" for="customCheck2"><?php _l('email-verification')?></label>
+                        </div>
+
+                        <hr/>
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[enable-captcha]" value="0"/>
+                            <input type="checkbox" name="val[enable-captcha]" <?php echo config('enable-captcha', false) ? 'checked' : null?> class="custom-control-input" id="customCheck3">
+                            <label class="custom-control-label" for="customCheck3">Google reCaptcha V2</label>
+                        </div>
+
+                        <div class="form-group floating-label <?php echo config('captcha-site-key')? 'has-value':null?>">
+                            <label><?php _l('captcha-site-key')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('captcha-site-key')?>" name="val[captcha-site-key]"/>
+                        </div>
+
+                        <div class="form-group floating-label <?php echo config('captcha-site-secret-key') ? 'has-value': null?>">
+                            <label><?php _l('captcha-site-secret-key')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('captcha-site-secret-key')?>" name="val[captcha-site-secret-key]"/>
+                        </div>
+                        <hr/>
+
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[facebook-login]" value="0"/>
+                            <input type="checkbox" name="val[facebook-login]" <?php echo config('facebook-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck4">
+                            <label class="custom-control-label" for="customCheck4"><?php _l('enable-facebook-login')?></label>
+                        </div>
+
+
+                        <div class="form-group floating-label <?php echo config('facebook-app-id')? 'has-value':null?>">
+                            <label><?php _l('app-id')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('facebook-app-id')?>" name="val[facebook-app-id]"/>
+                        </div>
+
+                        <div class="form-group floating-label <?php echo config('facebook-app-secret')? 'has-value':null?>">
+                            <label><?php _l('app-secret')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('facebook-app-secret')?>" name="val[facebook-app-secret]"/>
+                        </div>
+
+                        <hr/>
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[twitter-login]" value="0"/>
+                            <input type="checkbox" name="val[twitter-login]" <?php echo config('twitter-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck5">
+                            <label class="custom-control-label" for="customCheck5"><?php _l('enable-twitter-login')?></label>
+                        </div>
+
+
+                        <div class="form-group floating-label <?php echo config('twitter-consumer-key')? 'has-value': null?>">
+                            <label><?php _l('consumer-key')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('twitter-consumer-key')?>" name="val[twitter-consumer-key]"/>
+                        </div>
+
+                        <div class="form-group floating-label <?php echo config('twitter-consumer-secret') ? 'has-value':null?>">
+                            <label><?php _l('consumer-secret')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('twitter-consumer-secret')?>" name="val[twitter-consumer-secret]"/>
+                        </div>
+
+                        <hr/>
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[google-login]" value="0"/>
+                            <input type="checkbox" name="val[google-login]" <?php echo config('google-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck6">
+                            <label class="custom-control-label" for="customCheck6"><?php _l('enable-google-login')?></label>
+                        </div>
+
+
+                        <div class="form-group floating-label <?php echo config('google-client-id') ? 'has-value':null?>">
+                            <label><?php _l('client-id')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('google-client-id')?>" name="val[google-client-id]"/>
+                        </div>
+
+                        <div class="form-group floating-label <?php echo config('google-client-secret')? 'has-value':null?>">
+                            <label><?php _l('client-secret-key')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('google-client-secret')?>" name="val[google-client-secret]"/>
+                        </div>
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.registration')?>
+                        <div class="floating-button">
+                            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div aria-labelledby="contact-tab" class="tab-pane fade" id="others" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+
+
+                        <h6><?php _l('enable-notification-with-beamer')?></h6>
+                        <hr/>
+                        <div class="form-group floating-label <?php echo config('beamer-id', '') ? 'has-value':null?>">
+                            <label><?php _l('beamer-product-id')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('beamer-id', '')?>" name="val[beamer-id]"/>
+                        </div>
+
+                        <hr/>
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[enable-gdpr]" value="0"/>
+                            <input type="checkbox" name="val[enable-gdpr]" <?php echo config('enable-gdpr', true) ? 'checked' : null?> class="custom-control-input" id="customCheck15">
+                            <label class="custom-control-label" for="customCheck15"><?php _l('enable-gdpr')?></label>
+                        </div>
+
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[disable-landing]" value="0"/>
+                            <input type="checkbox" name="val[disable-landing]" <?php echo config('disable-landing', false) ? 'checked' : null?> class="custom-control-input" id="customCheck16">
+                            <label class="custom-control-label" for="customCheck16"><?php _l('disable-landing-page')?></label>
+                        </div>
+
+                        <hr/>
+
+
+                        <div class="form-group">
+                            <label><?php _l('google-analytics-id')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('google-analytics-id', '')?>" name="val[google-analytics-id]"/>
+                        </div>
+
+                        <hr/>
+                        <?php Hook::getInstance()->fire('extend.admin.other.settings')?>
+                        <h6><?php _l('social-links')?></h6>
+                        <div class="form-group">
+                            <label><?php _l('facebook-page')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('facebook-page', 'https://facebook.com')?>" name="val[facebook-page]"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('google-page')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('google-page', 'https://google.com')?>" name="val[google-page]"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('twitter-page')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('twitter-page', 'https://twitter.com')?>" name="val[twitter-page]"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('pinterest-page')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('pinterest-page', 'https://pinterest.com')?>" name="val[pinterest-page]"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('instagram-page')?></label>
+                            <input type="text" class="form-control" value="<?php echo config('instagram-page', 'https://instagram.com')?>" name="val[instagram-page]"/>
+                        </div>
+                        <hr/>
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.others')?>
+
+                        <div class="form-group">
+                            <label><?php _l('embed-code')?></label>
+                            <textarea class="form-control" rows="10" name="val[embed-code]"><?php echo config('embed-code')?></textarea>
+                        </div>
+
+                        <div class="floating-button">
+                            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

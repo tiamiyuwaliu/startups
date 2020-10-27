@@ -33,6 +33,7 @@
     right: 0px;
     top: 0px;
 }
+
 #admin-container .menu-pane #account-menu > a   {
 
     background: #ffffff;
@@ -100,10 +101,24 @@
 
 #admin-container .content-pane {
     width: 100%;
-    padding: 30px ;
-    padding-left: 280px;
+    padding: 30px 0;
+    padding-left: 250px;
+    height: 100vh;
+    overflow: hidden;
+}
+#admin-container .content-pane .content-top {
+    padding:0 30px ;
 }
 
+#admin-container .content-pane .content-body {
+    height: calc(100vh - 120px);
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 30px;
+}
+#admin-container .content-pane .content-body.with-tabs {
+    height: calc(100vh - 160px);
+}
 .sub-title {
     font-size:15px;
 }
@@ -146,12 +161,95 @@
     background: #ffffff;
     border-radius:20px;
 }
+.search-form {
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius:15px;
+    position: relative;
+}
+.search-form input,.search-form input:focus,.search-form input:hover {
+    border-bottom: none !important;
+}
+
+.search-form i {
+    position: absolute;
+    top: 10px;
+    right: 7px;
+    font-size:25px;
+}
+.modern-table {
+    width: 100%;
+}
+.modern-table .table-head .each {
+    float: left;
+    font-weight: 500;
+    font-size: 15px !important;
+    color:#D1D9E0;
+    padding: 10px 5px;
+}
+.modern-table .table-body .table-row  {
+    background: #F9FAFB;
+    padding: 30px 5px;
+    border-radius:5px;
+    -webkit-transition: -webkit-box-shadow .2s;
+    transition: -webkit-box-shadow .2s;
+    transition: box-shadow .2s;
+    transition: box-shadow .2s,-webkit-box-shadow .2s;
+    margin-bottom: 10px;
+}
+.modern-table .table-body .table-row:nth-child(2n) {
+    background: none;
+}
+.modern-table .table-body .table-row:hover {
+    box-shadow: 0 0 30px 10px  rgba(100,100,100,0.1);
+    background-color: #fff;
+}
+.modern-table .table-body .table-row .each {
+    float: left;
+    font-weight: 500;
+    font-size: 12px !important;
+    color:#282828;
+    padding: 2px 5px;
+}
+.modern-table .table-body .table-row .each .left {
+    display: none;
+    width: 50%;
+    float: left;
+}
+.modern-table .table-body .table-row .each .right {
+    width:100%;
+    float: left;
+}
+.floating-button {
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+}
+.modal-right .modal-dialog {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    height: 100vh;
+}
+.modal-right .modal-content {
+    height: 100vh;
+    padding: 50px;
+}
+@media(max-width:800px) {
+    .modern-table .table-body .table-row .each .left {
+        display: block;
+    }
+    .modern-table .table-body .table-row .each .right {
+        width:50%;
+    }
+}
 @media(min-width: 1400px) {
     #admin-container .menu-pane {
         width:300px;
     }
     #admin-container .content-pane {
 
-        padding-left: 330px;
+        padding-left: 300px;
     }
 }

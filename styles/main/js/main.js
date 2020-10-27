@@ -66,7 +66,7 @@ function notify(m, type) {
     } else if(type === 'success') {
         iziToast.success({
             message: m,
-            position: 'BottomRight'
+            position: 'topRight'
         });
     } else {
         iziToast.info({
@@ -890,7 +890,7 @@ $(function() {
     });
 
     $(document).on('keyup', '.search-form input', function() {
-        var parent = $(this).parent().parent();
+        var parent = $(this).parent();
         var link = parent.attr('action');
         load_page(link + '?term=' + $(this).val(), false, parent.data('container'));
     });

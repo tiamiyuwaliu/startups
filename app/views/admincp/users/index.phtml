@@ -1,0 +1,79 @@
+<div class="content-top">
+    <div class="clearfix">
+        <div class="float-left">
+            <h3><?php _l('users')?> </h3>
+            <p class="text-muted sub-title"><?php _l('manage-users-here')?>
+        </div>
+        <div class="float-right">
+            <form action="<?php echo getFullUrl()?>" data-container="#users" method="post" class="search-form shadow-24">
+                <input placeholder="<?php _l('enter-a-keyword')?>" value="<?php echo $C->request->input('term')?>" type="text" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                <i class="la la-search"></i>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="content-body">
+    <div id="users" class="">
+        <?php echo view('admincp/users/display', array('users' => $users))?>
+    </div>
+</div>
+
+<div class="floating-button">
+    <button class="btn btn-float btn-primary my-1" data-toggle="modal" data-target="#addUserModal" type="button"><i class="las la-plus"></i></button>
+
+</div>
+
+<div class="modal  modal-right" tabindex="-1" id="addUserModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group floating-label">
+                    <label><?php _l('full-name')?></label>
+                    <input type="text" class="form-control" name="val[full_name]"/>
+                </div>
+
+                <div class="form-group floating-label">
+                    <label><?php _l('email-address')?></label>
+                    <input type="text" class="form-control" name="val[email]"/>
+                </div>
+
+                <div class="form-group floating-label">
+                    <label><?php _l('password')?></label>
+                    <input type="password" class="form-control" name="val[password]"/>
+                </div>
+
+                <div class="form-group floating-label">
+                    <label><?php _l('confirm-password')?></label>
+                    <input type="password" class="form-control" name="val[confirm]"/>
+                </div>
+
+                <?php Hook::getInstance()->fire('admin.create.user')?>
+
+                <div class="form-group floating-label">
+                    <label><?php _l('select-timezone')?></label>
+                    <select class="form-control select-timezone" name="val[timezone]">
+                        <option value=""><?php _l('select-timezone')?></option>
+                        <?php foreach(getTimezones() as $key => $name):?>
+                            <option value="<?php echo $key?>"><?php echo $name?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('create-user')?></button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

@@ -212,6 +212,12 @@ div::-webkit-scrollbar-thumb
     border-radius:10px;
     border: solid 1px #F5F5F5;
 }
+nav-tabs .nav-link:active, .nav-tabs .nav-link:focus {
+    background: none;
+}
+.nav-tabs .nav-link:hover{
+    background-color: rgba(0,0,0,.1);
+}
 input:focus,
 select:focus,
 textarea:focus,

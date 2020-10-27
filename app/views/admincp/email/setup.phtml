@@ -1,0 +1,93 @@
+<div class="content-top">
+    <div class="clearfix">
+        <div class="float-left">
+            <h3><?php _l('email-setup')?> </h3>
+            <p class="text-muted sub-title"><?php _l('configure-email-setup')?>
+        </div>
+
+    </div>
+</div>
+
+<div class="content-body">
+    <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label><?php _l('email-driver')?></label>
+                    <div >
+                        <select class="form-control" name="val[email-driver]">
+                            <option <?php echo (config('email-driver',1) == 'mail') ? 'selected' : null?> value="mail"><?php _l('mail')?></option>
+                            <option <?php echo (config('email-driver',1) == 'smtp') ? 'selected' : null?> value="smtp"><?php _l('smtp')?></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('from_name')?></label>
+                    <div>
+                        <input type="text"  name="val[from_name]" class="form-control"  value="<?php echo config('from_name', '')?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('from_address')?>(<?php _l('site-email-address')?>)</label>
+                    <div>
+                        <input type="text"  name="val[from_address]" class="form-control"  value="<?php echo config('from_address', '')?>">
+                    </div>
+                </div>
+
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[enable-welcome-mail]" value="0"/>
+                    <input type="checkbox" name="val[enable-welcome-mail]" <?php echo config('enable-welcome-mail', false) ? 'checked' : null?> class="custom-control-input" id="customCheck12">
+                    <label class="custom-control-label" for="customCheck12"><?php _l('enable-welcome-mail')?></label>
+                </div>
+
+                <hr/>
+                <div class="form-group ">
+                    <label ><?php _l('smtp-host')?></label>
+                    <div >
+                        <input type="text"  name="val[smtp-host]" class="form-control "  value="<?php echo config('smtp-host', '')?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ><?php _l('smtp-username')?></label>
+                    <div >
+                        <input type="text"  name="val[smtp-username]" class="form-control"  value="<?php echo config('smtp-username', '')?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('smtp-password')?></label>
+                    <div >
+                        <input type="text"  name="val[smtp-password]" class="form-control "  value="<?php echo config('smtp-password', '')?>">
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label ><?php _l('smtp-port')?></label>
+                    <div>
+                        <input type="text"  name="val[smtp-port]" class="form-control"  value="<?php echo config('smtp-port', '')?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('email-charset')?></label>
+                    <div>
+                        <input type="text"  name="val[email-charset]" class="form-control"  value="<?php echo config('email-charset', 'utf-8')?>">
+                    </div>
+                </div>
+
+
+                <?php echo Hook::getInstance()->fire('admin.settings.email')?>
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="floating-button">
+            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+        </div>
+    </form>
+</div>
