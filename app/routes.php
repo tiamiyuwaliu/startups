@@ -12,6 +12,7 @@ $request->any('twitter/auth', array('uses' => 'Home@twitterAuth', 'secure' => fa
 $request->any('google/auth', array('uses' => 'Home@googleAuth', 'secure' => false));
 
 $request->any("dashboard", array('uses' => 'Dashboard@index', 'secure' => true));
+$request->any("admincp", array('uses' => 'Admin@index', 'secure' => true));
 
 $request->any('activate/{code}', array('uses' => 'Home@activate', 'secure' => false))->where(array('code' => '[a-zA-Z0-9]+'));
 $request->any('reset/{code}', array('uses' => 'Home@reset', 'secure' => false))->where(array('code' => '[a-zA-Z0-9]+'));

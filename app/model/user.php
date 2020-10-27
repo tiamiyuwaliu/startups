@@ -315,6 +315,13 @@ class UserModel extends Model {
         if (isset($second)) $letters .= mb_substr($second, 0, 1);
         return mb_strtoupper($letters);
     }
+
+    public function getAvatar($user = null) {
+        $user = ($user) ? $user : $this->authUser;
+
+        if (!$user['avatar']) return assetUrl('assets/images/user-avatar.png');
+    }
+
     public function userData($field) {
         return (isset($this->authUser[$field])) ? $this->authUser[$field] : '';
     }

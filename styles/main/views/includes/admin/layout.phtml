@@ -1,0 +1,69 @@
+<div id="admin-container">
+    <div class="menu-pane">
+       <div  class="logo-container">
+           <a href="<?php echo url('admincp')?>" data-ajax="true">
+               <img class="light-logo" src="<?php echo assetUrl(config('site-logo', 'assets/images/logo.png'))?>"/>
+               <img class="dark-logo" src="<?php echo assetUrl(config('site-logo', 'assets/images/logo-dark.png'))?>"/>
+           </a>
+
+           <div class=" dropright" id="account-menu">
+               <a href=""  class="" data-toggle="dropdown" >
+                   <img src="<?php echo model('user')->getAvatar()?>"/>
+               </a>
+               <div class="dropdown-menu">
+                   <!-- Dropdown menu links -->
+               </div>
+           </div>
+       </div>
+
+
+
+        <div class="goWebsiteLink">
+            <button class="btn  btn-block  btn-primary rounded-sm   shadow-24" type="button"><i class="float-left las la-external-link-square-alt"></i> Go to Website <i class="float-right las la-arrow-right"></i></button>
+
+        </div>
+
+        <div class="menu-container">
+            <h6><?php _l('admin-panel')?></h6>
+            <ul>
+                <li><a href="" class="active"><i class="las la-chart-bar"></i> <span><?php _l('dashboard')?></span></a> </li>
+            </ul>
+
+            <h6><?php _l('users')?></h6>
+            <ul>
+                <li><a href=""><i class="las la-user-friends"></i> <span><?php _l('manage-users')?></span></a> </li>
+            </ul>
+
+            <h6><?php _l('manage')?></h6>
+            <ul>
+                <li><a href=""><i class="las la-language"></i> <span><?php _l('languages')?></span></a> </li>
+                <li><a href=""><i class="las la-puzzle-piece"></i> <span><?php _l('modules')?></span></a> </li>
+            </ul>
+
+            <h6><?php _l('configuration')?></h6>
+            <ul>
+                <li><a href=""><i class="las la-cog"></i> <span><?php _l('settings')?></span></a> </li>
+                <li><a href=""><i class="las la-envelope"></i> <span><?php _l('email-setup')?></span></a> </li>
+                <li><a href=""><i class="las la-envelope-open-text"></i> <span><?php _l('email-templates')?></span></a> </li>
+            </ul>
+
+            <h6><?php _l('others')?></h6>
+            <ul>
+                <li><a href=""><i class="las la-pager"></i> <span><?php _l('pages')?></span></a> </li>
+            </ul>
+        </div>
+
+        <div class="help-button btn-float-dropdown dropdown">
+            <button data-toggle="dropdown"  class="btn btn-float btn-light shadow-24" type="button"><i style="font-size:20px" class="las la-question"></i></button>
+            <div class="dropdown-menu">
+                <button class="btn btn-float btn-info btn-sm float-btn-text" type="button"><i class="lab la-twitter"></i> <span><?php _l('follow-on-twitter')?></span></button>
+                <button class="btn btn-float btn-secondary btn-sm float-btn-text" type="button"><i class="lab la-instagram"></i> <span><?php _l('follow-on-instagram')?></span></button>
+                <button class="btn btn-float btn-light btn-sm float-btn-text" type="button"><i class="las la-quote-right"></i> <span><?php _l('visit-our-website')?></span></button>
+            </div>
+        </div>
+
+    </div>
+    <div class="content-pane">
+        <?php echo $content?>
+    </div>
+</div>
