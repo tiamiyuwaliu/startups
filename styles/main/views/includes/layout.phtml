@@ -166,8 +166,6 @@
     <?php endif?>
 <?php else:?>
     <script src="<?php echo assetUrl('styles/main/js/animate.js')?>"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://checkout.stripe.com/checkout.js"></script>
     <?php if(config('enable-captcha', false)):?>
         <script>
             var  onloadCallback = function() {
