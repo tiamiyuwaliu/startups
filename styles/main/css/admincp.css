@@ -16,6 +16,7 @@
     border-radius: 0px 20px 20px 0;
     transition: width 0.3s ease-in;
     padding: 30px 30px;
+    z-index: 99;
 }
 #admin-container .menu-pane .logo-container {
     position: relative;
@@ -94,5 +95,63 @@
 @media(min-width: 1400px) {
     #admin-container .menu-pane {
         width:300px;
+    }
+}
+
+#admin-container .content-pane {
+    width: 100%;
+    padding: 30px ;
+    padding-left: 280px;
+}
+
+.sub-title {
+    font-size:15px;
+}
+.stats-container {
+    margin-top: 50px;
+}
+.stats-container .each {
+    width: 100%;
+    height: 150px;
+    border-radius:10px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1045%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(122%2c 45%2c 224%2c 1)'%3e%3c/rect%3e%3cpath d='M0 137.95L10 129.67L20 105.7L30 120.21L40 101.1L50 102.19L60 96.2L70 120.88L80 140.62L90 126.91L100 114.72L110 91.18L120 88.5L130 90.09L140 91.55L150 98.49L160 86.96L170 111.16L180 108.9L190 104.46L200 129.36L210 129.91L220 108.59L230 119.06L240 141.89L250 139.85L260 151.87L270 167.46L280 168.7L290 170.69L300 171.62L310 172.8L320 164.5L330 161.25L340 159.18L350 164.2L360 182.2L370 171.71L380 162.42L390 165.19L400 189.01' stroke='rgba(81%2c 9%2c 79%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 137.95L10 129.67L20 105.7L30 120.21L40 101.1L50 102.19L60 96.2L70 120.88L80 140.62L90 126.91L100 114.72L110 91.18L120 88.5L130 90.09L140 91.55L150 98.49L160 86.96L170 111.16L180 108.9L190 104.46L200 129.36L210 129.91L220 108.59L230 119.06L240 141.89L250 139.85L260 151.87L270 167.46L280 168.7L290 170.69L300 171.62L310 172.8L320 164.5L330 161.25L340 159.18L350 164.2L360 182.2L370 171.71L380 162.42L390 165.19L400 189.01L400 200L0 200z' fill='url(%23SvgjsLinearGradient1046)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1045'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1046'%3e%3cstop stop-opacity='0.65' stop-color='rgba(81%2c 9%2c 79%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23981195' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+    padding: 30px;
+    color: #ffffff;
+    font-weight: bold !important;
+}
+.stats-container .each.bg-red {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1016%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(224%2c 76%2c 45%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1017)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1016'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1017'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-success {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1018%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(6%2c 162%2c 57%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1019)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1018'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1019'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-yellow {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1020%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(203%2c 216%2c 23%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1021)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1020'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1021'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-lightblue {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1022%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(23%2c 128%2c 216%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1023)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1022'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1023'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each i {
+    font-size:25px;
+}
+.stats-container .each .count {
+    font-size:50px;
+    font-weight: lighter;
+}
+.box {
+    box-shadow: 5px 20px 40px 0 rgba(0,0,0,0.07);
+    padding: 30px;
+    width: 100%;
+    min-height: 200px;
+    background: #ffffff;
+    border-radius:20px;
+}
+@media(min-width: 1400px) {
+    #admin-container .menu-pane {
+        width:300px;
+    }
+    #admin-container .content-pane {
+
+        padding-left: 330px;
     }
 }

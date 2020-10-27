@@ -203,6 +203,14 @@ div::-webkit-scrollbar-thumb
 .float-btn-text span {
     color: #000 !important;
     font-weight: 600;
+    display: none !important;
+}
+.float-btn-text:hover span {
+    display: inline-block !important;
+    background: #ffffff;
+    padding: 3px 7px;
+    border-radius:10px;
+    border: solid 1px #F5F5F5;
 }
 input:focus,
 select:focus,

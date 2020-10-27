@@ -1,1 +1,77 @@
-Admin dashboard
+<h3><?php _l('hi')?>! <?php echo model('user')->authUser['full_name']?></h3>
+<p class="text-muted sub-title"><?php _l('welcome-admin-dashboard')?>
+<span class="chip fade show ml-3" id="chipDismissible">
+   v <?php echo VERSION?></span>
+</p>
+
+<div class="stats-container row">
+    <div class="col-sm-4">
+        <div class="each clearfix">
+            <div class="float-left">
+                <i class="las la-user-friends"></i>
+                <h6><?php _l('users')?></h6>
+            </div>
+            <div class="float-right">
+                <div class="count"><?php echo model('user')->countTotalUsers()?></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="each clearfix bg-lightblue">
+            <div class="float-left">
+                <i class="las la-language"></i>
+                <h6><?php _l('languages')?></h6>
+            </div>
+            <div class="float-right">
+                <div class="count">30</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="each clearfix bg-red">
+            <div class="float-left">
+                <i class="las la-puzzle-piece"></i>
+                <h6><?php _l('modules')?></h6>
+            </div>
+            <div class="float-right">
+                <div class="count">30</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-7">
+        <div class="box">
+            <canvas    id="chartjs-users"
+                    data-content='<?php echo json_encode(array(
+                            'type' => 'line',
+                            'data' => array(
+                                    'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                    'datasets' => array(array(
+                                            'label' => 'Users',
+                                            'backgroundColor' => 'rgb(255, 99, 132)',
+                                            'borderColor' => 'rgb(255, 99, 132)',
+                                            'data' => [0, 10, 5, 2, 20, 30, 45]
+                                    ))
+                            )
+                    ))?>'
+                    class="chartjs"></canvas>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="box">
+            <span class="chip"><i class="chip-icon">L</i><?php _l('latest-members')?></span>
+
+            <?php foreach(model('user')->getRecentUsers() as $user):?>
+                <div class="media mt-3">
+                    <img class="mr-3" style="width: 40px" src="<?php echo model('user')->getAvatar($user)?>" alt="Generic placeholder image">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1"><?php echo $user['full_name']?></h5>
+                        <span class="text-muted"><?php echo $user['email']?></span>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+</div>

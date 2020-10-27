@@ -43,4 +43,8 @@ return array(
     'follow-on-instagram' => 'Follow on Instagram',
     'follow-on-twitter' => 'Follow on Twitter',
     'modules' => 'Modules',
+    'welcome-admin-dashboard' => 'Welcome to admin dashboard',
+    'welcome' => 'Welcome',
+    'hi' => 'Hi',
+    'latest-members' => 'Latest Members'
 );

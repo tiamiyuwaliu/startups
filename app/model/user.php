@@ -303,6 +303,16 @@ class UserModel extends Model {
         return $this->db->query("UPDATE users SET data=? WHERE id=?", perfectSerialize($settings), $this->authOwnerId);
     }
 
+    public function getRecentUsers($limit = 5) {
+        $query = $this->db->query("SELECT * FROM users ORDER BY id DESC LIMIT $limit");
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countTotalUsers() {
+        $query = $this->db->query("SELECT * FROM users ");
+        return $query->rowCount();
+    }
+
     public function getNameLetters($user = null) {
         $user = ($user) ? $user : $this->authUser;
         $explode = explode(' ', $user['full_name']);
