@@ -243,7 +243,7 @@ function load_page(url, f, cont) {
                 if (f == undefined) window.previousUrl.push(url);
                 window.history.pushState({}, data.title + ':' + url, url);
                 $(window).scrollTop(0);
-                hideMenu();
+                ///hideMenu();
                 reloadInit();
                 if ($('.post-edit-content').length > 0) {
                     finilizeSelectedAccounts();

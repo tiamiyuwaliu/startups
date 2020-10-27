@@ -1,0 +1,5 @@
+<blockquote>@TODO create a default dashboard layout as well</blockquote>
+
+<?php if(model('user')->isAdmin()):?>
+    <a href="<?php echo url('admincp')?>">Admin panel</a>
+<?php endif?>

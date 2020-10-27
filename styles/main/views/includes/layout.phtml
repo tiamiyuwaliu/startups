@@ -51,14 +51,6 @@
 
     <?php endif?>
 
-    <?php if($pageType == 'backend'):$design = model('admin')->getPageDesign();$data = perfectUnserialize($design['data']);?>
-
-    <style>
-
-
-    </style>
-
-    <?php endif?>
 
 
 </head>
@@ -79,12 +71,7 @@
             </div>
         </div>
     <?php endif?>
-    <?php if ($pageType != 'frontend'):?>
-        <div id="image-editor-overlay">
-            <a href="" onclick="return closeImageEditor()" class="close-btn"><i class="las la-times"></i></a>
-            <div class="content"></div>
-        </div>
-    <?php endif?>
+
 </body>
 
 <script>

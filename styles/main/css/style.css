@@ -1,1 +1,7 @@
 @import "global.css";
+#auth-container  {
+    width:50%;
+    border: solid 1px lightgrey;
+    padding:30px;
+    margin: 50px auto;
+}

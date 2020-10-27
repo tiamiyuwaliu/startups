@@ -61,7 +61,7 @@ class Controller {
 
         if ($this->model('user')->isLoggedIn()) {
             $user = $this->model('user')->authUser;
-            date_default_timezone_set($user['timezone']);
+            if($user['timezone']) date_default_timezone_set($user['timezone']);
         }
         Hook::getInstance()->fire('controller.loaded', null, array($this));
 
@@ -87,6 +87,12 @@ class Controller {
 
     public function setfrontend() {
         $this->pageType = 'frontend';
+        return $this;
+    }
+
+    public function setAdminLayout() {
+        $this->pageType = 'admincp';
+        $this->setWrapLayout('includes/admin/layout');
         return $this;
     }
 

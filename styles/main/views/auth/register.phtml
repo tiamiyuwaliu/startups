@@ -1,6 +1,6 @@
 
 <div class="welcome-title">
-    <h5><?php _l('create-your-own-account')?></h5>
+    <h3><?php _l('create-your-own-account')?></h3>
 </div>
 
 <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
@@ -11,50 +11,35 @@
         </div>
     <?php endif?>
     <div class="form-group">
-        <label class="bmd-label-floating" for="fullName"><?php _l('full-name')?></label>
-        <div class="input-group mb-2">
-
-            <input type="text"  id="fullName" class="form-control" name="val[full_name]" >
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="la la-user"></i></div>
-            </div>
+        <div class="floating-label">
+            <label  ><?php _l('full-name')?></label>
+            <input type="password"  placeholder="<?php _l('full-name')?>" class="form-control" name="val[full_name]" >
         </div>
     </div>
     <div class="form-group">
-        <label  class="bmd-label-floating" for="emailAddress"><?php _l('email-address')?></label>
-        <div class="input-group mb-2">
-
-            <input id="emailAddress" type="text" placeholder="" class="form-control" name="val[email]" >
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="la la-user"></i></div>
-            </div>
+        <div class="floating-label">
+            <label  ><?php _l('email-address')?></label>
+            <input type="password"  placeholder="<?php _l('email-address')?>" class="form-control" name="val[email]" >
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label  class="bmd-label-floating" for="password"><?php _l('password')?></label>
-                <div class="input-group mb-2">
-
-                    <input type="password" id="password" placeholder="" class="form-control" name="val[password]" >
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="la la-lock"></i></div>
-                    </div>
+                <div class="floating-label">
+                    <label  ><?php _l('password')?></label>
+                    <input type="password"  placeholder="<?php _l('password')?>" class="form-control" name="val[password]" >
                 </div>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="form-group">
-                <label  class="bmd-label-floating" for="confirm"><?php _l('confirm')?></label>
-                <div class="input-group mb-2">
-
-                    <input type="password" id="confirm" placeholder="" class="form-control" name="val[confirm]" >
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="la la-lock"></i></div>
-                    </div>
+                <div class="floating-label">
+                    <label  ><?php _l('confirm-password')?></label>
+                    <input type="password" id="confirm" placeholder="<?php _l('confirm-password')?>" class="form-control" name="val[confirm]" >
                 </div>
+
             </div>
         </div>
     </div>
@@ -78,7 +63,7 @@
 
     <div class="clearfix mt-5">
 
-        <a href="<?php echo url('login')?>" data-ajax="true" class="color-grey font-bg mt-5"><?php _l('already-have-accoung')?></a>
+        <a href="<?php echo url('login')?>" data-ajax="true" class="color-grey font-bg mt-5"><?php _l('login')?></a>
     </div>
 </form>
 

@@ -1,87 +1,16 @@
 <div id="app-container" class="clearfix <?php echo (session_get('open_menu', 0) == 1) ? 'opened-menu' : null?>">
 
-    <div class="left-pane">
-        <div class="side-head clearfix">
-            <div class="logo-container">
-                <a href="<?php echo url('post')?>" data-ajax="true" class="logo"><img src="<?php echo assetUrl(config('site_short_icon', 'assets/images/short-logo.png'))?>"/> </a>
-                <a href="<?php echo url('post')?>" data-ajax="true"  class="logo-full"><img src="<?php echo assetUrl(config('site_logo_light', 'assets/images/logo-light.png'))?>"/> </a>
+    <?php if($C->appSideLayout):?>
+        <div class="inner-container clearfix">
+            <div class="inner-left-pane modern-scroll">
+                <?php echo view($C->appSideLayout)?>
             </div>
-        </div>
-
-        <div class="thin-menu modern-scroll">
-            <ul>
-                <li><a data-ajax="true" id="left-compose-menu" href="<?php echo url('post')?>" title="<?php _l('compose')?>"  class="mtitle-right  compose-btn"><i class="las la-pencil-alt"></i> <span><?php _l('compose')?></span></a> </li>
-                <li><a data-ajax="true" id="report-icon-color" href="<?php echo url('reports')?>" title="<?php _l('reports')?>"  class="mtitle-right <?php echo ($C->activeIconMenu == 'reports')  ? 'active' : null?>"><i class="la la-chart-bar"></i> <span><?php _l('reports')?></span></a> </li>
-                <?php if(model('user')->hasPermission('drafts')):?>
-                    <li><a data-ajax="true" id="drafts-icon-color" href="<?php echo url('drafts')?>" title="<?php _l('drafts')?>"  class="mtitle-right <?php echo ($C->activeIconMenu == 'drafts')  ? 'active' : null?>"><i class="las la-business-time"></i> <span><?php _l('drafts')?></span></a> </li>
-                <?php endif?>
-                <?php Hook::getInstance()->fire('app.menu.start')?>
-                <li class="show-mobile"><a data-ajax="true" href="<?php echo url('schedules')?>" title="<?php _l('schedules')?>"  class="mtitle-right  <?php echo ($C->activeIconMenu == 'schedules')  ? 'active' : null?>"><i class="la la-calendar"></i> <span><?php _l('schedules')?></span></a> </li>
-
-                <?php if(config('enable-rss', true) and model('user')->hasPermission('rss')):?>
-                    <?php if(model('user')->isOriginalOwner() or model('user')->teamCanUse('rss')):?>
-                        <li><a data-ajax="true" id="rss-icon-color" href="<?php echo url('rss')?>" title="<?php _l('rss-feeds')?>"  class="mtitle-right <?php echo ($C->activeIconMenu == 'rss')  ? 'active' : null?>"><i class="las la-blog"></i> <span><?php _l('rss-feeds')?></span></a> </li>
-                    <?php endif?>
-                <?php endif?>
-                <?php if(model('user')->isOriginalOwner() or model('user')->teamCanUse('captions')):?>
-                    <li><a data-ajax="true" id="captions-icon-color" href="<?php echo url('captions')?>"  title="<?php _l('captions')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'captions')  ? 'active' : null?>"><i class="las la-grip-horizontal"></i> <span><?php _l('captions')?></span></a> </li>
-                <?php endif?>
-                <?php if(model('user')->isOriginalOwner() or model('user')->teamCanUse('filemanager')):?>
-                    <li><a data-ajax="true" id="filemanager-icon-color" href="<?php echo url('file-manager')?>" title="<?php _l('file-manager')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'filemanager')  ? 'active' : null?>"><i class="la la-folder"></i> <span><?php _l('file-manager')?></span></a> </li>
-                <?php endif?>
-
-                <?php if(model('user')->isOriginalOwner() or model('user')->teamCanUse('manage-accounts')):?>
-                    <li class="show-mobile"><a  data-ajax="true" href="<?php echo url('accounts')?>" title="<?php _l('accounts')?>"  class="mtitle-right  <?php echo ($C->activeIconMenu == 'accounts')  ? 'active' : null?>"><i class="la la-chart-bar"></i> <span><?php _l('accounts')?></span></a> </li>
-
-                    <li><a data-ajax="true" id="groups-icon-color" href="<?php echo url('groups')?>" title="<?php _l('groups-manager')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'groups')  ? 'active' : null?>"><i class="las la-bullseye"></i> <span><?php _l('groups-manager')?></span></a> </li>
-                <?php endif?>
-                <?php if( model('user')->isOriginalOwner() and (model('user')->permission('manage-team-user', 5) > 0 or model('user')->permission('manage-team-user', 5) == '-1')):?>
-                    <li><a data-ajax="true" id="manage-users-icon-color" href="<?php echo url('manage/team')?>" title="<?php _l('manage-team')?>"  class="mtitle-right <?php echo ($C->activeIconMenu == 'team')  ? 'active' : null?>"><i class="las la-user-circle"></i> <span><?php _l('manage-team')?></span></a> </li>
-                <?php endif?>
-                <?php Hook::getInstance()->fire('app.menu.end')?>
-            </ul>
-
-
-            <ul>
-                <?php Hook::getInstance()->fire('app.menu.bottom.start')?>
-
-                <?php if(model('user')->isAdmin()):?>
-                    <?php Hook::getInstance()->fire('app.menu.admin.start')?>
-                    <li><a data-ajax="true" href="<?php echo url('admin/users')?>" title="<?php _l('users-manager')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'users')  ? 'active' : null?>"><i class="la la-user-friends"></i> <span><?php _l('users-manager')?></span></a> </li>
-                    <?php if(moduleExists('saas')):?>
-                        <li><a data-ajax="true" href="<?php echo url('admin/packages')?>" title="<?php _l('packages')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'packages')  ? 'active' : null?>"><i class="la la-gift"></i> <span><?php _l('packages')?></span></a> </li>
-                        <!--<li><a data-ajax="true" href="<?php echo url('admin/payments')?>" title="<?php _l('payments')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'payments')  ? 'active' : null?>"><i class="las la-credit-card"></i> <span><?php _l('payments')?></span></a> </li>-->
-
-                    <?php endif?>
-                    <li><a data-ajax="true" href="<?php echo url('admin/modules')?>" title="<?php _l('modules')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'modules')  ? 'active' : null?>"><i class="la la-layer-group"></i> <span><?php _l('modules')?></span></a> </li>
-
-                    <li><a data-ajax="true" href="<?php echo url('admin')?>" title="<?php _l('configuration')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'settings')  ? 'active' : null?>"><i class="la la-cog"></i> <span><?php _l('configuration')?></span></a> </li>
-                    <?php Hook::getInstance()->fire('app.menu.admin.end')?>
-                <?php else:?>
-                    <li><a data-ajax="true" href="<?php echo url('schedules')?>"  title="<?php _l('schedules')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'schedules')  ? 'active' : null?>"><i class="las la-calendar"></i> <span><?php _l('schedules')?></span></a> </li>
-                    <li><a data-ajax="true" href="<?php echo url('profile')?>" title="<?php _l('my-profile')?>" class="mtitle-right <?php echo ($C->activeIconMenu == 'profile')  ? 'active' : null?>"><i class="la la-user"></i> <span><?php _l('my-profile')?></span></a> </li>
-
-                <?php endif?>
-            </ul>
-        </div>
-
-    </div>
-    <div class="right-pane">
-        <?php echo view('main::includes/app/header')?>
-
-        <?php if($C->appSideLayout):?>
-            <div class="inner-container clearfix">
-                <div class="inner-left-pane modern-scroll">
-                    <?php echo view($C->appSideLayout)?>
-                </div>
-                <div class="inner-right-pane">
-                    <?php echo $content?>
-                </div>
-
+            <div class="inner-right-pane">
+                <?php echo $content?>
             </div>
-        <?php else:?>
-            <?php echo $content?>
-        <?php endif?>
 
-    </div>
+        </div>
+    <?php else:?>
+        <?php echo $content?>
+    <?php endif?>
 </div>

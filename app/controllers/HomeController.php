@@ -12,7 +12,7 @@ class HomeController extends  Controller {
     }
 
     public function login() {
-        if ($this->model('user')->isLoggedIn()) return $this->request->redirect(url('post'));
+        if ($this->model('user')->isLoggedIn()) return $this->request->redirect(url('dashboard'));
         $this->setWrapLayout('auth/layout');
         if ($val = $this->request->input('val')) {
             $email = $val['email'];
@@ -76,7 +76,7 @@ class HomeController extends  Controller {
 
     public function signup() {
         if (!config('user-signup', true) or config('disable-landing', false)) return $this->request->redirect(url(''));
-        if ($this->model('user')->isLoggedIn()) return $this->request->redirect(url('post'));
+        if ($this->model('user')->isLoggedIn()) return $this->request->redirect(url('dashboard'));
         $this->setWrapLayout('auth/layout');
         if ($val = $this->request->input('val')) {
 

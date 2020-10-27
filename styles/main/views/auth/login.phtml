@@ -2,31 +2,24 @@
 
 
 <div class="welcome-title">
-    <h5><?php _l('login-your-account')?></h5>
+    <h3><?php _l('login')?></h3>
 </div>
 
 <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
-    <div class="form-group">
-        <label for="loginEmailAddress" class="bmd-label-floating"><?php _l('email-address')?></label>
-        <div class="input-group mb-2">
 
-            <input id="loginEmailAddress" type="text"  class="form-control" name="val[email]" >
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="la la-user"></i></div>
-            </div>
+    <div class="form-group">
+        <div class="floating-label">
+            <label for="loginEmailAddress"><?php _l('email-address')?></label>
+            <input aria-describedby="exampleFloatingLabel1Help" name="val[email]" class="form-control" id="loginEmailAddress" placeholder="<?php _l('email-address')?>" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="floating-label">
+            <label for="loginPassword"><?php _l('password')?></label>
+            <input aria-describedby="exampleFloatingLabel1Help" name="val[password]" class="form-control" id="loginPassword" placeholder="<?php _l('password')?>" type="password">
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="bmd-label-floating"><?php _l('password')?></label>
-        <div class="input-group mb-2">
-
-            <input type="password" class="form-control" name="val[password]" >
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="la la-lock"></i></div>
-            </div>
-        </div>
-    </div>
 
     <div  class="clearfix">
         <div class="float-left">
@@ -38,13 +31,12 @@
     </div>
 
     <button class="btn btn-block btn-raised btn-primary mt-3 btn-lg"><?php _l('login')?></button>
-    <a href="" class="btn btn-block btn-raised btn-outline-primary mt-3 btn-lg"><i class="lab la-facebook-f"></i> <?php _l('login-with-facebook')?></a>
 </form>
 
 
 <?php if(config('user-signup', true) and !config('disable-landing', false)):?>
     <div class="clearfix mt-5">
 
-        <a href="<?php echo url('signup')?>" data-ajax="true" class="color-grey font-bg mt-5"><?php _l('dont-have-account-signup')?></a>
+        <a href="<?php echo url('signup')?>" data-ajax="true" class="color-grey font-bg mt-5"><?php _l('signup')?></a>
     </div>
 <?php endif?>
