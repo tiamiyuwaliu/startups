@@ -119,4 +119,10 @@ return array(
     'smtp-port' => 'SMTP Port',
     'email-charset' => 'Email charset',
 
+    'manage-accounts' => 'Manage accounts',
+    'welcome-to-your-dashboard' => 'Welcome to your dashboard',
+    'no-accounts-info' => 'You have not added any Instagram account, kindly click the button below to add new account',
+    'add-accounts' => 'Add accounts',
+    'my-account' => 'My account',
+    'logout' => 'Log out'
 );

@@ -1,5 +1,49 @@
-<blockquote>@TODO create a default dashboard layout as well</blockquote>
+<div class="content-top">
+    <h3><?php _l('hi')?>! <?php echo model('user')->authUser['full_name']?></h3>
+    <div class="sub-title"><?php _l('welcome-to-your-dashboard')?></div>
+</div>
 
-<?php if(model('user')->isAdmin()):?>
-    <a href="<?php echo url('admincp')?>">Admin panel</a>
-<?php endif?>
+<div class="content-body">
+    <div class="stats-container row">
+        <div class="col-sm-4">
+            <div class="each clearfix bg-dummy">
+                <div class="float-left">
+                    <i class="las la-user-friends"></i>
+                    <h6></h6>
+                </div>
+                <div class="float-right">
+                    <div class="count"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="each clearfix bg-dummy">
+                <div class="float-left">
+                    <i class="las la-language"></i>
+                    <h6></h6>
+                </div>
+                <div class="float-right">
+                    <div class="count"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="each clearfix bg-dummy">
+                <div class="float-left">
+                    <i class="las la-puzzle-piece"></i>
+                    <h6></h6>
+                </div>
+                <div class="float-right">
+                    <div class="count"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-account-info">
+        <p><?php _l('no-accounts-info')?></p>
+
+        <button class="btn btn-primary my-1" type="button"><?php _l('add-accounts')?></button>
+    </div>
+
+</div>

@@ -1,16 +1,102 @@
 <div id="app-container" class="clearfix <?php echo (session_get('open_menu', 0) == 1) ? 'opened-menu' : null?>">
+    <div class="menu-pane">
+        <div class="icon-menus">
+            <a class="logo" href="<?php echo url('dashboard')?>" data-ajax="true">
+                <img class="light-logo" src="<?php echo assetUrl(config('site_short_icon','assets/images/short-logo.png'))?>"/>
+                <img class="dark-logo" src="<?php echo assetUrl(config('site_short_icon_light','assets/images/short-logo.png'))?>"/>
+            </a>
 
-    <?php if($C->appSideLayout):?>
-        <div class="inner-container clearfix">
-            <div class="inner-left-pane modern-scroll">
-                <?php echo view($C->appSideLayout)?>
+            <ul>
+                <li><a class="account-icon" href="<?php echo url('dashboard')?>" data-ajax="true"><img src="<?php echo model('user')->getAvatar()?>"/> </a> </li>
+                <li><a href="" class="btn btn-primary btn-float shadow-none add-button"><i class="las la-plus"></i></a> </li>
+            </ul>
+
+            <ul class="main">
+                <li><a href="" class="active"><i class="icons icon-grid"></i></a> </li>
+                <li><a href=""><i class="icons icon-folder"></i></a> </li>
+                <li><a href=""><i class="las la-hashtag"></i></a> </li>
+            </ul>
+        </div>
+        <div class="menu-container">
+            <div class="no-accounts-dummy">
+                <div class="dummy-media">
+                    <div class="avatar"></div>
+                    <div class="infos">
+                        <div class="info-1"></div>
+                        <div class="info-2"></div>
+                    </div>
+                </div>
+
+                <div class="dummy-menus row">
+                    <div class="col-6">
+                        <div class="dummy-menu">
+                            <div class="icon"></div>
+                            <div class="icon-title"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="dummy-menu">
+                            <div class="icon"></div>
+                            <div class="icon-title"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="dummy-menu">
+                            <div class="icon"></div>
+                            <div class="icon-title"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="dummy-menu">
+                            <div class="icon"></div>
+                            <div class="icon-title"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="dummy-menu">
+                            <div class="icon"></div>
+                            <div class="icon-title"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="inner-right-pane">
-                <?php echo $content?>
+
+            <div class="manage-account-button">
+                <a href="<?php echo url('accounts')?>" data-ajax="true" class="btn btn-light my-1 btn-block " ><?php _l('manage-accounts')?> <i class="las la-arrow-right float-right"></i></a>
+
             </div>
 
         </div>
-    <?php else:?>
+    </div>
+    <div class="content-pane">
+        <div class="header">
+            <ul>
+                <li class="dropdown">
+                    <?php $languages = model('admin')->getLanguages()?>
+                    <a  data-toggle="dropdown" id="change-language-selector" class=" padding-sm btn dropdown-toggle language-selector " href="#" >
+                        <img style="width:20px" src="<?php echo assetUrl('assets/images/flags/'.Translator::instance()->lang().'.png')?>"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <?php foreach ($languages as $language):?>
+                            <a href="<?php echo url('change/language', array('id' => $language['id']))?>" class="dropdown-item"> <img style="width: 17px;" class="mr-1" src="<?php echo assetUrl('assets/images/flags/'.$language['id'].'.png')?>"/> <span class="pt-1"><?php echo $language['name']?></span></a>
+                        <?php endforeach;?>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="" data-toggle="dropdown" class="account-menu"><img src="<?php echo model('user')->getAvatar()?>"/> </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdow-menu-lg">
+                        <a class="dropdown-item" href="<?php echo url('profile')?>"><?php _l('my-account')?></a>
+                        <a class="dropdown-item" href="<?php echo url('accounts')?>"><?php _l('manage-accounts')?></a>
+                        <?php if(model('user')->isAdmin()):?>
+                            <a class="dropdown-item" href="<?php echo url('admincp')?>"><?php _l('admin-panel')?></a>
+                        <?php endif?>
+                        <div class="dropdown-divider" ></div>
+                        <a class="dropdown-item" href="<?php echo url('logout')?>"><?php _l('logout')?></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
         <?php echo $content?>
-    <?php endif?>
+    </div>
+
 </div>

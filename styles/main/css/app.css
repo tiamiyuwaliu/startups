@@ -1,1 +1,350 @@
 @import "global.css";
+.padding-sm {
+    padding-left: 10px;
+    padding-right:10px;
+    min-width: 3rem;
+}
+.dropdow-menu-lg {
+    min-width:250px;
+}
+#app-container {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    overflow-x: hidden;
+    background: #f5f5f5;
+}
+#app-container .menu-pane {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width:250px;
+    background: #ffffff;
+    border-radius: 0px 20px 20px 0;
+    transition: width 0.3s ease-in;
+    padding: 30px 30px;
+    z-index: 99;
+}
+#app-container .menu-pane .icon-menus {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:60px;
+    background: #ffff;
+    border-right:solid 1px #f5f5f5;
+    height: 100vh;
+}
+#app-container .menu-pane .icon-menus .logo {
+    display: block;
+    margin: 20px auto;
+    width: 40px;
+}
+#app-container .menu-pane .icon-menus .logo img{
+    width:40px;
+    margin: auto;
+}
+#app-container .menu-pane .icon-menus .logo .dark-logo {
+    display: none;
+}
+#app-container .menu-pane .icon-menus ul {
+    padding: 0;
+    margin: 0;
+}
+#app-container .menu-pane .icon-menus ul li {
+    padding: 0 10px ;
+}
+#app-container .menu-pane .icon-menus ul a {
+    display: block;
+    margin: 20px auto;
+}
+#app-container .menu-pane .icon-menus ul a.add-button {
+    width:40px;
+    height: 40px;
+}
+#app-container .menu-pane .icon-menus ul a i {
+    font-size:25px;
+}
+#app-container .menu-pane .icon-menus ul a.add-button i {
+    font-size:20px;
+    position: relative;
+    bottom: 5px;
+}
+#app-container .menu-pane .icon-menus ul a.account-icon img {
+    width:40px;
+    height:40px;
+    border-radius:100px;
+    border: solid 2px #f5f5f5;
+}
+#app-container .menu-pane .icon-menus .main {
+    margin-top:100px;
+}
+#app-container .menu-pane .icon-menus .main li {
+    padding: 0;
+}
+#app-container .menu-pane .icon-menus .main a {
+    text-align: center;
+    width:100%;
+   padding:5px 0;
+    color: #000;
+}
+#app-container .menu-pane .icon-menus .main a.active {
+    border-right:solid 3px #7A2DE0
+}
+#app-container .menu-pane .menu-container {
+    padding:30px  10px;
+    padding-left: 60px;
+
+}
+#app-container .menu-pane .menu-container .manage-account-button {
+    position: absolute;
+    bottom: 30px;
+}
+.no-accounts-dummy .dummy-media {
+    width: 100%;
+    position: relative;
+    height: 50px;
+}
+.no-accounts-dummy .dummy-media .avatar {
+    border-radius:5px;
+    width:40px;
+    height:40px;
+    background: #F5F5F5;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.no-accounts-dummy .dummy-media .infos {
+    padding-left: 50px;
+    padding-top: 2px;
+}
+.no-accounts-dummy .dummy-media .info-1, .no-accounts-dummy .dummy-media .info-2 {
+    width:100%;
+    height:17px;
+    background-color: #F5F5F5;
+    border-radius:5px;
+}
+.no-accounts-dummy .dummy-media .info-2 {
+    margin-top: 3px;
+    height: 10px;
+    width: 50%;
+}
+.no-accounts-dummy .dummy-menus {
+    margin-top: 50px;
+}
+.no-accounts-dummy .dummy-menus .dummy-menu {
+    margin-bottom: 20px;
+}
+.no-accounts-dummy .dummy-menus .dummy-menu .icon {
+    width: 50px;
+
+    margin-bottom: 10px;
+    height:50px;
+    background-color: #F5F5F5;
+}
+.no-accounts-dummy .dummy-menus .dummy-menu .icon-title {
+    width:80px;
+    height:8px;
+    border-radius:5px;
+    background:#F5F5F5 ;
+
+}
+
+#app-container .content-pane {
+    width: 100%;
+    padding: 30px 0;
+    padding-left: 350px;
+    height: 100vh;
+    overflow: hidden;
+}
+#app-container .content-pane .content-top {
+    padding:0 30px ;
+}
+
+#app-container .content-pane .content-body {
+    height: calc(100vh - 120px);
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 30px;
+}
+#app-container .content-pane .content-body.with-tabs {
+    height: calc(100vh - 160px);
+}
+#app-container .content-pane .header {
+    width:auto;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+#app-container .content-pane .header ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+#app-container .content-pane .header ul li {
+    display: inline-block;
+    padding: 10px ;
+}
+#app-container .content-pane .header ul a.account-menu img {
+    width:30px;
+    height:30px;
+    border-radius:100px;
+}
+.sub-title {
+    font-size:15px;
+}
+.stats-container {
+    margin-top: 50px;
+}
+.stats-container .each {
+    width: 100%;
+    height: 150px;
+    border-radius:10px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1045%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(122%2c 45%2c 224%2c 1)'%3e%3c/rect%3e%3cpath d='M0 137.95L10 129.67L20 105.7L30 120.21L40 101.1L50 102.19L60 96.2L70 120.88L80 140.62L90 126.91L100 114.72L110 91.18L120 88.5L130 90.09L140 91.55L150 98.49L160 86.96L170 111.16L180 108.9L190 104.46L200 129.36L210 129.91L220 108.59L230 119.06L240 141.89L250 139.85L260 151.87L270 167.46L280 168.7L290 170.69L300 171.62L310 172.8L320 164.5L330 161.25L340 159.18L350 164.2L360 182.2L370 171.71L380 162.42L390 165.19L400 189.01' stroke='rgba(81%2c 9%2c 79%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 137.95L10 129.67L20 105.7L30 120.21L40 101.1L50 102.19L60 96.2L70 120.88L80 140.62L90 126.91L100 114.72L110 91.18L120 88.5L130 90.09L140 91.55L150 98.49L160 86.96L170 111.16L180 108.9L190 104.46L200 129.36L210 129.91L220 108.59L230 119.06L240 141.89L250 139.85L260 151.87L270 167.46L280 168.7L290 170.69L300 171.62L310 172.8L320 164.5L330 161.25L340 159.18L350 164.2L360 182.2L370 171.71L380 162.42L390 165.19L400 189.01L400 200L0 200z' fill='url(%23SvgjsLinearGradient1046)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1045'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1046'%3e%3cstop stop-opacity='0.65' stop-color='rgba(81%2c 9%2c 79%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23981195' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+    padding: 30px;
+    color: #ffffff;
+    font-weight: bold !important;
+}
+.stats-container .each.bg-red {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1016%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(224%2c 76%2c 45%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1017)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1016'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1017'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-success {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1018%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(6%2c 162%2c 57%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1019)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1018'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1019'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-yellow {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1020%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(203%2c 216%2c 23%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1021)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1020'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1021'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-lightblue {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1022%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(23%2c 128%2c 216%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(26%2c 29%2c 2%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1023)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1022'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1023'%3e%3cstop stop-opacity='0.65' stop-color='rgba(26%2c 29%2c 2%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='%23313704' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-dummy {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='400' height='200' preserveAspectRatio='none' viewBox='0 0 400 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1030%26quot%3b)' fill='none'%3e%3crect width='400' height='200' x='0' y='0' fill='rgba(229%2c 232%2c 234%2c 1)'%3e%3c/rect%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164' stroke='rgba(193%2c 193%2c 192%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 72L10 85.96L20 109.52L30 96.31L40 111.7L50 115.53L60 124.82L70 118.93L80 127.76L90 148.17L100 172.59L110 151.9L120 170.19L130 174.91L140 181.94L150 172.64L160 152.24L170 149.65L180 143.72L190 149.89L200 173.82L210 179.84L220 190.71L230 193.7L240 188.01L250 182.85L260 163.92L270 153.49L280 137.96L290 154.11L300 158.46L310 177.44L320 174.63L330 197.79L340 174.66L350 162.29L360 163.85L370 182.17L380 162.91L390 176.12L400 164L400 200L0 200z' fill='url(%23SvgjsLinearGradient1031)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1030'%3e%3crect width='400' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='0%25' x2='50%25' y2='100%25' id='SvgjsLinearGradient1031'%3e%3cstop stop-opacity='0.65' stop-color='rgba(193%2c 193%2c 192%2c 1)' offset='0'%3e%3c/stop%3e%3cstop stop-opacity='0' stop-color='white' offset='0.8'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+}
+.stats-container .each.bg-dummy h6 {
+    width:100px;
+    height:10px;
+    background:#F5F5F5;
+    border-radius:5px;
+}
+.stats-container .each.bg-dummy .count {
+    width:20px;
+    height:20px;
+    background: grey;
+    border-radius:100px;
+}
+.stats-container .each i {
+    font-size:25px;
+}
+.stats-container .each .count {
+    font-size:50px;
+    font-weight: lighter;
+}
+.box {
+    box-shadow: 5px 20px 40px 0 rgba(0,0,0,0.07);
+    padding: 30px;
+    width: 100%;
+    min-height: 200px;
+    background: #ffffff;
+    border-radius:20px;
+}
+.search-form {
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius:15px;
+    position: relative;
+}
+.search-form input,.search-form input:focus,.search-form input:hover {
+    border-bottom: none !important;
+}
+
+.search-form i {
+    position: absolute;
+    top: 10px;
+    right: 7px;
+    font-size:25px;
+}
+.modern-table {
+    width: 100%;
+}
+.modern-table .table-head .each {
+    float: left;
+    font-weight: 500;
+    font-size: 15px !important;
+    color:#D1D9E0;
+    padding: 10px 5px;
+}
+.modern-table .table-body .table-row  {
+    background: #F9FAFB;
+    padding: 30px 5px;
+    border-radius:5px;
+    -webkit-transition: -webkit-box-shadow .2s;
+    transition: -webkit-box-shadow .2s;
+    transition: box-shadow .2s;
+    transition: box-shadow .2s,-webkit-box-shadow .2s;
+    margin-bottom: 10px;
+}
+.modern-table .table-body .table-row:nth-child(2n) {
+    background: none;
+}
+.modern-table .table-body .table-row:hover {
+    box-shadow: 0 0 30px 10px  rgba(100,100,100,0.1);
+    background-color: #fff;
+}
+.modern-table .table-body .table-row .each {
+    float: left;
+    font-weight: 500;
+    font-size: 12px !important;
+    color:#282828;
+    padding: 2px 5px;
+}
+.modern-table .table-body .table-row .each .left {
+    display: none;
+    width: 50%;
+    float: left;
+}
+.modern-table .table-body .table-row .each .right {
+    width:100%;
+    float: left;
+}
+.floating-button {
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+}
+.modal-right .modal-dialog {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    height: 100vh;
+}
+.modal-right .modal-content {
+    height: 100vh;
+    padding: 50px;
+}
+
+.no-account-info {
+    margin: 50px ;
+    text-align: center;
+}
+.no-account-info p {
+    font-size: 15px;
+    color: grey;
+    font-weight: 600;
+    width: 50%;
+    margin:20px auto;
+}
+@media(max-width:800px) {
+    .modern-table .table-body .table-row .each .left {
+        display: block;
+    }
+    .modern-table .table-body .table-row .each .right {
+        width:50%;
+    }
+}
+
+@media(min-width: 1400px) {
+    #app-container .menu-pane {
+        width:350px;
+    }
+}
