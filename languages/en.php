@@ -124,5 +124,6 @@ return array(
     'no-accounts-info' => 'You have not added any Instagram account, kindly click the button below to add new account',
     'add-accounts' => 'Add accounts',
     'my-account' => 'My account',
-    'logout' => 'Log out'
+    'logout' => 'Log out',
+    'manage-accounts-info' => 'You can add, edit, delete your instagram accounts'
 );
