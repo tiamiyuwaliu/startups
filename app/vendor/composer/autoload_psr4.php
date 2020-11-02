@@ -6,15 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'seregazhuk\\PinterestBot\\' => array($vendorDir . '/seregazhuk/pinterest-bot/src'),
     'Winbox\\' => array($vendorDir . '/winbox/args/src'),
     'Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Symfony\\Polyfill\\Intl\\Idn\\' => array($vendorDir . '/symfony/polyfill-intl-idn'),
     'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'Symfony\\Component\\Mime\\' => array($vendorDir . '/symfony/mime'),
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
-    'Stichoza\\GoogleTranslate\\' => array($vendorDir . '/stichoza/google-translate-php/src/Stichoza/GoogleTranslate'),
     'RingCentral\\Psr7\\' => array($vendorDir . '/ringcentral/psr7/src'),
     'React\\Stream\\' => array($vendorDir . '/react/stream/src'),
     'React\\Socket\\' => array($vendorDir . '/react/socket/src'),
@@ -28,11 +27,9 @@ return array(
     'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Omnipay\\Stripe\\' => array($vendorDir . '/omnipay/stripe/src'),
     'Omnipay\\PayPal\\' => array($vendorDir . '/omnipay/paypal/src'),
-    'Omnipay\\Mollie\\' => array($vendorDir . '/omnipay/mollie/src'),
     'Omnipay\\Common\\' => array($vendorDir . '/omnipay/common/src/Common'),
     'Money\\' => array($vendorDir . '/moneyphp/money/src'),
     'LazyJsonMapper\\' => array($vendorDir . '/lazyjsonmapper/lazyjsonmapper/src'),
-    'JmesPath\\' => array($vendorDir . '/mtdowling/jmespath.php/src'),
     'JBZoo\\Utils\\' => array($vendorDir . '/jbzoo/utils/src'),
     'JBZoo\\Image\\' => array($vendorDir . '/jbzoo/image/src'),
     'JBZoo\\Data\\' => array($vendorDir . '/jbzoo/data/src'),
@@ -53,5 +50,4 @@ return array(
     'Clue\\React\\HttpProxy\\' => array($vendorDir . '/clue/http-proxy-react/src'),
     'BinSoul\\Net\\Mqtt\\Client\\React\\' => array($vendorDir . '/binsoul/net-mqtt-client-react/src'),
     'BinSoul\\Net\\Mqtt\\' => array($vendorDir . '/binsoul/net-mqtt/src'),
-    'Aws\\' => array($vendorDir . '/aws/aws-sdk-php/src'),
 );

@@ -13,6 +13,8 @@ $request->any('google/auth', array('uses' => 'Home@googleAuth', 'secure' => fals
 
 $request->any("dashboard", array('uses' => 'Dashboard@index', 'secure' => true));
 $request->any("accounts", array('uses' => 'Account@index', 'secure' => true));
+$request->any("profile", array('uses' => 'Profile@index', 'secure' => true));
+$request->any("delete/account", array('uses' => 'Profile@delete', 'secure' => true));
 
 $request->any("admincp", array('uses' => 'Admin@index', 'secure' => true));
 $request->any("admincp/users", array('uses' => 'Admin@users', 'secure' => true));

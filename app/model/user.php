@@ -330,6 +330,7 @@ class UserModel extends Model {
         $user = ($user) ? $user : $this->authUser;
 
         if (!$user['avatar']) return assetUrl('assets/images/user-avatar.png');
+        return url_img($user['avatar'], 200);
     }
 
     public function userData($field) {
@@ -346,7 +347,8 @@ class UserModel extends Model {
             'full_name' => '',
             'email' => '',
             'timezone' => '',
-            'date_format' => ''
+            'date_format' => '',
+            'avatar' => $this->authUser['avatar']
         );
 
         /**
@@ -354,10 +356,11 @@ class UserModel extends Model {
          * @var $email
          * @var $timezone
          * @var $date_format
+         * @var $avatar
          */
         extract(array_merge($ext, $val));
 
-        return $this->db->query("UPDATE users SET full_name=?,email=?,timezone=?,date_format=? WHERE id=?", $full_name,$email,$timezone,$date_format, $this->authId);
+        return $this->db->query("UPDATE users SET full_name=?,email=?,timezone=?,date_format=?,avatar=? WHERE id=?", $full_name,$email,$timezone,$date_format,$avatar, $this->authId);
     }
 
     public function savePassword($val) {

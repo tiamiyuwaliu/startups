@@ -54,23 +54,23 @@
 #app-container .menu-pane .icon-menus ul li {
     padding: 0 10px ;
 }
-#app-container .menu-pane .icon-menus ul a {
+#app-container .menu-pane .icon-menus ul li >  a {
     display: block;
     margin: 20px auto;
 }
-#app-container .menu-pane .icon-menus ul a.add-button {
+#app-container .menu-pane .icon-menus ul li > a.add-button {
     width:40px;
     height: 40px;
 }
-#app-container .menu-pane .icon-menus ul a i {
+#app-container .menu-pane .icon-menus ul li > a i {
     font-size:25px;
 }
-#app-container .menu-pane .icon-menus ul a.add-button i {
+#app-container .menu-pane .icon-menus ul li > a.add-button i {
     font-size:20px;
     position: relative;
     bottom: 5px;
 }
-#app-container .menu-pane .icon-menus ul a.account-icon img {
+#app-container .menu-pane .icon-menus ul li > a.account-icon img {
     width:40px;
     height:40px;
     border-radius:100px;
@@ -149,7 +149,45 @@
     background:#F5F5F5 ;
 
 }
+#app-container .menu-pane .menu-container .media {
+    background: #F5F5F5;
+    padding:3px;
+    border-radius:4px;
+    padding-top:5px
+}
+#app-container .menu-pane .menu-container ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-top: 30px;
+}
+#app-container .menu-pane .menu-container ul li {
+    width:50%;
+    float: left;
+}
+#app-container .menu-pane .menu-container ul li a {
+    display: block;
+    color: #000;
+    text-align:center;
+    margin-bottom:20px;
+    font-weight: bold;
+}
 
+#app-container .menu-pane .menu-container ul li a i {
+    display: block;
+    color: grey !important;
+    font-size: 50px;
+    position: relative;
+
+}
+#app-container .menu-pane .menu-container ul li a.active, 
+#app-container .menu-pane .menu-container ul li a.active i{
+    color: #7828EA !important;
+    font-weight: bold;
+}
+#app-container .menu-pane .menu-container ul li a:hover, #app-container .menu-pane .menu-container ul li a:hover i {
+    color: #000;
+}
 #app-container .content-pane {
     width: 100%;
     padding: 30px 0;
@@ -173,7 +211,7 @@
 #app-container .content-pane .header {
     width:auto;
     position: absolute;
-    top: 0;
+    top: 24px;
     right: 20px;
 }
 #app-container .content-pane .header ul {
@@ -196,6 +234,7 @@
 .stats-container {
     margin-top: 50px;
 }
+
 .stats-container .each {
     width: 100%;
     height: 150px;
@@ -323,6 +362,10 @@
     padding: 50px;
 }
 
+.modal-right-lg .modal-dialog {
+    max-width:50rem;
+}
+
 .no-account-info {
     margin: 50px ;
     text-align: center;
@@ -333,6 +376,129 @@
     font-weight: 600;
     width: 50%;
     margin:20px auto;
+}
+.side-help h3{
+    font-weight: bold;
+}
+.side-help img {
+    width: 100%;
+    margin: 10px 0;
+    border-radius: 5px ;
+}
+.grid-container {
+    width: 100%;
+}
+.grid-container .each-container {
+    width:25%;
+    float: left;
+    padding-right:15px;
+}
+.grid-container .each-container .each {
+    width:100%;
+    background: #ffffff;
+    height: 200px;
+    border-radius:10px;
+    display: block;
+    margin-bottom: 15px;
+}
+.grid-container .each-container .each-add {
+    background: #ffffff;
+    text-align: center;
+    padding: 40px 0;
+    color:#130523;
+}
+
+.grid-container .each-container .each-add i {
+    font-size:100px;
+
+}
+.grid-container .each-container .each-account {
+    padding: 20px;
+    position: relative;
+
+}
+.grid-container .each-container .each-account .each-footer {
+    position: absolute;
+    bottom: 0;
+    padding: 10px 20px;
+    left: 0px;
+    width: 100%;
+}
+.digit-group {
+    margin: 20px 0;
+}
+.digit-group input {
+    width: 13.2%;
+    height: 70px;
+    background-color: #fff;
+    border: solid 1px grey;
+    border-radius:5px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-family: "Raleway", sans-serif;
+    font-weight: 200;
+    color: #000000;
+    margin: 0 2px;
+}
+.bold {
+    font-weight: bold !important;
+}
+.digit-group input::-webkit-inner-spin-button,
+.digit-group input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.digit-group .splitter {
+    padding: 0 5px;
+    color: grey;
+    font-size: 24px;
+}
+
+
+.account-add-second-step {
+    display: none;
+}
+.accounts-add-progress{
+    font-weight:600;
+    border:solid 1px #EBEBEB;
+    background: #F6F6F6;
+    padding: 0 10px;
+    margin: 20px 0;
+    margin-top: 0;
+    border-radius:5px;
+}
+.progress-purple {
+    border-bottom-color: #7A2DE0;
+}
+.progress-purple:after {
+    background: #E5D7F9;
+}
+.accounts-add-progress .progress-container {
+    float: left;
+    width:80%;
+}
+.accounts-add-progress .text-container {
+    width: 20%;
+    padding: 10px 10px;
+    float: left;
+    text-align: center;
+}
+.social-accounts-menu{
+    width:250px;
+    left:50px !important;
+    top: -40px !important;
+}
+.avatar-container {
+    padding: 30px 0;
+}
+.avatar-container .img-container {
+    width:100px;
+    height: 100px;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    border-radius:100px;
 }
 @media(max-width:800px) {
     .modern-table .table-body .table-row .each .left {

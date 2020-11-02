@@ -1,0 +1,147 @@
+<div class="content-top">
+    <h3> <?php _l('my-account')?></h3>
+    <div class="sub-title"><?php _l('my-account-info')?></div>
+
+    <div class="nav-tabs-scrollable">
+        <ul class="nav nav-justified nav-tabs" id="justifiedTab" role="tablist">
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab" href="#profile" id="home-tab" role="tab"><?php _l('profile')?></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#password" id="profile-tab" role="tab"><?php _l('password')?></a>
+            </li>
+
+            <?php Hook::getInstance()->fire('profile.tabs')?>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#cancel" id="profile-tab" role="tab"><?php _l('cancel-account')?></a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="content-body">
+    <div class="tab-content" id="justifiedTabContent">
+        <div  class="tab-pane fade show active" id="profile" role="tabpanel">
+            <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <input type="hidden" name="val[action]" value="profile"/>
+
+                                <div class="avatar-container row">
+                                    <div class="col-md-4">
+                                        <div class="img-container" style="background-image:url(<?php echo model('user')->getAvatar()?>)"></div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="custom-file mt-4">
+                                            <input type="file" class="custom-file-input" name="avatar" id="customFile">
+                                            <label class="custom-file-label" for="customFile"><?php _l('choose-picture')?></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><?php _l('full-name')?></label>
+                                    <input class="form-control" name="val[full_name]" value="<?php echo $user['full_name']?>"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><?php _l('email-address')?></label>
+                                    <input class="form-control" name="val[email]" value="<?php echo $user['email']?>"/>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label><?php _l('timezone')?></label>
+                                    <select class="form-control select-timezone" name="val[timezone]">
+                                        <option value=""><?php _l('select-timezone')?></option>
+                                        <?php foreach(getTimezones() as $key => $name):?>
+                                            <option <?php echo $user['timezone'] == $key ? 'selected' : null?> value="<?php echo $key?>"><?php echo $name?></option>
+                                        <?php endforeach?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><?php _l('date-format')?></label>
+                                    <select class="form-control" name="val[date_format]">
+                                        <?php foreach(getDateFormats() as $key => $value):?>
+                                            <option <?php echo ($user['date_format'] == $key) ? 'selected':null?> value="<?php echo $key?>"><?php echo $value?></option>
+                                        <?php endforeach?>
+                                    </select>
+                                </div>
+
+
+                                <button class="btn  btn-primary"><?php _l('save-profile')?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div  class="tab-pane fade" id="password" role="tabpanel">
+            <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <input type="hidden" name="val[action]" value="password"/>
+
+                                <div class="form-group floating-label">
+                                    <label><?php _l('current-password')?></label>
+                                    <input type="password" class="form-control" name="val[currentpassword]"/>
+                                </div>
+
+                                <div class="form-group floating-label">
+                                    <label><?php _l('new-password')?></label>
+                                    <input type="password" class="form-control" name="val[password]"/>
+                                </div>
+                                <div class="form-group floating-label">
+                                    <label><?php _l('confirm-password')?></label>
+                                    <input type="password" class="form-control" name="val[confirm]"/>
+                                </div>
+
+                                <button class="btn  btn-primary"><?php _l('change-password')?></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="alert alert-light" role="alert">
+                            <h6 class="bold"><?php _l('how-to-change-password')?></h6>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item"><?php _l('how-to-change-password-1')?></li>
+                            <li class="list-group-item"><?php _l('how-to-change-password-2')?> </li>
+                            <li class="list-group-item"><?php _l('how-to-change-password-3')?></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div  class="tab-pane fade" id="cancel" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="bold"><?php _l('cancel-my-account')?></h6>
+
+                            <div class="alert alert-light mt-3" role="alert">
+                                <?php _l('cancel-account-note')?>
+                            </div>
+
+                            <div >
+                                <a href="<?php echo url('delete/account')?>" class="btn btn-danger mt-5 confirm"><?php _l('cancel-account')?></a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php Hook::getInstance()->fire('profile.tabs.content')?>
+    </div>
+</div>
+

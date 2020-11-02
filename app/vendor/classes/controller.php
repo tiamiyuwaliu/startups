@@ -42,6 +42,8 @@ class Controller {
     public $collapsed = false;
     public $useEditor = false;
     public $fullLoader = true;
+
+    public $selectedAccount = null;
     public function __construct($request)
     {
         $this->request = $request;
@@ -62,7 +64,10 @@ class Controller {
         if ($this->model('user')->isLoggedIn()) {
             $user = $this->model('user')->authUser;
             if($user['timezone']) date_default_timezone_set($user['timezone']);
+
+
         }
+
         Hook::getInstance()->fire('controller.loaded', null, array($this));
 
     }
@@ -127,10 +132,25 @@ class Controller {
     }
 
     public function render($content, $wrap = false) {
+        $this->selectedAccount = $this->model('social')->firstAccount();
+        if ($switchAccount = $this->request->input('switch')) {
+            $account = $this->model('social')->findAccount($switchAccount);
+            if ($account)  {
+                $this->selectedAccount = $account;
+                session_put('selected-account', $switchAccount);
+
+            }
+        }
+
+        if ($selectedAccount = session_get('selected-account') ) {
+            $account = $this->model('social')->findAccount($selectedAccount);
+            if ($account) $this->selectedAccount = $account;
+        }
 
         if ($wrap) {
             $content = $this->view($this->wrapLayout, array('content' => $content));
         }
+
 
 
         if (is_ajax()) {

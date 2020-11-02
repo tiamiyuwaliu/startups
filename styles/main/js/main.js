@@ -246,8 +246,7 @@ function load_page(url, f, cont) {
                 ///hideMenu();
                 reloadInit();
                 if ($('.post-edit-content').length > 0) {
-                    finilizeSelectedAccounts();
-                    validateEditPost();
+
                 }
                 pageLoaded();
                 window.runPreviewAuto = true;
@@ -256,9 +255,7 @@ function load_page(url, f, cont) {
                 //$("#help-modal").modal('hide');
                 //automationPageInit();
                 $('body').click();
-                setTimeout(function() {
-                    $('body').bootstrapMaterialDesign();
-                }, 300)
+
 
             }
 
@@ -281,6 +278,27 @@ window.captchIsLoaded = false;
 window.runPreviewAuto = true;
 function reloadInit(paginate) {
     initAnimation();
+
+    $('.digit-group').find('input').each(function() {
+        $(this).attr('maxlength', 1);
+        $(this).on('keyup', function(e) {
+            var parent = $($(this).parent());
+
+            if(e.keyCode === 8 || e.keyCode === 37) {
+                var prev = parent.find('input#' + $(this).data('previous'));
+
+                if(prev.length) {
+                    $(prev).select();
+                }
+            } else if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                var next = parent.find('input#' + $(this).data('next'));
+
+                if(next.length) {
+                    $(next).select();
+                }
+            }
+        });
+    });
 
     $('.scroll-paginate').scroll(function () {
         if(($(this).find('.the-content').height() - $(this).scrollTop()) - 10 <= $(this).height()) {
@@ -986,5 +1004,31 @@ function previewFile(t,file, type) {
     return false;
 }
 
+
+function processAccountResult(result) {
+    if (result.error_type === 'general' && result.message !== 'challenge_required') {
+        notify(result.message, 'error');
+    } else {
+        $('.account-add-first-step').hide();
+        $('.account-add-second-step').fadeIn();
+        $('.detail-stepper').removeClass('active');
+        $('.verification-stepper').addClass('active');
+        $('.verification-text').html(result['message'])
+        $('#verificationModal').find('label').html(c['message']);
+    }
+}
+
+function accountAddedSuccess() {
+    $('#addAccountModal').modal('hide');
+    $('.account-add-first-step').fadeIn();
+    $('.account-add-second-step').hide();
+    $('.account-add-first-step').find('input').val('');
+    $('.account-add-second-step').find('input').val('');
+    $('.detail-stepper').addClass('active');
+    $('.verification-stepper').removeClass('active');
+
+    load_page(buildLink('accounts'));
+    return false;
+}
 
 
