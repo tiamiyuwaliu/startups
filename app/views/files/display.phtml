@@ -1,0 +1,37 @@
+<div class="each-container">
+    <div class="each <?php echo (isset($selected) and $selected) ? 'selected' : null?>"
+         style="background-image: <?php echo ($file['file_type'] == 'image') ? 'url('.assetUrl($file['file_name']).')': 'none'?>;"
+         data-raw="<?php echo $file['file_name']?>"
+         data-id="<?php echo $file['id']?>"
+         data-file="<?php echo assetUrl($file['file_name'])?>" data-type="<?php echo $file['file_type']?>">
+        <input type="hidden" value="<?php echo $file['id']?>" name="val[filesi][]"/>
+        <div class="video-content" style="width:100%;height:100%;overflow: hidden;position:relative;">
+            <?php if($file['file_type'] == 'video'):?>
+                <video src='<?php echo assetUrl($file['file_name'])?>' playsinline='' muted='' loop=''></video>
+            <?php endif?>
+        </div>
+
+
+        <div class="the-content">
+            <div class="clearfix">
+                <div class="float-left dropdown">
+                    <a href="" data-toggle="dropdown" class="menu "><i class="las la-ellipsis-v"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="" onclick="return previewFile(this,'<?php echo assetUrl($file['file_name'])?>','<?php echo $file['file_type']?>')" class="dropdown-item">View</a>
+                        <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('files', array('action' => 'delete','id' => $file['id']))?>">Delete</a>
+
+                    </div>
+                </div>
+                <div class="float-right">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck<?php echo $file['id']?>"  value="<?php echo $file['id']?>" name="val[files][]">
+                        <label class="custom-control-label" for="customCheck<?php echo $file['id']?>"></label>
+                    </div>
+                </div>
+            </div>
+            <span class="badge badge-primary"><?php echo ($file['file_type'] == 'image') ? l('image') : l('video')?></span>
+
+
+        </div>
+    </div>
+</div>

@@ -21,6 +21,19 @@ class SocialModel extends Model {
         return $this->instagram;
     }
 
+    public function login($account) {
+        $instagram =  $this->getObject();
+        try {
+            $instagram->login($account['username'], mDcrypt($account['password']));
+        } catch (Exception $e) {
+            //there is problem login user to disable this account here
+        }
+
+        return $this;
+    }
+
+
+
     public function setProxy() {
 
     }

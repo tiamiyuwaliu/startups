@@ -162,6 +162,11 @@ a {
 .font-bg {
     font-size:15px !important;
 }
+.floating-button {
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+}
 .gdpr-container {
     position: fixed;
     bottom: 40px;

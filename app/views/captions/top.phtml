@@ -1,0 +1,17 @@
+<div class="content-top">
+    <h3><?php _l('manage-templates')?></h3>
+    <div class="nav-tabs-scrollable">
+        <ul class="nav nav-justified nav-tabs" id="justifiedTab" role="tablist">
+            <li class="nav-item">
+                <a  class="nav-link <?php echo ($active == 'captions') ? 'active': null?>" data-ajax="true" href="<?php echo url('captions')?>" ><?php _l('captions')?></a>
+            </li>
+            <li class="nav-item">
+                <a  class="nav-link <?php echo ($active == 'hashtags') ? 'active': null?>" data-ajax="true" href="<?php echo url('hashtags')?>" ><?php _l('hashtags')?></a>
+            </li>
+            <li class="nav-item">
+                <a  class="nav-link <?php echo ($active == 'mentions') ? 'active': null?>" data-ajax="true" href="<?php echo url('mentions')?>" ><?php _l('@mentions')?></a>
+            </li>
+        </ul>
+    </div>
+
+</div>

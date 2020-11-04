@@ -18,12 +18,12 @@
             </div>
             <div class="grid-container clearfix">
                 <div class="each-container">
-                    <a href="" class="each each-add shadow-4" data-toggle="modal" data-target="#addAccountModal"><i class="las la-plus-circle"></i></a>
+                    <a href="" class="each each-add shadow-1" data-toggle="modal" data-target="#addAccountModal"><i class="las la-plus-circle"></i></a>
                 </div>
 
                 <?php foreach(model('social')->getAccounts() as $account):?>
                     <div class="each-container">
-                        <div class="each each-account shadow-4">
+                        <div class="each each-account shadow-1">
                             <?php if($account['status']):?>
                                 <div class="mb-3"><span class="badge badge-pill badge-success"><?php _l('active')?></span></div>
                             <?php else:?>
