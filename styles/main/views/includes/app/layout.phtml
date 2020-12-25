@@ -23,7 +23,7 @@
                         </div>
                     </li>
                     <li><a href="" data-toggle="modal" data-target="#addAccountModal" title="<?php _l('add-account')?>" class="btn btn-light btn-float shadow-none add-button mtitle-right"><i class="las la-plus"></i></a> </li>
-                    <li><a href="" title="<?php _l('compose-new-post')?>" class="btn compose-menu btn-primary mtitle-right btn-float shadow-none add-button"><i class="las la-edit"></i></a> </li>
+                    <li><a href="<?php echo url('posts')?>" data-ajax="true" title="<?php _l('compose-new-post')?>" class="btn compose-menu btn-primary mtitle-right btn-float shadow-none add-button"><i class="las la-edit"></i></a> </li>
                 </ul>
 
                 <ul class="main">
@@ -32,6 +32,7 @@
                     <li><a href="<?php echo url('chat')?>" data-ajax="true" class="btn chat-menu btn-primary mtitle-right btn-float shadow-none btn-sm <?php echo ($C->activeIconMenu == 'chat') ? 'active':null?>" title="<?php _l('chat')?>"><i class="icons icon-bubble"></i></a></li>
                     <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>"><i class="icons icon-graph"></i></a></li>
                     <li><a href="<?php echo url('calendar')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'calendar') ? 'active':null?>" title="<?php _l('calendar')?>"><i class="icons icon-calendar"></i> </a></li>
+
                 </ul>
                 <ul class="main">
                     <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('templates')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'captions' ? 'active':null?>"><i class="icons icon-grid"></i></a> </li>
@@ -75,6 +76,13 @@
 
 </div>
 
+<div class="modal  modal-right modal-right" tabindex="-1" id="addTemplatesModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content p-0">
+            <img src="<?php echo assetUrl('assets/images/loader.gif')?>"/>
+        </div>
+    </div>
+</div>
 <div class="modal  modal-right modal-right-lg" tabindex="-1" id="addAccountModal" role="dialog">
     <div class="modal-dialog" role="document">
         <form action="<?php echo url('accounts')?>" method="post" class="general-form short-form">
@@ -155,5 +163,27 @@
 
             </div>
         </form>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg " id="fileManagerModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="icons icon-folder-alt"></i> <?php _l('choose-media')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" >
+                <div id="choose-files-container" data-container="#choose-files-container" data-paginate="true" data-offset="0" data-url="<?php echo url('files/load')?>" class="files-grid clearfix content-scroller modern-scroll" data-height="50">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('close')?></button>
+                <button type="button" class="btn btn-primary color-white" onclick="return Filemanager.add()"><?php _l('add')?></button>
+            </div>
+        </div>
     </div>
 </div>

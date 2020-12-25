@@ -1355,7 +1355,7 @@ function convertTimeByTimezone($datetime, $convert = false, $account = null){
 
     $user = model('user')->authUser;
     if ($account) {
-        $account = model('account')->find($account);
+        $account = model('social')->find($account);
         $user = model('user')->getUser($account['userid']);
     }
 

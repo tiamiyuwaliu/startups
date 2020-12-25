@@ -37,7 +37,7 @@
 }
 #app-container .menu-pane .icon-menus .logo {
     display: block;
-    margin: 20px auto;
+    margin: 10px auto;
     width: 40px;
 }
 #app-container .menu-pane .icon-menus .logo img{
@@ -56,7 +56,7 @@
 }
 #app-container .menu-pane .icon-menus ul li >  a {
     display: block;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 #app-container .menu-pane .icon-menus ul li > a.add-button {
     width:40px;
@@ -125,25 +125,39 @@
 }
 #app-container .content-pane .content-top {
     padding:0 30px ;
-    padding-top: 30px;
+    padding-top: 10px;
     background: #ffffff;
     box-shadow: inset 0 -2px 0 -1px rgba(0,0,0,.12);
-    min-height: 90px;
+    min-height: 60px;
+}
+body {
+    overflow: hidden;
 }
 
 #app-container .content-pane .content-body {
-    height: calc(100vh - 120px);
-    overflow: auto;
-    overflow-x: hidden;
+
+    overflow: hidden;
     padding: 30px;
+}
+.content-scroller {
+    overflow: hidden !important;
+    overflow-x: hidden;
+    padding-right: 10px;
 }
 #app-container .content-pane .content-body.with-tabs {
     height: calc(100vh - 160px);
 }
+.content-scroller.with-tabs-card {
+    height: calc(100vh - 200px) !important;
+}
+.content-scroller.with-tabs-card-footer {
+    height: calc(100vh - 250px) !important;
+}
+
 #app-container .content-pane .header {
     width:auto;
     position: absolute;
-    top: 24px;
+    top: 0px;
     right: 20px;
 }
 #app-container .content-pane .header ul {
@@ -476,6 +490,9 @@ img.emojione {
 .folder-color-chooser label.active{
     border:solid 2px #000000;
 }
+.hide {
+    display: none;
+}
 .files-grid {
     width: 100%;
     height: calc(100vh - 180px);
@@ -484,18 +501,23 @@ img.emojione {
     overflow-x: hidden;
 }
 .files-grid .each-container {
-    width: 16.6%;
+    width: 14.28%;
     float: left;
     padding-right:15px;
 }
 .files-grid .each-container .each {
-    background: #000;
+    background: #fff;
     border-radius:3px;
-    height:150px;
+    height:130px;
     margin-bottom: 20px;
     background-size:cover;
     background-position: center;
     position: relative;
+    transition: border .3s;
+
+}
+.files-grid .each-container .each .video-content {
+    border-radius:3px;
     overflow: hidden;
 }
 .files-grid .each-container .each .the-content {
@@ -507,13 +529,17 @@ img.emojione {
     height: 100%;
     border-radius:3px;
     padding: 10px;
+    padding-right: 0;
 }
 .files-grid .each-container .each .the-content .menu {
     font-size:20px;
     color: #ffffff;
 }
-.files-grid .each-container .each:hover  .the-content {
+.files-grid .each-container .each:hover  .the-content, .files-grid .each-container .each.selected  .the-content {
     display: block;
+}
+.files-grid .each-container .each.selected {
+    border: solid 5px #E9DCFA;
 }
 .files-grid .each-container .each .the-content .badge {
     position: absolute;
@@ -522,6 +548,293 @@ img.emojione {
 }
 .nav-tabs-scrollable .nav-link:hover {
     background: none !important;
+}
+.files-grid .each-container .each-back {
+    display: block;
+    font-size:60px;
+    color: grey;
+    text-align: center;
+    padding: 30px 0;
+}
+.files-grid .each-container .each-folder {
+    padding: 20px 10px;
+    display: block;
+}
+.files-grid .each-container .each-folder h6 {
+    text-align: center;
+    margin: 10px 0;
+    color: grey;
+}
+.files-grid .each-container .each-folder .folder-icon {
+    position: relative;
+    width:100px;
+    height:50px;
+    margin: auto;
+    margin-bottom:4px;
+}
+.files-grid .each-container .each-folder .folder-icon .bottom {
+    width: 100px;
+    height: 50px;
+    padding-top: 0px;
+    position: relative;
+    text-align: center;
+}
+
+.files-grid .each-container .each-folder .folder-icon .bottom:after {
+    content: " ";
+    width: 50px;
+    height: 35px;
+    border-radius: 0 5px 5px 5px;
+    display: block;
+    background-color: #0DB2E1;
+    position: absolute;
+    top: 15px;
+    left: 25px;
+}
+
+.files-grid .each-container .each-folder  .folder-icon .bottom:before {
+    content: " ";
+    width: 25px;
+    height: 5px;
+    border-radius: 5px 15px 0 0;
+    display: block;
+    background-color: #0DB2E1;
+    position: absolute;
+    top: 10px;
+    left: 25px;
+}
+.each-select-account {
+    width: 100%;
+    height: 100vh;
+
+}
+.account-selector-list .each {
+    position: relative;
+    margin:5px 0 ;
+    border-radius:3px;
+    padding: 3px ;
+    display: block;
+}
+.account-selector-list .each:hover, .account-selector-list .each.active {
+}
+.account-selector-list .each .custom-control {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.account-selector-list .each .media {
+    padding-left: 30px;
+}
+.account-selector-list .each h6 {
+    font-size: 12px;
+    color: grey;
+    font-weight: 300;
+}
+.account-selector-list .each.active h6, .account-selector-list .each:hover h6 {
+}
+.file-drag-drop-container {
+    border: dashed 1px lightgrey;
+    height: 250px;
+    border-bottom: none;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+.file-drag-drop-container i {
+    font-size:150px !important;
+    color: #F5F5F5;
+}
+.external-file-chooser {
+    border: dashed 1px lightgrey;
+    height: 70px;
+    padding: 20px;
+    color: grey;
+}
+.external-file-chooser .btn {
+    padding-top: 5px;
+    font-size:20px;
+}
+.selected-media-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: auto;
+    overflow-y: hidden;
+    height: 150px;
+    padding: 10px 0;
+
+}
+.selected-media-container .each {
+    flex: 0 0 auto;
+    width: 100px;
+    height: 100px;
+    margin-right: 15px;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    border: solid 1px lightgrey;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+.selected-media-container  .each video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: 100%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.selected-media-container  .each .close {
+    position: absolute;
+    z-index: 99;
+}
+.post-editor-menu a {
+    text-align: left;
+}
+.post-editor-menu a i, .post-editor-menu a  span {
+    display: inline-block;
+}
+.post-editor-menu a i {
+    font-size: 25px;
+    position: relative;
+    top: -5px;
+    margin-right: 5px;
+}
+.post-editor-menu a  span {
+    color: grey;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+.post-editor-menu a  span h6 {
+    text-transform: uppercase;
+    margin: 2px 0;
+    color: grey;
+    font-weight: bold;
+}
+.post-editor-menu a.active, .post-editor-menu a:active, .post-editor-menu a.nav-link:hover, .post-editor-menu a:focus {
+    background: #E5E5E5 !important;
+    border-bottom: none !important;
+}
+.post-editor-menu a.active::before, .post-editor-menu a::before {
+    display: none;
+}
+.post-editor-menu a.active{
+    color: #8D12F4 !important;
+}
+.post-editor-menu a.active h6 {
+    color: #000;
+}
+.post-buttons {
+    position: relative;
+    margin-top: 30px;
+    width: 100%;
+    left: 0;
+    padding: 0;
+}
+.post-buttons .btn-group {
+    width: 50%;
+}
+.post-buttons .btn {
+    margin: 0;
+    font-weight: bold;
+}
+.post-buttons .btn-light {
+    color: grey;
+}
+.posts-action-toggle label {
+    font-size:12px;
+}
+.post-preview {
+    height: 420px;
+}
+.container-1200 {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1240px;
+}
+.post-preview .instagram-post-header {
+    padding: 10px 20px;
+    position: relative;
+}
+.post-preview .instagram-post-header .avatar {
+    width:30px;
+    height: 30px;
+    border-radius:100px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #F5F5F5;
+}
+.post-preview .instagram-post-header .header-info {
+    padding-left: 40px;
+}
+.post-preview .instagram-post-header .header-info div, .post-preview .instagram-post-caption div {
+    width: 100%;
+    height: 10px;
+    background: #F5F5F5;
+    margin-bottom: 7px;
+}
+.post-preview .instagram-post-content {
+    height: 240px;
+    background:  #F5F5F5;
+    border-top: solid 1px #E5E5E5;
+    border-bottom: solid 1px #E5E5E5;
+}
+.post-preview .preview-images-container .each {
+    width: 100%;
+    height: 240px;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center;
+}
+.preview-images-container .carousel-indicators li {
+    width:12px;
+    height: 12px;
+    border: none;
+    background: #fff;
+}
+.preview-images-container .carousel-indicators li.active {
+    background:#000;
+}
+.post-preview .instagram-post-caption {
+    padding: 10px 20px;
+}
+.video-instagram-post {
+    background: #000;
+    width: 100%;
+    height: 100%;
+}
+.post-editor-container {
+    position: relative;
+    min-height: 100px;
+}
+.post-editor-container textarea {
+    min-height: 110px !important;
+}
+.post-editor-container .editor-insert-btn-container {
+    position: absolute;
+    top: 30px;
+    right: 7px;
+}
+.post-editor-container a {
+    display: block;
+    margin-bottom:0px;
+    font-size:20px;
+    color: grey;
+}
+.color-white {
+    color: #ffffff !important;
+}
+#fileManagerModal  .each-container {
+    width:20%;
+}
+.border-none {
+    border:none;
 }
 @media(max-width:800px) {
     .modern-table .table-body .table-row .each .left {

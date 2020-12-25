@@ -1,0 +1,13 @@
+<?php if($C->request->segment(2)): $folder = model('file')->find($C->request->segment(2))?>
+    <div class="each-container">
+        <a  href="" onclick="return Filemanager.openFolder('<?php echo($folder['folder_id']) ? url('files/load/'.$folder['folder_id']) : url('files/load')?>')" class="each each-back shadow-1">
+            <i class="las la-arrow-left"></i>
+        </a>
+    </div>
+<?php endif?>
+<?php foreach(model('file')->getFolders($C->request->segment(2)) as $folder):?>
+    <?php echo view('files/folder', array('folder' => $folder, 'load' => true));?>
+<?php endforeach?>
+<?php foreach($files as $file):?>
+    <?php echo view('files/display', array('file' => $file, 'load' => true));?>
+<?php endforeach?>

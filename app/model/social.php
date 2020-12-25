@@ -27,6 +27,7 @@ class SocialModel extends Model {
             $instagram->login($account['username'], mDcrypt($account['password']));
         } catch (Exception $e) {
             //there is problem login user to disable this account here
+            print_r($e);
         }
 
         return $this;
@@ -75,6 +76,16 @@ class SocialModel extends Model {
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @alias findAccount
+     * @param $username
+     * @return mixed
+     */
+    public function find($username) {
+        $query = $this->db->query("SELECT * FROM accounts WHERE (username=? OR id=?) AND userid=?", $username, $username, model('user')->authOwnerId);
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getAccounts() {
         $query = $this->db->query("SELECT * FROM accounts WHERE userid=?", model('user')->authOwnerId);
         return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -84,6 +95,11 @@ class SocialModel extends Model {
         $accounts = $this->getAccounts();
         if ($accounts) return $accounts[0];
         return null;
+    }
+
+    public function findOneActive() {
+        $query = $this->db->query("SELECT * FROM accounts WHERE userid=? AND status=? ORDER BY rand() LIMIT 1", model('user')->authOwnerId, 1);
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     public function deleteAccount($id) {

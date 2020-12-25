@@ -1,0 +1,20 @@
+<div class="each-container ">
+    <a
+        <?php if(isset($load)):?>
+            onclick="return Filemanager.openFolder('<?php echo url('files/load/'.$folder['id'])?>')"
+            <?php else:?>
+            data-ajax="true"
+            <?php endif?>
+        href="<?php echo (isset($load)) ? 'javascript:void(0)' : url('files/'.$folder['id'])?>" class="each shadow-1 each-folder">
+        <style>
+            #this-folder-color-<?php echo $folder['id']?> .bottom:after, #this-folder-color-<?php echo $folder['id']?> .bottom:before {
+                background-color: <?php echo $folder['folder_color'] ? $folder['folder_color'] : '#000'?> !important;
+            }
+
+        </style>
+        <div class="folder-icon" id="this-folder-color-<?php echo $folder['id']?>">
+            <div class="bottom"></div>
+        </div>
+        <h6><?php echo $folder['file_name']?></h6>
+    </a>
+</div>

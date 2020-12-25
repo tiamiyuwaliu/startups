@@ -1,0 +1,64 @@
+<?php echo view('posts/header', array('active' => 'drafts'))?>
+
+<div class="content-body content-scroller modern-scroll ">
+    <div class="container-1200">
+        <div class="row">
+            <div class="col-md-3 side-content">
+                <h4><i class="icons icon-menu"></i> Post Filter</h4>
+                <div class="clearfix mt-4">
+                    <div class="custom-control custom-checkbox ">
+                        <input  type="checkbox" checked onchange="return PostEditor.toggleSelectAll(this)" class="custom-control-input" id="customCheckAccountAll">
+                        <label class="custom-control-label" for="customCheckAccountAll"><?php _l('select-all-accounts')?></label>
+                    </div>
+
+                </div>
+                <div class="account-selector-list clearfix ">
+
+                    <?php foreach(model('social')->getAccounts() as $account):?>
+                        <a href="" onclick="return PostEditor.addAccount('<?php echo $account['id']?>','<?php echo $account['username']?>', '<?php echo assetUrl($account['avatar'])?>')" class="each " data-id="<?php echo $account['id']?>" data-name="<?php echo $account['username']?>" data-avatar="<?php echo assetUrl($account['avatar'])?>">
+                            <div class="custom-control custom-checkbox mt-3">
+                                <input checked name="val[accounts][]" value="<?php echo $account['id']?>"  onchange="return PostEditor.selectAccount(this)"  type="checkbox" class="custom-control-input" id="customCheck<?php echo $account['id']?>">
+                                <label class="custom-control-label" for="customCheck<?php echo $account['id']?>"></label>
+                            </div>
+                            <div class="media">
+                                <img class="mr-3 mt-2" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
+                                <div class="media-body pt-1">
+                                    <h6 class=" text--wrapping mt-2"><?php echo $account['username']?></h6>
+                                </div>
+                            </div>
+
+                        </a>
+                    <?php endforeach?>
+                </div>
+            </div>
+            <div class="col-md-9 main-content">
+                <div class="card shadow-1  pr-0">
+                    <div class="card-header clearfix border-none">
+                        <div class="float-left">
+                            <div class="custom-control custom-checkbox mt-1">
+                                <input  type="checkbox" checked onchange="" class="custom-control-input" id="customCheckDraftAll">
+                                <label class="custom-control-label" for="customCheckDraftAll"><?php _l('select-all')?></label>
+                            </div>
+                        </div>
+                        <div class="float-right">
+                            <div class="dropdown">
+                                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bulk action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Delete</a>
+                                    <a class="dropdown-item" href="#">Schedule now</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        dsksdll
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

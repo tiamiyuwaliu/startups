@@ -1,0 +1,21 @@
+<div class="content-top">
+    <h3> <?php _l('posts')?></h3>
+
+    <div class="nav-tabs-scrollable">
+        <ul class="nav nav-justified nav-tabs" id="justifiedTab" role="tablist">
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($active == 'compose')? 'active': null?>" data-ajax="true" href="<?php echo url('posts')?>" id="home-tab" role="tab"><?php _l('compose')?></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'bulk')? 'active': null?>" data-ajax="true" href="<?php echo url('posts/bulk')?>" id="profile-tab" role="tab"><?php _l('bulk')?></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'drafts')? 'active': null?>" data-ajax="true" href="<?php echo url('posts/drafts')?>" id="profile-tab" role="tab"><?php _l('drafts')?></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'history')? 'active': null?>" data-ajax="true" href="<?php echo url('posts/history')?>" id="profile-tab" role="tab"><?php _l('history')?></a>
+            </li>
+        </ul>
+    </div>
+
+</div>

@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h5 class="modal-title"><?php _l('choose')?> <?php _l($type)?></h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<?php
+autoLoadVendor();
+$emojione = new \Emojione\Client(new \Emojione\Ruleset());
+?>
+<div class="content-scroller modern-scroll p-0">
+    <div class="list-group list-group-flush">
+        <?php foreach($list as $item):?>
+            <a class="list-group-item list-group-item-action" href="" onclick="return insertTemplate(this)">
+                <div class="hide value"><?php echo ($type == 'captions') ? $item['caption'] : $item['content']?></div>
+                <div><?php echo $item['title']?></div>
+                <small class="text-muted"><?php echo ($type == 'captions') ? $emojione->shortnameToImage($item['caption']) : $emojione->shortnameToImage($item['content'])?></small>
+            </a>
+
+        <?php endforeach;?>
+
+    </div>
+</div>

@@ -300,6 +300,13 @@ function reloadInit(paginate) {
         });
     });
 
+    $('.content-scroller').each(function() {
+        var h = ($(this).data('height') !== undefined) ? $(this).data('height') : 0;
+        h += $('.content-top').height();
+        h += 50;
+        $(this).css('height', 'calc(100vh - '+h+'px)');
+    })
+
     $('.scroll-paginate').scroll(function () {
         if(($(this).find('.the-content').height() - $(this).scrollTop()) - 10 <= $(this).height()) {
             var mainContainer = $(this);
@@ -348,7 +355,8 @@ function reloadInit(paginate) {
         $(".modern-scroll").each(function() {
             $(this).niceScroll({
                 autohidemode: 'leave',
-                cursorcolor: "#E2E2E2",
+                cursorcolor: "#7A2DE0",
+                horizrailenabled: false
             });
 
             if ($(this).data('paginate') !== undefined) {
@@ -1055,4 +1063,492 @@ function submit_file_upload() {
     $(".filemanager-uploader").submit();
 }
 
+function selectThisFile(t) {
 
+    if($(t).is(':checked')) {
+
+        $('.each-file-'+$(t).data('id')).addClass('selected')
+    } else {
+        $('.each-file-'+$(t).data('id')).removeClass('selected')
+    }
+    toggleSelectButton();
+}
+
+function selectAllFiles(t) {
+    $('.each-file').each(function() {
+        $(this).addClass('selected')
+        $(this).find('input').prop('checked', 'checked')
+    });
+    toggleSelectButton();
+}
+
+function deselectAllFiles(t) {
+    $('.each-file').each(function() {
+        $(this).removeClass('selected')
+        $(this).find('input').prop('checked', false)
+    });
+    toggleSelectButton();
+}
+function countSelectedFiles() {
+    var count = 0;
+    $('.each-file').each(function() {
+        if ($(this).find('input').is(':checked')) count += 1;
+    });
+    return count;
+}
+function toggleSelectButton() {
+    if (countSelectedFiles() > 0) {
+        $('.select-button').hide();
+        $('.deselect-button').fadeIn();
+        $('.file-delete-button').removeClass('btn-light')
+        $('.file-delete-button').addClass('btn-danger');
+        $('.file-delete-button').removeProp('disabled');
+        $('.file-delete-button').removeAttr('disabled');
+    } else {
+        $('.deselect-button').hide();
+        $('.select-button').fadeIn();
+        $('.file-delete-button').removeClass('btn-danger')
+        $('.file-delete-button').addClass('btn-light');
+        $('.file-delete-button').prop('disabled', 'disabled');
+        $('.file-delete-button').attr('disabled', 'disabled');
+    }
+}
+
+
+function submitFilesForm() {
+    $('#files-form').submit();
+    $('.file-delete-button').removeClass('btn-danger')
+    $('.file-delete-button').addClass('btn-light');
+    $('.file-delete-button').prop('disabled', 'disabled');
+    $('.file-delete-button').attr('disabled', 'disabled');
+}
+
+function filterMediaList(t) {
+    var v = $(t).val();
+    var url = window.location.href.split('?')[0] + "?type=" + v;
+    return load_page(url);
+}
+
+function loadTemplates(t) {
+    window.theTextEditor = $($(t).data('editor'));
+    $("#addTemplatesModal .modal-content").html("<img  style='width:100px;margin: 30px auto;' src='"+baseUrl+"styles/main/images/loader-bar.gif'/>")
+    $("#addTemplatesModal").modal('show');
+    $.ajax({
+        url: buildLink('load/templates'),
+        type: 'POST',
+        data: {type: $(t).data('type')},
+        success : function(r) {
+            $("#addTemplatesModal .modal-content").html(r);
+            reloadInit()
+        }
+    })
+    return false;
+}
+
+function insertTemplate(t) {
+    var el = window.theTextEditor.emojioneArea();
+    el[0].emojioneArea.setText(el[0].emojioneArea.getText()+ '  ' +$(t).find('.value').html());
+    $("#addTemplatesModal").modal('hide');
+    el[0].emojioneArea.setFocus();
+    return false;
+}
+
+var PostEditor = {
+    accounts : [],
+    media : [],
+    postType: 'media',
+    locationInterval: null,
+    lastLocationText: '',
+    locationSearching: false,
+
+    addAccount: function(id, name, avatar, force) {
+        if (this.accountExists(id) && force === undefined) {
+            this.removeAccount(id);
+
+        } else {
+            this.accounts.push({id: parseInt(id), name: name, avatar: avatar});
+        }
+        if (force === undefined) this.updateSelectedAccounts();
+        return false;
+    },
+
+    selectAccount: function(t) {
+        var parent = $(t).parent().parent();
+        if ($(t).is(':checked')) {
+            this.addAccount(parent.data('id'), parent.data('name'), parent.data('avatar'));
+        }   else {
+            this.removeAccount(parent.data('id'));
+        }
+        this.updateSelectedAccounts();
+    },
+
+    accountExists: function(id) {
+        for (var i = 0; i < this.accounts.length;i++) {
+            if (parseInt(this.accounts[i].id) === parseInt(id)) return true;
+        }
+        return false;
+    },
+
+    removeAccount: function(id) {
+        var newList = [];
+        for (var i = 0; i < this.accounts.length;i++) {
+            if (parseInt(this.accounts[i].id) !== parseInt(id)) {
+                newList.push(this.accounts[i]);
+            }
+        }
+        this.accounts = newList;
+    },
+
+    updateSelectedAccounts: function() {
+        var allSelected = true;
+        console.log(PostEditor.accounts);
+        $('.account-selector-list a').each(function() {
+
+            if (PostEditor.accountExists($(this).data('id'))) {
+                $(this).addClass('active');
+                $(this).find('input').prop('checked', true);
+            } else {
+                $(this).removeClass('active');
+                $(this).find('input').prop('checked', false);
+                allSelected = false;
+            }
+        });
+        if (allSelected) {
+            $('#customCheckAccountAll').prop('checked', true);
+        } else {
+            $('#customCheckAccountAll').prop('checked', false);
+        }
+        PostEditor.validateAccountsMedia();
+    },
+
+    toggleSelectAll: function(t) {
+        if($(t).is(':checked')) {
+            $('.account-selector-list a ').each(function() {
+                PostEditor.addAccount($(this).data('id'), $(this).data('name'), $(this).data('avatar'), true);
+            });
+            PostEditor.updateSelectedAccounts();
+        } else {
+            this.accounts = [];
+            this.updateSelectedAccounts();
+        }
+    },
+    updateSelectedMedias: function() {
+        for(var i = 0;i<PostEditor.media.length;i++) {
+            var thisMedia = PostEditor.media[i];
+            if ($('.selected-media-container each-media-'+thisMedia.id).length < 1) {
+                var div = $("<div data-id='"+thisMedia.id+"' data-type='"+thisMedia.type+"' data-name='"+thisMedia.file_name+"' data-thumbnail='"+thisMedia.thumbnail+"' data-file='"+thisMedia.id+"' class='each each-media-"+thisMedia.id+"'></div>");
+                div.append("<input type='hidden' value='"+thisMedia.file_name+"' name='val[media][]'/>")
+                div.append("<a href='' class='close' onclick='return PostEditor.removeMedia(this)'><i class=\"las la-trash-alt\"></i></a>");
+                if (thisMedia.type === 'video') {
+                    div.append("<video src='"+thisMedia.file+"' playsinline='' muted='' loop='true' autoplay></video>")
+                } else {
+                    div.css('background-image', "url('"+thisMedia.file+"')");
+                }
+                $('.selected-media-container').append(div)
+            }
+        }
+
+        PostEditor.renderPreview();
+
+    },
+    removeFromMediaLists: function(id) {
+        var newList = [];
+        for(var i = 0;i<PostEditor.media.length;i++) {
+            if (parseInt(PostEditor.media[i].id) !== parseInt(id)) newList.push(PostEditor.media[i]);
+        }
+        PostEditor.media = newList;
+        PostEditor.validateAccountsMedia();
+    },
+    removeMedia: function(t) {
+          var parent = $(t).parent();
+          PostEditor.removeFromMediaLists(parent.data('id'));
+          parent.remove();
+          PostEditor.renderPreview();
+          return false;
+    },
+    uploadResult: function (result) {
+
+        var json = jQuery.parseJSON(result);
+        for(var i = 0;i<json.length;i++) {
+
+            PostEditor.media.push(json[i]);
+        }
+        $('#compose-file-input').val('');
+        PostEditor.finishMediaSelect();
+    },
+
+    finishMediaSelect: function() {
+        if (PostEditor.postType === 'story') {
+            if (PostEditor.media.length > 1) {
+                PostEditor.media = [];
+                notify(strings.please_select_story_error, 'error');
+                return false;
+            }
+        } else if (PostEditor.postType === 'live' || PostEditor.postType === 'igtv') {
+            if (PostEditor.media.length > 1) {
+                PostEditor.media = [];
+                if (PostEditor.postType === 'live') notify(strings.please_select_live_video_error, 'error');
+                if (PostEditor.postType === 'igtv') notify(strings.please_select_igtv_error, 'error');
+                return false;
+            }
+            var media = PostEditor.media[0];
+            if (media.type !== 'video') {
+                PostEditor.media = [];
+                if (PostEditor.postType === 'live') notify(strings.please_select_live_video_error2, 'error');
+                if (PostEditor.postType === 'igtv') notify(strings.please_select_igtv_error2, 'error');
+                return false;
+            }
+        }
+        PostEditor.updateSelectedMedias();
+        PostEditor.validateAccountsMedia();
+    },
+
+    chooseCallback: function(r) {
+
+        for(var i = 0;i<r.length;i++) {
+
+            PostEditor.media.push(r[i]);
+        }
+        PostEditor.finishMediaSelect();
+    },
+
+    validateAccountsMedia: function() {
+        if (PostEditor.media.length < 1) {
+            $("#compose-media-continue").addClass('disabled');
+            $("#compose-media-continue").addClass('btn-secondary');
+            $("#compose-media-continue").removeClass('btn-primary');
+            return false;
+        }
+        $("#compose-media-continue").removeClass('disabled');
+        $("#compose-media-continue").removeClass('btn-secondary');
+        $("#compose-media-continue").addClass('btn-primary');
+        return true;
+    },
+
+    continueMediaSelect: function() {
+        if (PostEditor.validateAccountsMedia()) {
+            $('.media-select-container').hide();
+            $('.post-content-container').fadeIn();
+        }
+        return false;
+    },
+
+    editMediaSelect: function() {
+        $('.post-content-container').hide();
+        $('.media-select-container').fadeIn();
+        return false;
+    },
+
+    renderPreview: function() {
+        if (PostEditor.postType === 'media' || PostEditor.postType === 'album') {
+            $(".regular-instagram-post").show();
+            $('.video-instagram-post').hide();
+            var carouseContainer = $('<div id="instagramCarousel"  class="carousel slide preview-images-container" data-interval="false"></div>');
+            var indicators = $('<ol class="carousel-indicators"></ol>');
+            var inners = $('<div class="carousel-inner"></div>');
+            if (PostEditor.media.length > 0) {
+                for(var i=0;i<PostEditor.media.length;i++) {
+                    var media = PostEditor.media[i];
+                    var active = (i === 0) ? 'active' : '';
+                    indicators.append('<li data-target="#instagramCarousel" data-slide-to="'+i+'" class="shadow-1 '+active+'"></li>');
+                    var div = $('<div class="carousel-item '+active+' each"></div>');
+                    if(media.type === 'image') {
+                        div.data('type', media.type);
+                        div.data('image', media.file_name);
+                        div.css("background-image", 'url(' + media.file+')')
+                    } else {
+                        div.html("<div class='video-content' style='width:100%;height:100%;overflow: hidden;position:relative;'><video src='"+media.file+"' playsinline='' muted='' loop=''></video></div>")
+                    }
+                    inners.append(div);
+                }
+                carouseContainer.append(indicators);
+                carouseContainer.append(inners);
+
+                $(".instagram-post-content").html(carouseContainer);
+                console.log(carouseContainer);
+                carouseContainer.carousel()
+            }
+        }   else {
+            $(".regular-instagram-post").hide();
+            $('.video-instagram-post').show();
+            if (PostEditor.media.length > 0) {
+                var media = PostEditor.media[0]
+                $('.video-instagram-post').html("<div class='video-content' style='width:100%;height:100%;overflow: hidden;position:relative;'><video src='"+media.file+"' playsinline='' muted='' loop=''></video></div>")
+
+            }
+        }
+    },
+
+    toggleFirstComment: function(t) {
+        if ($(t).is(':checked')) {
+            $('.first-comment-container').fadeIn();
+        } else {
+            $('.first-comment-container').hide();
+        }
+    },
+    toggleSchedule: function(t) {
+        if ($(t).is(':checked')) {
+            $('.schedule-input-container').fadeIn();
+            $('#publish-btn').hide();
+            $('#schedule-now-btn').show();
+        } else {
+            $('.schedule-input-container').hide();
+            $('#publish-btn').show();
+            $('#schedule-now-btn').hide();
+        }
+    },
+    switchType : function(t, type) {
+        var canSwitch = true;
+        if (type === 'media' || type === 'album' || type === 'story') {
+            $('#add-location-compose-btn').show();
+            $('.first-comment-switch-container').show();
+            if (type === 'story') {
+                $('.story-link-container').show();
+                $('.friend-story-container').show();
+            } else {
+                $('.story-link-container').hide();
+                $('.friend-story-container').hide();
+            }
+        } else {
+            if (PostEditor.media.length > 0) {
+                var media = PostEditor.media[0];
+                if (media.type !== 'video') {
+                    notify(strings.need_edit_file_video, 'error');
+                    canSwitch = false;
+                }
+            }
+            if (canSwitch) {
+                $('#add-location-compose-btn').hide();
+                $('.first-comment-switch-container').hide();
+                $('.story-link-container').hide();
+                $('.friend-story-container').hide();
+            }
+
+        }
+        if (canSwitch) {
+            PostEditor.postType = type;
+            PostEditor.renderPreview();
+            $('#composePostTypes a ').removeClass('active');
+            $(t).addClass('active');
+            $('#compose-type-input').val(type);
+
+        }
+        return false;
+    },
+    openLocation: function() {
+        $('#addLocationModal').modal('show');
+        $('#addLocationModal').find('.modal-header input').focus();
+        return false;
+    },
+
+    closeLocation: function() {
+        $('#addLocationModal').modal('hide');
+    },
+
+    fetchLocation : function(t) {
+        var text = $(t).val();
+        if (text !== '') {
+            $('.instagram-locations-container').html("<img style='width: 100px; margin: 30px auto;' src='"+baseUrl+"styles/main/images/loader-bar.gif' class='loader'/>");
+            if (PostEditor.locationInterval === null) {
+                PostEditor.locationInterval = setInterval(function() {
+                    text = $(t).val();
+                    if (!PostEditor.locationIsSearching) {
+                        PostEditor.locationIsSearching = true;
+                        $.ajax({
+                            url: buildLink('post/location', [{key:'term', value: text}]),
+                            success: function(data) {
+                                $('.instagram-locations-container').html(data);
+
+                                clearInterval(PostEditor.locationInterval);
+                                PostEditor.lastLocationText = '';
+                                PostEditor.locationInterval = null;
+                                PostEditor.locationIsSearching = false;
+                            }
+                        })
+                    }
+
+
+                }, 4000);
+            }
+            window.lastLocationText = text;
+        }
+    },
+
+    clickUploadButton: function() {
+        $("#compose-file-input").click();
+        return false;
+    },
+
+    submitPost: function(draft) {
+        if (PostEditor.accounts.length < 1) {
+            notify(strings.please_select_one_account, 'error');
+            return false;
+        }
+
+        if (draft === undefined) {
+            $('#draft-input').remove();
+        } else {
+            $("#postEditorForm").append("<input type='hidden' value='1' name='val[draft]' id='draft-input'/>")
+        }
+
+        $("#postEditorForm").submit();
+        return false;
+    },
+
+    postCompleted: function() {
+        var el = $('#compose-editor').emojioneArea();
+        el[0].emojioneArea.setText('');
+
+        var el = $('#compose-first-comment-editor').emojioneArea();
+        el[0].emojioneArea.setText('');
+        PostEditor.postType = 'media';
+        $('.post-content-container').hide();
+        $('.media-select-container').show();
+        $('#draft-input').remove();
+        $('.selected-media-container').html('')
+
+    }
+}
+
+var Filemanager = {
+    func : null,
+
+    add: function() {
+        var result = [];
+        $("#fileManagerModal .selected").each(function() {
+            result.push({id: $(this).data('id'), file_name: $(this).data('raw'), thumbnail: $(this).data('thumbnail'), type: $(this).data('type'), file: $(this).data('file')})
+        });
+
+        $("#fileManagerModal").modal('hide');
+        eval(Filemanager.func)(result);
+        return false;
+    },
+    open: function(callback) {
+        Filemanager.func = callback;
+        $("#fileManagerModal").modal('show');
+        $("#fileManagerModal #choose-files-container").data('offset', 0);
+        $("#fileManagerModal #choose-files-container").data('url', buildLink('files/load'))
+        $("#fileManagerModal #choose-files-container").html("<img style='width: 100px; margin: 30px auto;' src='"+baseUrl+"styles/main/images/loader-bar.gif' class='loader'/>");
+
+        $.ajax({
+            url: buildLink('files/load'),
+            success: function(d) {
+                $("#fileManagerModal #choose-files-container").html(d);
+            }
+        })
+        return false;
+    },
+
+    openFolder: function(url) {
+        $("#fileManagerModal #choose-files-container").html("<img style='width: 100px; margin: 30px auto;' src='"+baseUrl+"styles/main/images/loader-bar.gif' class='loader'/>");
+        $("#fileManagerModal #choose-files-container").data('offset', 0);
+        $("#fileManagerModal #choose-files-container").data('url', url)
+        $.ajax({
+            url: url,
+            success: function(d) {
+                $("#fileManagerModal #choose-files-container").html(d);
+            }
+        })
+        return false;
+    }
+}

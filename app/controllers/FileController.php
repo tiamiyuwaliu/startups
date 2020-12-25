@@ -50,7 +50,15 @@ class FileController extends Controller {
                             }
 
                             $id = $this->model('file')->save($val);
-                            $uploadedFiles[] = model('file')->find($id);
+                            $file = model('file')->find($id);
+                            $file = array(
+                                'id' => $file['id'],
+                                'file_name' => $file['file_name'],
+                                'thumbnail' => assetUrl($file['resize_image']),
+                                'type' => $file['file_type'],
+                                'file' => assetUrl($file['file_name'])
+                                );
+                            $uploadedFiles[] = $file;
                         } else {
                             return json_encode(array(
                                 'type' => 'error',
@@ -59,36 +67,33 @@ class FileController extends Controller {
                         }
                     }
 
-                    return json_encode(array(
-                        'type' => 'reload',
-                        'message'=> l('upload-successful'),
-                    ));
+                    if (isset($val['upload_result'])) {
+
+                        return json_encode(array(
+                            'type' => 'function',
+                            'value' => $val['upload_result'],
+                            'content' => json_encode($uploadedFiles),
+                            'message'=> l('upload-successful'),
+                        ));
+                    } else {
+                        return json_encode(array(
+                            'type' => 'reload',
+                            'message'=> l('upload-successful'),
+                        ));
+                    }
 
                 }
 
             }
             if (isset($val['action'])) {
-                if ($val['action'] == 'sort') {
-                    $i = 0;
-                    foreach($val['filesi'] as $file) {
-                        Database::getInstance()->query("UPDATE files SET sort_number=? WHERE id=?", $i, $file);
-                        $i++;
+                if(isset($val['files']) and !empty($val['files'])) {
+                    foreach($val['files'] as $id) {
+                        $this->model('file')->delete($id);
                     }
                     return json_encode(array(
-                        'type' => 'function',
-                        'value' => 'confirmFileSort',
-
+                        'type' => 'reload',
+                        'message' => l('files-deleted-successfully'),
                     ));
-                } else {
-                    if(isset($val['files']) and !empty($val['files'])) {
-                        foreach($val['files'] as $id) {
-                            $this->model('file')->delete($id);
-                        }
-                        return json_encode(array(
-                            'type' => 'reload',
-                            'message' => l('files-deleted-successfully'),
-                        ));
-                    }
                 }
 
             }
@@ -103,25 +108,18 @@ class FileController extends Controller {
                 ));
             }
 
+            if (isset($val['editfolder'])) {
+                $this->model('file')->saveFolder($val);
+                return json_encode(array(
+                    'type' => 'reload-modal',
+                    'message' => l('folder-edited'),
+                    'content' => '#editFolderModal'
+                ));
+            }
 
         }
 
-        if ($editFolder = $this->request->input('editfolder')) {
-            $val = array(
-                'name' => $this->request->input('name'),
-                'folder_id' => $this->request->input('id'),
-                'color' =>  $this->request->input('color'),
-            );
 
-
-            $this->model('file')->saveFolder($val);
-            return json_encode(array(
-                'type' => 'reload-modal',
-                'value' => 'confirmFolderEdit',
-                'message' => l('folder-edited'),
-                'content' => '#editFolderModal'.$val['folder_id']
-            ));
-        }
         if ($action = $this->request->input('action')) {
             switch($action) {
                 case 'delete':
@@ -131,6 +129,18 @@ class FileController extends Controller {
                     return json_encode(array(
                         'type' => 'reload',
                         'message' => l('files-deleted-successfully'),
+                    ));
+                    break;
+                case 'delete-folder':
+                    $this->defendDemo();
+                    $id = $this->request->input('id');
+                    $folder = $this->model('file')->find($id);
+                    $url = ($folder['folder_id']) ? url('files/'. $folder['folder_id']) : url('files');
+                    $this->model('file')->delete($id);
+                    return json_encode(array(
+                        'type' => 'url',
+                        'value' => $url,
+                        'message' => l('folder-deleted-successfully'),
                     ));
                     break;
                 case 'move':
@@ -296,7 +306,7 @@ class FileController extends Controller {
 
         $offset = $this->request->input('offset', 0);
 
-        $files = $this->model('file')->getFiles($offset);
+        $files = $this->model('file')->getFiles($offset, $this->request->segment(1), $this->request->input('type', 'all'));
         if ($paginate = $this->request->input('paginate')) {
             $content = '';
             foreach($files as $file) {
@@ -308,5 +318,22 @@ class FileController extends Controller {
             ));
         }
         return $this->render($this->view('files/index', array('files' => $files)), true);
+    }
+
+    public function load() {
+        $offset = $this->request->input('offset', 0);
+
+        $files = $this->model('file')->getFiles($offset, $this->request->segment(2), $this->request->input('type', 'all'));
+        if ($paginate = $this->request->input('paginate')) {
+            $content = '';
+            foreach($files as $file) {
+                $content .= view('files/display', array('file' => $file, 'load' => true));
+            }
+            return json_encode(array(
+                'offset' => $offset + 40,
+                'content' => $content
+            ));
+        }
+        return $this->view('files/load', array('files' => $files));
     }
 }

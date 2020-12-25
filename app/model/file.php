@@ -32,9 +32,17 @@ class FileModel extends Model {
             '#32ff7e'
         );
     }
-    public function getFiles($offset = 0, $folderId = 0) {
-        $sql = "SELECT * FROM files WHERE userid=? AND (file_type=? OR file_type=?) ";
-        $param = array(model('user')->authOwnerId, 'image', 'video');
+    public function getFiles($offset = 0, $folderId = 0, $type = 'all') {
+        $sql = "SELECT * FROM files WHERE userid=? ";
+        $param = array(model('user')->authOwnerId);
+        if ($type == 'all') {
+            $sql .= " AND (file_type=? OR file_type=?) ";
+            $param[] = 'image';
+            $param[] = 'video';
+        } else {
+            $sql .= " AND file_type=? ";
+            $param[] = $type;
+        }
         if ($folderId != 'all') {
             $sql .= " AND folder_id=?";
             $param[] = $folderId;
@@ -93,7 +101,7 @@ class FileModel extends Model {
          * @var $color
          */
         extract($val);
-        $this->db->query("UPDATE files SET file_name=?,folder_color=? WHERE id=?", $name, $folder_id, $color);
+        $this->db->query("UPDATE files SET file_name=?,folder_color=? WHERE id=?", $name,  $color, $folder_id);
         Hook::getInstance()->fire('save.file.folder', null, array($val));
     }
 

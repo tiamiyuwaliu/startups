@@ -186,8 +186,11 @@ a {
 div::-webkit-scrollbar
 {
     width: 4px;
+
     background-color: #F5F5F5;
 }
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-button{width:4px;height:4px;}
 .emojionearea > .emojionearea-editor {
     min-height: 110px;
     max-height: 110px;
@@ -249,4 +252,12 @@ button:focus {
     width:20px;
     height:20px;
     border-radius:100px;
+}
+
+.hide {
+    display: none
+}
+.btn-outline-light {
+    border: solid 1px #F5F5F5;
+    color: #000 !important;
 }
