@@ -2,6 +2,16 @@
 
 <div class="content-body content-scroller modern-scroll ">
 
+    <?php
+        $editPost = ($C->request->input('id')) ? model('post')->find($C->request->input('id')) : null;
+        $postData = ($editPost) ? perfectUnserialize($editPost['type_data']) : array();
+        if ($editPost) {
+            autoLoadVendor();
+            $emojione = new \Emojione\Client(new \Emojione\Ruleset());
+            $caption = $emojione->shortnameToUnicode($postData['content']);
+            $firstComment = $emojione->shortnameToUnicode($postData['first_comment']);
+        }
+    ?>
     <div class="container-1200">
         <form action="<?php echo getFullUrl()?>" method="post" class="general-form" id="postEditorForm">
             <div class="row ">
@@ -14,24 +24,26 @@
                         </div>
 
                     </div>
-                    <div class=" pt-3" style="background: #F5F5F5;">
+                    <div class=" pt-3" >
                         <div class="account-selector-list clearfix ">
 
                             <?php foreach(model('social')->getAccounts() as $account):?>
-                                <a href="" onclick="return PostEditor.addAccount('<?php echo $account['id']?>','<?php echo $account['username']?>', '<?php echo assetUrl($account['avatar'])?>')" class="each " data-id="<?php echo $account['id']?>" data-name="<?php echo $account['username']?>" data-avatar="<?php echo assetUrl($account['avatar'])?>">
-                                    <div class="custom-control custom-checkbox mt-3">
-                                        <input name="val[accounts][]" value="<?php echo $account['id']?>"  onchange="return PostEditor.selectAccount(this)"  type="checkbox" class="custom-control-input" id="customCheck<?php echo $account['id']?>">
-                                        <label class="custom-control-label" for="customCheck<?php echo $account['id']?>"></label>
-                                    </div>
-                                    <div class="media">
-                                        <img class="mr-3 mt-2" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
-                                        <div class="media-body pt-1">
-                                            <h6 class=" text--wrapping mt-2"><?php echo $account['username']?></h6>
+                                <?php if(($editPost and $editPost['account'] == $account['id']) or !$editPost):?>
+                                    <a href="" onclick="return PostEditor.addAccount('<?php echo $account['id']?>','<?php echo $account['username']?>', '<?php echo assetUrl($account['avatar'])?>')" class="each " data-id="<?php echo $account['id']?>" data-name="<?php echo $account['username']?>" data-avatar="<?php echo assetUrl($account['avatar'])?>">
+                                        <div class="custom-control custom-checkbox mt-3">
+                                            <input <?php echo ($editPost and $editPost['account'] == $account['id']) ? 'checked':null?> name="val[accounts][]" value="<?php echo $account['id']?>"  onchange="return PostEditor.selectAccount(this)"  type="checkbox" class="custom-control-input" id="customCheck<?php echo $account['id']?>">
+                                            <label class="custom-control-label" for="customCheck<?php echo $account['id']?>"></label>
                                         </div>
-                                    </div>
+                                        <div class="media">
+                                            <img class="mr-3 mt-2" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
+                                            <div class="media-body pt-1">
+                                                <h6 class=" text--wrapping mt-2"><?php echo $account['username']?></h6>
+                                            </div>
+                                        </div>
 
-                                </a>
-                            <?php endforeach?>
+                                    </a>
+                                <?php endif?>
+                            <?php  endforeach?>
                         </div>
                     </div>
 
@@ -43,7 +55,7 @@
                                 <div class="nav-tabs-scrollable" style="height: 4rem;">
                                     <ul class="nav nav-justified nav-tabs post-editor-menu" id="composePostTypes" role="tablist">
                                         <li class="nav-item">
-                                            <a aria-controls="home"  class="nav-link active" onclick="return PostEditor.switchType(this, 'media')"  href="#compose"  role="tab">
+                                            <a aria-controls="home"  class="nav-link <?php echo (!$editPost or $editPost['type'] == 'media') ? 'active':null?>" onclick="return PostEditor.switchType(this, 'media')"  href="#compose"  role="tab">
                                                 <i class="icons icon-camera"></i>
                                                 <span>
                                         <h6> <?php _l('post')?></h6>
@@ -53,7 +65,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a aria-controls="home"  class="nav-link" onclick="return PostEditor.switchType(this, 'album')"  href="#compose"  role="tab">
+                                            <a aria-controls="home"  class="nav-link <?php echo ($editPost['type'] == 'album') ? 'active':null?>" onclick="return PostEditor.switchType(this, 'album')"  href="#compose"  role="tab">
                                                 <i class="icons icon-layers"></i>
                                                 <span>
                                         <h6> <?php _l('album')?></h6>
@@ -63,7 +75,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a aria-controls="home"  class="nav-link " onclick="return PostEditor.switchType(this, 'story')" href="#compose"  role="tab">
+                                            <a aria-controls="home"  class="nav-link <?php echo ($editPost['type'] == 'story') ? 'active':null?>" onclick="return PostEditor.switchType(this, 'story')" href="#compose"  role="tab">
                                                 <i class="icons icon-plus"></i>
                                                 <span>
                                         <h6><?php _l('story')?></h6>
@@ -73,7 +85,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a aria-controls="home"  class="nav-link " onclick="return PostEditor.switchType(this, 'igtv')"  href="#compose"  role="tab">
+                                            <a aria-controls="home"  class="nav-link <?php echo ($editPost['type'] == 'igtv') ? 'active':null?>" onclick="return PostEditor.switchType(this, 'igtv')"  href="#compose"  role="tab">
                                                 <i class="icons icon-screen-desktop"></i>
                                                 <span>
                                         <h6> IGTV</h6>
@@ -127,6 +139,24 @@
                                             <a href="" class="btn shadow-none"><i class="las la-link"></i></a>
                                         </div>
                                     </div>
+                                    <?php if($editPost):$mediaLists = array()?>
+
+                                        <input type="hidden" name="val[edit_post]" value="<?php echo $editPost['id']?>"/>
+                                        <?php foreach($postData['media'] as $mediaFile):$mediaId = model('file')->findId($mediaFile)?>
+                                            <?php
+                                            $mediaLists[] = array(
+                                                'type' => isImage($mediaFile) ? 'image': 'video',
+                                                'file_name' => $mediaFile,
+                                                'id' => $mediaId,
+                                                'thumbnail' => assetUrl($mediaFile),
+                                                'file' => assetUrl($mediaFile)
+                                            )
+                                            ?>
+
+                                        <?php endforeach;?>
+                                        <div class="edit-post-data hide" data-account="<?php echo $editPost['account']?>" data-type="<?php echo $editPost['type']?>"><?php echo json_encode($mediaLists)?></div>
+
+                                    <?php endif?>
                                     <div class="selected-media-container clearfix">
 
                                     </div>
@@ -151,7 +181,7 @@
                                                         <div class="modal-header">
                                                             <div class="form-group floating-label" style="width: 100%;">
                                                                 <label class=""><?php _l('add-location')?></label>
-                                                                <input  onkeyup="return PostEditor.fetchLocation(this)" type="text" class="form-control" />
+                                                                <input value="<?php echo ($editPost and isset($postData['enter_location'])) ? $postData['enter_location'] : null?>"  onkeyup="return PostEditor.fetchLocation(this)" name="val[enter_location]" type="text" class="form-control" />
                                                             </div>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
@@ -159,6 +189,19 @@
                                                         </div>
                                                         <div class="content-scroller modern-scroll p-0 instagram-locations-container" >
 
+                                                            <?php if ($editPost and isset($postData['selected_location'])):$selectLocation = @unserialize($postData['selected_location']);?>
+                                                                <div class="list-group list-group-flush">
+                                                                    <div class="list-group-item list-group-item-action" onclick="return PostEditor.selectLocation(this)">
+                                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                                            <input checked type="radio" value="<?php echo $postData['selected_location']?>" id="customRadioInline79f7576e022830d69df4b7d815f82b02"  name="val[selected_location]" class="custom-control-input">
+                                                                            <label class="custom-control-label" for="customRadioInline79f7576e022830d69df4b7d815f82b02">
+                                                                                <?php echo $selectLocation->location->name?><br>
+                                                                                <span class="text-muted"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <?php endif?>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" onclick="return PostEditor.closeLocation()" class="btn "><?php _l('continue')?></button>
@@ -169,7 +212,7 @@
                                             <div class="form-group mt-4">
                                                 <h5><?php _l('caption')?></h5>
                                                 <div class="post-editor-container">
-                                                    <textarea class="form-control emoji-text" id="compose-editor" name="val[content]"></textarea>
+                                                    <textarea class="form-control emoji-text" id="compose-editor" name="val[content]"><?php echo ($editPost) ? $caption : ''?></textarea>
                                                     <div class="editor-insert-btn-container">
                                                         <a href="" onclick="return loadTemplates(this)" data-type="captions" data-editor="#compose-editor"><i class="icons icon-layers"></i></a>
                                                         <a href="" onclick="return loadTemplates(this)" data-type="mention" data-editor="#compose-editor"><i class="las la-at"></i></a>
@@ -178,10 +221,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="first-comment-container hide">
+                                            <div class="first-comment-container <?php echo ($editPost and $postData['first_comment']) ? '':'hide'?>">
                                                 <h5><?php _l('first-comment')?></h5>
                                                 <div class="post-editor-container">
-                                                    <textarea class="form-control emoji-text" id="compose-first-comment-editor" name="val[first_comment]"></textarea>
+                                                    <textarea class="form-control emoji-text" id="compose-first-comment-editor" name="val[first_comment]"><?php echo ($editPost) ? $firstComment : ''?></textarea>
                                                     <div class="editor-insert-btn-container">
                                                         <a href="" class="mtitle" title="<?php _l('insert-caption')?>" onclick="return loadTemplates(this)" data-type="captions" data-editor="#compose-first-comment-editor"><i class="icons icon-layers"></i></a>
                                                         <a href="" class="mtitle" title="<?php _l('insert-hashtag')?>" onclick="return loadTemplates(this)" data-type="mention" data-editor="#compose-first-comment-editor"><i class="las la-at"></i></a>
@@ -191,14 +234,14 @@
                                                 </div>
                                             </div>
 
-                                            <div class="story-link-container hide">
+                                            <div class="story-link-container <?php echo ($editPost and $editPost['type'] == 'story') ? '' : 'hide'?>">
                                                 <div class="form group floating-label">
                                                     <label><?php _l('story-link')?></label>
-                                                    <input type="text" name="val[story_link]" class="form-control" />
+                                                    <input type="text" name="val[story_link]" value="<?php echo ($editPost) ? $postData['story_link']: ''?>" class="form-control" />
                                                 </div>
                                             </div>
 
-                                            <div class="schedule-input-container mt-3 hide">
+                                            <div class="schedule-input-container mt-3 <?php echo ($editPost and $editPost['is_scheduled']) ? '' : 'hide'?>">
                                                 <div class="input-group mb-2">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text"><i class="icons icon-calendar"></i></div>
@@ -208,6 +251,11 @@
                                                     if ($C->request->input('date')) {
                                                         $dateObj = DateTime::createFromFormat('m/d/Y', $C->request->input('date'));
                                                         $date = $dateObj->format(getAdminDateFormat().' h:i A');
+
+                                                    }
+
+                                                    if ($editPost and $editPost['is_scheduled']) {
+                                                        $date = date(getAdminDateFormat().' h:i A', strtotime($editPost['schedule_date']));
 
                                                     }
 
@@ -221,21 +269,21 @@
                                                     <input type="hidden" name="val[schedule]" value="0"/>
                                                     <div class="custom-control custom-checkbox">
 
-                                                        <input value="1" name="val[schedule]" onchange="return PostEditor.toggleSchedule(this, '.schedule-input-container')" type="checkbox" class="custom-control-input" id="enableSchedule">
+                                                        <input value="1" <?php echo ($editPost and $editPost['is_scheduled']) ? 'checked' : ''?> name="val[schedule]" onchange="return PostEditor.toggleSchedule(this, '.schedule-input-container')" type="checkbox" class="custom-control-input" id="enableSchedule">
                                                         <label class="custom-control-label" for="enableSchedule"><?php _l('schedule')?></label>
                                                     </div>
                                                 </div>
                                                 <div class="col-4 first-comment-switch-container">
                                                     <input type="hidden" name="val[enable_first_comment]" value="0"/>
                                                     <div class="custom-control custom-checkbox">
-                                                        <input name="val[enable_first_comment]" value="1" onchange="return PostEditor.toggleFirstComment(this)"  type="checkbox" class="custom-control-input" id="enableFirstComment">
+                                                        <input <?php echo ($editPost and $postData['first_comment']) ? 'checked' : ''?> name="val[enable_first_comment]" value="1" onchange="return PostEditor.toggleFirstComment(this)"  type="checkbox" class="custom-control-input" id="enableFirstComment">
                                                         <label class="custom-control-label" for="enableFirstComment"><?php _l('add-first-comment')?></label>
                                                     </div>
                                                 </div>
-                                                <div class="col-4 friend-story-container hide">
+                                                <div class="col-4 friend-story-container <?php echo ($editPost and $editPost['type'] == 'story') ? '' : 'hide'?>">
                                                     <input   type="hidden" value="0"  name="val[friend_story]">
                                                     <div class="custom-control custom-checkbox">
-                                                        <input value="1"  type="checkbox" class="custom-control-input" name="val[friend_store]" id="enableFriendStory">
+                                                        <input value="1"  <?php echo ($editPost and $editPost['type'] == 'story' and $postData['friend_story']) ? 'checked':null?> type="checkbox" class="custom-control-input" name="val[friend_story]" id="enableFriendStory">
                                                         <label class="custom-control-label" for="enableFriendStory"><?php _l('friends-story')?></label>
                                                     </div>
                                                 </div>
@@ -245,10 +293,18 @@
 
                                             <div class="post-buttons">
                                                 <div class="btn-group mt-4 shadow-none float-right" role="group" >
-                                                    <button type="button" onclick="PostEditor.submitPost(true)" class="btn  btn-light btn-block  btn-lg"><?php _l('send-to-draft')?></button>
-                                                    <button type="button" onclick="PostEditor.submitPost()" class="btn  btn-block btn-primary  btn-lg" id="publish-btn"><?php _l('publish-now')?></button>
-                                                    <button type="button" onclick="PostEditor.submitPost()" class="btn  btn-block btn-primary  btn-lg hide" id="schedule-now-btn"><?php _l('schedule-now')?></button>
-                                                </div>
+                                                    <?php if($editPost):?>
+                                                        <button type="button" onclick="PostEditor.submitPost(false, 'save')" class="btn  btn-light btn-block  btn-lg"><?php _l('save')?></button>
+                                                        <button type="button" onclick="PostEditor.submitPost(false, 'publish')" class="btn  btn-block btn-primary  btn-lg" id="publish-btn"><?php _l('publish-now')?></button>
+                                                        <button type="button" onclick="PostEditor.submitPost(false, 'schedule')" class="btn  btn-block btn-primary  btn-lg hide" id="schedule-now-btn"><?php _l('schedule-now')?></button>
+
+                                                    <?php else:?>
+                                                        <button type="button" onclick="PostEditor.submitPost(true)" class="btn  btn-light btn-block  btn-lg"><?php _l('send-to-draft')?></button>
+                                                        <button type="button" onclick="PostEditor.submitPost()" class="btn  btn-block btn-primary  btn-lg" id="publish-btn"><?php _l('publish-now')?></button>
+                                                        <button type="button" onclick="PostEditor.submitPost()" class="btn  btn-block btn-primary  btn-lg hide" id="schedule-now-btn"><?php _l('schedule-now')?></button>
+
+                                                    <?php endif?>
+                                                    </div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">

@@ -12,7 +12,7 @@
     height: 100vh;
     overflow: auto;
     overflow-x: hidden;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 #app-container .menu-pane {
     position: fixed;
@@ -26,13 +26,15 @@
     padding: 30px 30px;
     z-index: 99;
 }
+.pagination {
+    background: none;
+}
 #app-container .menu-pane .icon-menus {
     position: absolute;
     top: 0;
     left: 0;
     width:60px;
-    background: #ffff;
-    border-right:solid 1px #f5f5f5;
+
     height: 100vh;
 }
 #app-container .menu-pane .icon-menus .logo {
@@ -126,8 +128,6 @@
 #app-container .content-pane .content-top {
     padding:0 30px ;
     padding-top: 10px;
-    background: #ffffff;
-    box-shadow: inset 0 -2px 0 -1px rgba(0,0,0,.12);
     min-height: 60px;
 }
 body {
@@ -835,6 +835,33 @@ img.emojione {
 }
 .border-none {
     border:none;
+}
+.list-post-preview {
+    width:200px;
+    max-width:100%;
+    height: 200px;
+    margin: 15px auto;
+}
+.list-post-preview .carousel-item {
+    width:100%;
+    height: 200px;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+.post-list-links {
+    margin: auto;
+}
+.post-list-links a{
+    display: block;
+    margin-bottom: 10px;
+}
+.post-list-links a i {
+    width: 25px;
+    font-size: 17px;
+}
+#postPreviewModal .modal-dialog {
+    max-width: 20rem;
 }
 @media(max-width:800px) {
     .modern-table .table-body .table-row .each .left {

@@ -305,7 +305,13 @@ function reloadInit(paginate) {
         h += $('.content-top').height();
         h += 50;
         $(this).css('height', 'calc(100vh - '+h+'px)');
-    })
+    });
+
+    if($('.edit-post-data').length > 0) {
+        var editPost = $('.edit-post-data');
+        PostEditor.loadPost(editPost.data('type'), editPost.data('account'), jQuery.parseJSON(editPost.html()));
+        $('.edit-post-data').remove();
+    }
 
     $('.scroll-paginate').scroll(function () {
         if(($(this).find('.the-content').height() - $(this).scrollTop()) - 10 <= $(this).height()) {
@@ -1153,6 +1159,51 @@ function insertTemplate(t) {
     return false;
 }
 
+function toggleSelectItemsAll(t) {
+    $('.select-item-input').each(function() {
+        if ($(t).is(':checked')) {
+            $(this).prop('checked', 'checked')
+            $(this).attr('checked', 'checked');
+            $('#selectActionBtn').removeClass('disabled')
+        }  else {
+            $(this).prop('checked', false)
+            $(this).attr('checked', false)
+            $('#selectActionBtn').addClass('disabled')
+        }
+    });
+}
+
+function processSelectItems(t) {
+    var all = true;
+    var ids = [];
+    $('.select-item-input').each(function() {
+        if ($(this).is(':checked')) {
+            ids.push($(this).data('id'))
+        }  else {
+            all = false;
+        }
+    });
+
+    if (ids.length > 0) {
+        $('#selectActionBtn').removeClass('disabled')
+    } else {
+        $('#selectActionBtn').addClass('disabled')
+    }
+    if (all) {
+        $('.select-item-all').prop('checked', 'checked')
+        $('.select-item-all').attr('checked', 'checked')
+    } else {
+        $('.select-item-all').prop('checked', false)
+        $('.select-item-all').attr('checked', false)
+    }
+}
+
+function doSelectForm(action) {
+    $('#select-action-input').val(action);
+    $('.select-form').submit();
+    return false;
+}
+
 var PostEditor = {
     accounts : [],
     media : [],
@@ -1170,6 +1221,75 @@ var PostEditor = {
         }
         if (force === undefined) this.updateSelectedAccounts();
         return false;
+    },
+
+    loadPost: function(type, account, images) {
+        PostEditor.postType = type;
+        PostEditor.media = [];
+        PostEditor.accounts = [];
+        PostEditor.addAccount(account, '', '');
+        console.log(images);
+        for(var i = 0;i<images.length;i++) {
+
+            PostEditor.media.push(images[i]);
+        }
+        $('#compose-file-input').val('');
+        PostEditor.finishMediaSelect();
+        PostEditor.continueMediaSelect()
+    },
+
+    addSelectAccount : function(t) {
+        var all = true;
+        var ids = [];
+        if ($(t).hasClass('each')) {
+            if ($(t).find('input').is(':checked')) {
+                $(t).find('input').removeProp('checked');
+                $(t).find('input').removeAttr('checked');
+            } else {
+                $(t).find('input').prop('checked', 'checked');
+                $(t).find('input').attr('checked', 'checked');
+            }
+        }
+        $('.each-account-input').each(function() {
+           if ($(this).is(':checked')) {
+               ids.push($(this).data('id'));
+           }  else {
+               all = false;
+           }
+        });
+
+
+        if (all) {
+            $('.account-select-all-input').prop('checked', 'checked')
+            $('.account-select-all-input').attr('checked', 'checked')
+        } else {
+            $('.account-select-all-input').prop('checked', false)
+            $('.account-select-all-input').attr('checked', false)
+        }
+
+        var url = $('.account-select-all-input').data('url');
+        if (!all) url += '?accounts='+ids.join(',');
+
+        load_page(url)
+
+        return false;
+    },
+
+    togglePageSelectAll : function(t) {
+        var ids = [];
+        $('.each-account-input').each(function() {
+            if ($(t).is(':checked')) {
+                ids.push($(this).data('id'));
+                $(this).prop('checked', 'checked')
+                $(this).attr('checked', 'checked')
+            }  else {
+                $(this).prop('checked', false)
+                $(this).attr('checked', false)
+            }
+        });
+        var url = $('.account-select-all-input').data('url');
+
+        load_page(url)
     },
 
     selectAccount: function(t) {
@@ -1201,7 +1321,6 @@ var PostEditor = {
 
     updateSelectedAccounts: function() {
         var allSelected = true;
-        console.log(PostEditor.accounts);
         $('.account-selector-list a').each(function() {
 
             if (PostEditor.accountExists($(this).data('id'))) {
@@ -1352,9 +1471,9 @@ var PostEditor = {
                     var active = (i === 0) ? 'active' : '';
                     indicators.append('<li data-target="#instagramCarousel" data-slide-to="'+i+'" class="shadow-1 '+active+'"></li>');
                     var div = $('<div class="carousel-item '+active+' each"></div>');
+                    div.data('type', media.type);
+                    div.data('image', media.file_name);
                     if(media.type === 'image') {
-                        div.data('type', media.type);
-                        div.data('image', media.file_name);
                         div.css("background-image", 'url(' + media.file+')')
                     } else {
                         div.html("<div class='video-content' style='width:100%;height:100%;overflow: hidden;position:relative;'><video src='"+media.file+"' playsinline='' muted='' loop=''></video></div>")
@@ -1385,6 +1504,7 @@ var PostEditor = {
         } else {
             $('.first-comment-container').hide();
         }
+        reloadInit();
     },
     toggleSchedule: function(t) {
         if ($(t).is(':checked')) {
@@ -1396,6 +1516,7 @@ var PostEditor = {
             $('#publish-btn').show();
             $('#schedule-now-btn').hide();
         }
+        reloadInit();
     },
     switchType : function(t, type) {
         var canSwitch = true;
@@ -1479,7 +1600,7 @@ var PostEditor = {
         return false;
     },
 
-    submitPost: function(draft) {
+    submitPost: function(draft, action) {
         if (PostEditor.accounts.length < 1) {
             notify(strings.please_select_one_account, 'error');
             return false;
@@ -1488,7 +1609,11 @@ var PostEditor = {
         if (draft === undefined) {
             $('#draft-input').remove();
         } else {
-            $("#postEditorForm").append("<input type='hidden' value='1' name='val[draft]' id='draft-input'/>")
+            if (draft) {
+                $("#postEditorForm").append("<input type='hidden' value='1' name='val[draft]' id='draft-input'/>")
+            } else {
+                $("#postEditorForm").append("<input type='hidden' value='"+action+"' name='val[edit_action]' id='draft-input'/>")
+            }
         }
 
         $("#postEditorForm").submit();
@@ -1507,6 +1632,50 @@ var PostEditor = {
         $('#draft-input').remove();
         $('.selected-media-container').html('')
 
+    },
+
+    preview: function(t) {
+        var type = $(t).data('type');
+        var medias = $(t).data('media');
+
+        if (type === 'media' || type === 'album') {
+            $(".regular-instagram-post").show();
+            $('.video-instagram-post').hide();
+            var carouseContainer = $('<div id="instagramCarousel"  class="carousel slide preview-images-container" data-interval="false"></div>');
+            var indicators = $('<ol class="carousel-indicators"></ol>');
+            var inners = $('<div class="carousel-inner"></div>');
+            if (medias.length > 0) {
+                for(var i=0;i<medias.length;i++) {
+                    var media = medias[i];
+                    var active = (i === 0) ? 'active' : '';
+                    indicators.append('<li data-target="#instagramCarousel" data-slide-to="'+i+'" class="shadow-1 '+active+'"></li>');
+                    var div = $('<div class="carousel-item '+active+' each"></div>');
+                    if(media.type === 'image') {
+                        div.data('type', media.type);
+                        div.css("background-image", 'url(' + media.file+')')
+                    } else {
+                        div.html("<div class='video-content' style='width:100%;height:100%;overflow: hidden;position:relative;'><video src='"+media.file+"' playsinline='' muted='' loop=''></video></div>")
+                    }
+                    inners.append(div);
+                }
+                carouseContainer.append(indicators);
+                carouseContainer.append(inners);
+
+                $(".instagram-post-content").html(carouseContainer);
+                carouseContainer.carousel()
+            }
+        }   else {
+            $(".regular-instagram-post").hide();
+            $('.video-instagram-post').show();
+            if (medias.length > 0) {
+                var media = medias[0]
+                $('.video-instagram-post').html("<div class='video-content' style='width:100%;height:100%;overflow: hidden;position:relative;'><video src='"+media.file+"' playsinline='' muted='' loop=''></video></div>")
+
+            }
+        }
+
+        $("#postPreviewModal").modal('show')
+        return false;
     }
 }
 

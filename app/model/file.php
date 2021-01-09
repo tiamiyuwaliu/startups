@@ -129,7 +129,7 @@ class FileModel extends Model {
     }
 
     public function find($id) {
-        $query = $this->db->query("SELECT * FROM files WHERE id=?", $id);
+        $query = $this->db->query("SELECT * FROM files WHERE id=? OR file_name=?", $id, $id);
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 

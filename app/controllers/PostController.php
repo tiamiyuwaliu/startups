@@ -25,11 +25,34 @@ class PostController extends Controller {
             } else {
                 if (isset($val['edit_post'])) {
                     $this->model('post')->savePost($val,$val['accounts'][0], $val['edit_post']);
-                    return json_encode(array(
-                        'type' => 'function',
-                        'value' => 'PostEditor.draftSaved',
-                        'message' => l('post-saved-success')
-                    ));
+                    if ($val['edit_action'] == 'save') {
+                        return json_encode(array(
+                            'type' => 'function',
+                            'value' => 'PostEditor.draftSaved',
+                            'message' => l('post-saved-success')
+                        ));
+                    } elseif($val['edit_action'] == 'publish') {
+                        $publish = $this->model('post')->publish($val['edit_post']);
+                        if ($publish) {
+                            return json_encode(array(
+                                'type' => 'function',
+                                'value' => 'PostEditor.postCompleted',
+                                'message' => l('post-success')
+                            ));
+                        } else {
+                            return json_encode(array(
+                                'type' => 'error',
+                                'message' => l('post-failed-in-all')
+                            ));
+                        }
+                    } elseif($val['edit_action'] == 'schedule') {
+                        $this->model('post')->updateStatus($val['edit_post'], 2);
+                        return json_encode(array(
+                            'type' => 'function',
+                            'value' => 'PostEditor.postCompleted',
+                            'message' => l('post-scheduled-success')
+                        ));
+                    }
                 }
                 if (!$val['schedule']) {
                     $success = array();
@@ -115,7 +138,10 @@ class PostController extends Controller {
     public function drafts() {
         $this->setTitle(l('drafts'));
 
-        return $this->render($this->view('posts/drafts'), true);
+        $selectedAccounts = $this->request->input('accounts', 'all');
+
+        $posts = $this->model('post')->getPosts(4, $selectedAccounts);
+        return $this->render($this->view('posts/drafts', array('posts' => $posts,'selectedAccounts' => explode(',', $selectedAccounts))), true);
     }
 
     public function history() {

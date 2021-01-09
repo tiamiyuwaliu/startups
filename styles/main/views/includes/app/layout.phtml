@@ -1,5 +1,5 @@
 <div id="app-container" class="clearfix <?php echo (session_get('open_menu', 0) == 1) ? 'opened-menu' : null?>">
-    <div class="menu-pane">
+    <div class="menu-pane shadow-1">
         <div class="icon-menus">
             <a class="logo" href="<?php echo url('dashboard')?>" data-ajax="true">
                 <img class="light-logo" src="<?php echo assetUrl(config('site_short_icon','assets/images/short-logo.png'))?>"/>
@@ -48,7 +48,7 @@
             <ul>
                 <li class="dropdown">
                     <?php $languages = model('admin')->getLanguages()?>
-                    <a  data-toggle="dropdown" id="change-language-selector" class=" padding-sm btn dropdown-toggle language-selector " href="#" >
+                    <a  data-toggle="dropdown" id="change-language-selector" class=" padding-sm btn dropdown-toggle language-selector shadow-1" href="#" >
                         <img style="width:20px" src="<?php echo assetUrl('assets/images/flags/'.Translator::instance()->lang().'.png')?>"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
@@ -183,6 +183,37 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('close')?></button>
                 <button type="button" class="btn btn-primary color-white" onclick="return Filemanager.add()"><?php _l('add')?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="postPreviewModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="post-preview" >
+                <div class="regular-instagram-post ">
+                    <div class="card-header" style="text-align:center;border-bottom: solid 1px #F5F5F5;">
+                        <img src="<?php echo assetUrl('assets/images/instagram-logo.png')?>"/>
+                    </div>
+                    <div class="instagram-post-header">
+                        <div class="avatar"></div>
+                        <div class="header-info">
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="instagram-post-content">
+
+                    </div>
+                    <div class="instagram-post-caption">
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="video-instagram-post hide">
+
+                </div>
             </div>
         </div>
     </div>
