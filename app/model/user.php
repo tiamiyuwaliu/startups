@@ -97,13 +97,6 @@ class UserModel extends Model {
 
         if (!$result) return false;
         if (!hash_check($password, $result['password'])) return false;
-        if ($result['status'] == 0) {
-            $this->sendActivationLink($result['id'], $result['email'], $result['full_name']);
-            exit(json_encode(array(
-                'type' => 'error',
-                'message' => l('please-activate-your-account')
-            )));
-        }
          $this->authId = $result['id'];
         $this->authUser = $result;
         $this->authOwnerId = ($result['is_team']) ? $result['is_team'] : $this->authId;
@@ -149,7 +142,6 @@ class UserModel extends Model {
             'password' => '',
             'email' => '',
             'full_name' => '',
-            'timezone' => ''
         );
 
         /**
@@ -164,29 +156,13 @@ class UserModel extends Model {
         $password = hash_value($password);
         $active = config('email-verification', false) ? 0 : 1;
         if ($isAdmin) $active = 1;
-        $query = $this->db->query("INSERT INTO users (password,email,full_name,created,changed,status,timezone) VALUES(?,?,?,?,?,?,?)", $password,$email,$full_name,time(),time(), $active, $timezone);
+        $query = $this->db->query("INSERT INTO users (password,email,full_name,created,changed,status) VALUES(?,?,?,?,?,?)", $password,$email,$full_name,time(),time(), $active);
         $userid = $this->db->lastInsertId();
-
-
-
         if ($isAdmin) {
             Hook::getInstance()->fire('admin.add.user', null, array($userid, $val));
         }
 
-
-
-        if (!$noActivate) {
-            if ($active == 0) {
-                $this->sendActivationLink($userid, $email, $full_name);
-            } else {
-                $this->sendWelcomeMail($email, $full_name);
-            }
-            Hook::getInstance()->fire('user.signup.success', null, array($userid, $val));
-
-        } else {
-            $this->sendWelcomeMail($email, $full_name);
-            $this->db->query("UPDATE users SET status=? WHERE id=?", 1, $userid);
-        }
+        $this->db->query("UPDATE users SET status=? WHERE id=?", 1, $userid);
         return $userid;
     }
 
@@ -220,15 +196,6 @@ class UserModel extends Model {
         Hook::getInstance()->fire('admin.user.save', null, array($id, $val));
         return true;
     }
-    public function sendActivationLink($userid, $email, $full_name) {
-        $code = mEncrypt(''.time().'');
-        $link = url('activate/'.$code);
-        $this->db->query("UPDATE users SET activation_code=? WHERE id=?", $code, $userid);
-        return Email::getInstance()->setAddress($email, $full_name)
-            ->setSubject(config('activation-subject'), array('full_name' => $full_name))
-            ->setMessage(config('activation-content'), array('site-name' => config('site-title', 'SmartPost'), 'full_name' => $full_name, 'activation_link' => $link))
-            ->send();
-    }
 
     public function sendResetLink($userid, $email, $full_name) {
         $code = mEncrypt(''.time().'');
@@ -241,13 +208,6 @@ class UserModel extends Model {
             ->send();
     }
 
-    public function sendWelcomeMail($email, $full_name) {
-        if (!config('enable-welcome-mail',false)) return false;
-        return Email::getInstance()->setAddress($email, $full_name)
-            ->setSubject(config('welcome-subject'), array('full_name' => $full_name))
-            ->setMessage(config('welcome-content'), array( 'full_name' => $full_name))
-            ->send();
-    }
 
     public function updatePassword($password, $userid) {
         return $this->db->query("UPDATE users SET password=? WHERE id=?", hash_value($password), $userid);
@@ -372,126 +332,6 @@ class UserModel extends Model {
 
     }
 
-    public function getPermissions() {
-        $permissions =  perfectUnserialize($this->authOwner['permission']);
-        return (empty($permissions)) ? array() : $permissions;
-    }
-
-
-
-    public function hasPermission($key, $default = null) {
-        $permissions = $this->getPermissions();
-        if (empty($permissions)) {
-            if ($default ) return $default;
-            return true;
-        }
-        if (isset($permissions[$key])) return $permissions[$key];
-        return ($default) ? $default : false;
-    }
-
-    public function permission($key, $default = null) {
-        $permissions = $this->getPermissions();
-        if (empty($permissions)) {
-            if ($default ) return $default;
-            return true;
-        }
-        if (isset($permissions[$key])) return $permissions[$key];
-        return ($default) ? $default : false;
-    }
-
-
-    public function getTotalSize() {
-        $size = $this->hasPermission('storage');
-        return (!$size) ? 'unlimited' : $size;
-    }
-
-    public function getUsedSize() {
-        $query = $this->db->query("SELECT SUM(file_size) as size FROM files WHERE userid=?", $this->authOwnerId);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-        return  ($result) ? round($result['size'] / 1000) : 0;
-    }
-
-    public function getAllowSize() {
-        if(!$this->isLoggedin()) return 0;
-        $permissions = $this->getPermissions();
-        $size = (isset($permissions['file_size'])) ? $permissions['file_size']: null;
-        if (!$size) return 1000;
-        return $size;
-    }
-
-    public function canUpload() {
-        $used = $this->getUsedSize();
-        $total = $this->getTotalSize();
-        if ($total == 'unlimited') return true;
-        if ($used < $total) return true;
-        return false;
-    }
-
-    public function saveTeam($val, $id = null) {
-        $ext = array(
-            'name' => '',
-            'email' => '',
-            'permission' => array()
-        );
-        /**
-         * @var $name
-         * @var $email
-         * @var $permission
-         */
-        extract(array_merge($ext, $val));
-
-        $permission = perfectSerialize($permission);
-        if ($id) {
-            $this->db->query("UPDATE user_team SET permissions=? WHERE id=?", $permission, $id);
-        } else {
-            if ($this->teamExists($email)) return false;
-
-            $this->db->query("INSERT INTO user_team (name,email,ownerid,permissions)VALUES(?,?,?,?)",
-                $name,$email,$this->authOwnerId,$permission);
-            $this->sendInviteCode($this->db->lastInsertId());
-            return true;
-        }
-    }
-
-    public function findTeam($id) {
-        $query = $this->db->query("SELECT * FROM user_team WHERE id=?", $id);
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function findTeamByCode($code) {
-        $query = $this->db->query("SELECT * FROM user_team WHERE invite_code=?", $code);
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function sendInviteCode($id) {
-        $team = $this->findTeam($id);
-        $name = $team['name'];
-        $email = $team['email'];
-        //send invite code
-        $code = generateHash($name.$email.time());
-
-        $link = url('activate/invite/'.$code);
-
-        $this->db->query("UPDATE user_team SET invite_code=? WHERE id=?", $code, $id);
-        return Email::getInstance()->setAddress($email, $name)
-            ->setSubject(l('invite-member-subject', array('name' => $this->authOwner['full_name'], 'site' => config('site-title', 'SmartPost'))))
-            ->setMessage(l('invite-member-message',array( 'name' => $name, 'link' => $link)))
-            ->send();
-    }
-
-    public function deleteTeam($id) {
-        return $this->db->query("DELETE FROM user_team WHERE id=? AND ownerid=?", $id, $this->authOwnerId);
-    }
-
-    public function teamExists($email) {
-        $query = $this->db->query("SELECT * FROM user_team WHERE ownerid=? AND email=?", $this->authOwnerId, $email);
-        return $query->rowCOunt();
-    }
-
-    public function getTeamMembers() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE ownerid=?", $this->authOwnerId);
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
 
     public function setOwnerId($id, $userid) {
         $this->db->query("UPDATE users SET is_team=? WHERE id=?", $id, $userid);
@@ -507,33 +347,7 @@ class UserModel extends Model {
         return ($this->authId == $this->authOwnerId);
     }
 
-    public function findTheTeam() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE userid=? AND ownerid=?", $this->authId, $this->authOwnerId);
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-    public function teamCanUse($p) {
-        $team = ($this->team) ? $this->team : $this->findTheTeam();
-        $permission = perfectUnserialize($team['permissions']);
-        return $permission[$p];
-    }
 
-    public function countTeamMember() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE ownerid=?", $this->authOwnerId);
-        return $query->rowCount();
-    }
-    public function isTeamMEmber() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE userid=?", $this->authId);
-        return $query->rowCount();
-    }
 
-    public function getSwitchAccounts() {
-        $ids = array($this->authId);
-        $query = $this->db->query("SELECT ownerid FROM user_team WHERE userid=?", $this->authId);
-        while($fetch = $query->fetch(PDO::FETCH_ASSOC)) {
-            $ids[] = $fetch['ownerid'];
-        }
-        $ids = implode(',', $ids);
-        $query = $this->db->query("SELECT * FROM users WHERE id IN ($ids)");
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
+
 }
