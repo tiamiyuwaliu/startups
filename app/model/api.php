@@ -156,7 +156,14 @@ class ApiModel extends Model {
             die('FCM Send Error: ' . curl_error($ch));
         }
         curl_close($ch);
+        print_r($result);
         return $result;
     }
+
+    public function findReferral($userid){
+        $query = $this->db->query("SELECT * FROM referrals WHERE userid=? AND status=?", $userid, 0);
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 }

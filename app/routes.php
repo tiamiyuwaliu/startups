@@ -35,6 +35,8 @@ $request->any('test/push', array('uses' => 'Api@testPush', 'secure' => false));
 $request->any('api/settings', array('uses' => 'Api@settings', 'secure' => false));
 $request->any('api/wallet/balance', array('uses' => 'Api@walletBalance', 'secure' => false));
 $request->any('api/pay/wallet', array('uses' => 'Api@payWallet', 'secure' => false));
+$request->any('api/pay/bonus', array('uses' => 'Api@payBonus', 'secure' => false));
+
 $request->any('api/load/wallet', array('uses' => 'Api@loadWallet', 'secure' => false));
 $request->any('api/wallet/history', array('uses' => 'Api@walletHistory', 'secure' => false));
 

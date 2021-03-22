@@ -48,6 +48,7 @@ class ApiController  extends Controller {
         $device = $this->request->input('device');
         $fullname = $this->request->input('name');
         $timezone = $this->request->input('timezone');
+        $referral = $this->request->input('referral');
 
         $user = $this->model('user')->getUser($email);
         if ($user) {
@@ -64,6 +65,12 @@ class ApiController  extends Controller {
         $user = $this->model('user')->getUser($userid);
         $this->model('user')->loginWithObject($user);
         $token = $this->model('api')->addToken($this->model('user')->authId, $device);
+
+        //find referral if exists
+        $referralUser = $this->model('user')->getUser($referral);
+        if ($referralUser) {
+            Database::getInstance()->query("INSERT INTO referrals (userid,referral_id)VALUES(?,?)", $userid, $referralUser['id']);
+        }
         $user = $this->model('user')->authUser;
         $user['avatar'] = str_replace('%w', 200, $user['avatar']);
         return json_encode(array(
@@ -158,6 +165,11 @@ class ApiController  extends Controller {
         $this->tokenRequired();
         return json_encode(array(
             'gas_rate' => 400,
+            'conviniency_fee' => 200,
+            'referral_amount' => 100,
+            'referral_bonus' => $this->model('user')->authUser['referral_bonus'],
+            'available_gas' => array(6, '12.5'),
+            'video_id' => 'Pjz8-yknF_s',
             'states' => array(
                 'osogbo',
                 'ede',
@@ -180,6 +192,18 @@ class ApiController  extends Controller {
         $newWallet = $wallet - $amount;
 
         Database::getInstance()->query("UPDATE users SET wallet=? WHERE id=?", $newWallet, $this->model('user')->authId);
+        return json_encode(array(
+            'balance' => $newWallet
+        ));
+    }
+
+    public function payBonus() {
+        $this->tokenRequired();
+        $amount = $this->request->input('amount');
+        $wallet = $this->model('user')->authUser['referral_bonus'];
+        $newWallet = $wallet - $amount;
+
+        Database::getInstance()->query("UPDATE users SET referral_bonus=? WHERE id=?", $newWallet, $this->model('user')->authId);
         return json_encode(array(
             'balance' => $newWallet
         ));
@@ -304,6 +328,12 @@ class ApiController  extends Controller {
 
         //send notifications to customer about the order
         $order = $this->model('api')->findOrder($id);
+        $referral = $this->model('api')->findReferral($order['userid']);
+        if ($referral) {
+            $referralUser = $this->model('user')->getUser($referral['referral_id']);
+            Database::getInstance()->query("UPDATE users SET referral_bonus=? WHERE id=?", $referralUser['referral_bonus'] + 100, $referralUser['id']);
+            Database::getInstance()->query("UPDATE referrals SET status=? WHERE id=?", 1, $referral['id']);//mark the referral process complete
+        }
         $this->model('api')->sendPush(array($order['userid']), "Your order is delivered", "Your order has been delivered, Thank you");
 
         return json_encode(array(
