@@ -4,6 +4,8 @@
     padding-right:10px;
     min-width: 3rem;
 }
+.modal-backdrop {
+}
 .dropdow-menu-lg {
     min-width:250px;
 }
@@ -19,11 +21,11 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width:60px;
-    background: #ffffff;
-    border-radius: 0px 20px 20px 0;
+    width:90px;
+    background: #F4F5FA;
     transition: width 0.3s ease-in;
     padding: 30px 30px;
+    border-right: solid 1px #E0E0E0;
     z-index: 99;
 }
 .pagination {
@@ -33,7 +35,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width:60px;
+    width:100%;
 
     height: 100vh;
 }
@@ -41,6 +43,7 @@
     display: block;
     margin: 10px auto;
     width: 40px;
+    margin-bottom: 50px;
 }
 #app-container .menu-pane .icon-menus .logo img{
     width:40px;
@@ -59,25 +62,23 @@
 #app-container .menu-pane .icon-menus ul li >  a {
     display: block;
     margin: 10px auto;
+    font-size:10px;
 }
-#app-container .menu-pane .icon-menus ul li > a.add-button {
-    width:40px;
-    height: 40px;
-}
+
 #app-container .menu-pane .icon-menus ul li > a i {
-    font-size:25px;
-}
-#app-container .menu-pane .icon-menus ul li > a.add-button i {
     font-size:20px;
-    position: relative;
-    bottom: 5px;
+    display: block;
+    width: 40px;
+    color: #7f00ff;
+    height: 40px;
+    padding: 10px 0;
+    text-align: center;
+    background: #EDEEF7;
+    border-radius:10px;
+    margin: 0 auto;
+    margin-bottom: 7px;
 }
-#app-container .menu-pane .icon-menus ul li > a.account-icon img {
-    width:40px;
-    height:40px;
-    border-radius:100px;
-    border: solid 2px #f5f5f5;
-}
+
 #app-container .menu-pane .icon-menus .main {
     margin-top:10px;
     border-top: solid 1px #F5F5F5;
@@ -89,6 +90,7 @@
     text-align: center;
     width:100%;
    padding:5px 0;
+    font-weight: 500;
     margin: 10px auto;
     color: #000;
 }
@@ -100,35 +102,35 @@
     font-size:20px !important;
 }
 #app-container .menu-pane .icon-menus .main a.active {
-    border-right:solid 3px #7A2DE0
+    color: #7A2DE0;
 }
-.bio-menu {
-    background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12) !important;
-    color: #ffffff !important;
-}
-.chat-menu {
-    background: #fdc830 !important; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fdc830, #f37335) !important; /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fdc830, #f37335) !important;
-    color: #ffffff !important;
-}
-.compose-menu {
-    background: #7f00ff; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #7f00ff, #e100ff); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #7f00ff, #e100ff) !important;/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #ffffff !important;
+
+#app-container .menu-pane .icon-menus .main a.active i {
+    background: #7A2DE0;
+    color: #ffffff;
+    box-shadow: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 3px rgba(0,0,0,.12),0 4px 15px 0 rgba(0,0,0,.2)!important;
 }
 #app-container .content-pane {
     width: 100%;
     padding:0;
-    padding-left: 60px;
+    padding-left: 90px;
     height: 100vh;
     overflow: hidden;
 }
-#app-container .content-pane .content-top {
-    padding:0 30px ;
-    padding-top: 10px;
-    min-height: 60px;
+#app-container .content-pane .content-top{
+    border-top: solid 1px #F6F6F6;
+    border-bottom: solid 1px #F6F6F6;
+    padding: 5px 20px;
+    position: relative;
+    min-height: 40px;
+}
+#app-container .content-pane .content-top .left-actions {
+    position: relative;
+}
+#app-container .content-pane .content-top .right-actions {
+    position: absolute;
+    right: 20px;
+    top: 5px;
 }
 body {
     overflow: hidden;
@@ -137,7 +139,10 @@ body {
 #app-container .content-pane .content-body {
 
     overflow: hidden;
-    padding: 30px;
+    padding: 30px 20px;
+}
+.empty-result {
+    text-align: center;
 }
 .content-scroller {
     overflow: hidden !important;
@@ -156,13 +161,44 @@ body {
 
 #app-container .content-pane .header {
     width:auto;
-    position: absolute;
-    top: 0px;
-    right: 20px;
+    position: relative;
+
 }
+#app-container .content-pane .header .user-accounts {
+    padding-left: 20px;
+}
+#app-container .content-pane .header .user-accounts a {
+    display: block;
+    float: left;
+    width: 50px;
+    height: 50px;
+    border: solid 3px #F4F5FA;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+    margin: 7px 2px;
+}
+#app-container .content-pane .header .user-accounts a.active {
+    border-color: #7C31D7;
+}
+#app-container .content-pane .header .user-accounts a img {
+    width:100%;
+    height: 100%;
+}
+#app-container .content-pane .header .user-accounts a.add {
+    background: #F4F5FA;
+    font-size:25px;
+    color: #000;
+    text-align: center;
+    padding: 5px 0;
+}
+
 #app-container .content-pane .header ul {
     padding: 0;
     margin: 0;
+    position: absolute;
+    top:5px;
+    right: 20px;
     list-style: none;
 }
 #app-container .content-pane .header ul li {
@@ -341,7 +377,7 @@ body {
 }
 .grid-container .each-container .each {
     width:100%;
-    background: #ffffff;
+    background: #F6F6F6;
     height: 200px;
     border-radius:10px;
     display: block;
@@ -369,6 +405,36 @@ body {
     padding: 10px 20px;
     left: 0px;
     width: 100%;
+}
+.account-add-startup a {
+    display: block;
+    padding:35px 10px ;
+    position: relative;
+    color: grey;
+   
+}
+.account-add-startup a:first-child {
+    border-bottom: solid 1px #F6F6F6;
+}
+.account-add-startup a i {
+    font-size:40px
+}
+.account-add-startup a div {
+    position: absolute;
+    padding-left: 50px;
+    top: 40px;
+}
+.account-add-startup a div span {
+    display: block;
+}
+.account-add-startup a div span.title {
+    font-weight: bold;
+}
+.account-add-startup a:hover {
+    background: #F6F6F6;
+}
+.account-add-startup a:hover div span.title {
+    color: #000;
 }
 .digit-group {
     margin: 20px 0;
@@ -404,31 +470,6 @@ body {
 
 .account-add-second-step {
     display: none;
-}
-.accounts-add-progress{
-    font-weight:600;
-    border:solid 1px #EBEBEB;
-    background: #F6F6F6;
-    padding: 0 10px;
-    margin: 20px 0;
-    margin-top: 0;
-    border-radius:5px;
-}
-.progress-purple {
-    border-bottom-color: #7A2DE0;
-}
-.progress-purple:after {
-    background: #E5D7F9;
-}
-.accounts-add-progress .progress-container {
-    float: left;
-    width:80%;
-}
-.accounts-add-progress .text-container {
-    width: 20%;
-    padding: 10px 10px;
-    float: left;
-    text-align: center;
 }
 .social-accounts-menu{
     width:250px;
@@ -873,7 +914,5 @@ img.emojione {
 }
 
 @media(min-width: 1400px) {
-    #app-container .menu-pane {
-        width:60px;
-    }
+
 }

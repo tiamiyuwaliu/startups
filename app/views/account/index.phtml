@@ -1,67 +1,171 @@
 <div class="content-top">
-    <h3><?php _l('accounts')?></h3>
+    <div class="left-actions">
+        <div class="btn-group shadow-none">
+            <a href="" class="btn btn-light shadow-none btn-sm"><i class="icons icon-grid"></i></a>
+            <a href="" class="btn btn-light shadow-none btn-sm"><i class="las la-list"></i></a>
+        </div>
+
+    </div>
+    <div class="right-actions">
+        <a href="" class="btn btn-primary btn-sm shadow-none" data-toggle="modal" data-target="#accountOptionModal">Add New Account</a>
+    </div>
 </div>
 
-<div class="content-body">
-    <div class="row">
-        <div class="col-md-10">
-            <div class="accounts-add-progress clearfix">
-                <div class="progress-container">
-                    <div class="progress" style="height: 20px;">
-                        <div class="progress-bar progress-purple"  role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-                <div class="text-container">
-                    1 / & added
+
+<div class="content-body content-scroller content-body.with-tabs">
+    <?php $accounts = model('social')->getAccounts()?>
+    <?php if(empty($accounts)):?>
+        <div class="empty-result">
+            <img src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+            <h5>No accounts added yet </h5>
+        </div>
+    <?php else:?>
+        <div class="grid-container clearfix">
+            <div class="each-container" style="display:none">
+                <div class="each ">
+
                 </div>
             </div>
-            <div class="grid-container clearfix">
+
+            <?php foreach($accounts as $account):?>
                 <div class="each-container">
-                    <a href="" class="each each-add shadow-1" data-toggle="modal" data-target="#addAccountModal"><i class="las la-plus-circle"></i></a>
+                    <div class="each each-account ">
+                        <?php if($account['status']):?>
+                            <div class="mb-3"><span class="badge badge-pill badge-success"><?php _l('active')?></span></div>
+                        <?php else:?>
+                            <div class="mb-3"><span class="badge badge-pill badge-danger"><?php _l('disabled')?></span></div>
+                        <?php endif?>
+
+
+                        <div class="media">
+                            <img class="mr-3" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
+                            <div class="media-body">
+                                <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
+                                <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
+                            </div>
+                        </div>
+
+                        <div class="each-footer clearfix">
+                            <div class="float-left" style="width:60%">
+
+                                <a data-ajax="true" href="<?Php echo url('dashboard', array('switch' => $account['username']))?>" title="<?php _l('set-active-account')?>" class="btn-float btn btn-sm shadow-none mtitle <?php echo ($C->selectedAccount['id'] == $account['id']) ? 'btn-primary' : null?> "><i class="las la-check"></i></a>
+                            </div>
+                            <div class="float-right " style="width:40%">
+                                <a href="<?php echo url('accounts', array('action' => 'delete', 'id' => $account['id']))?>" data-ajax-action="true" class=" btn btn-float btn-sm  float-right shadow-none confirm mtitle" title="<?php _l('delete-account')?>" data-message="<?php _l('confirm-delete-account')?>"><i class="las la-trash-alt"></i></a>
+
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
-                <?php foreach(model('social')->getAccounts() as $account):?>
-                    <div class="each-container">
-                        <div class="each each-account shadow-1">
-                            <?php if($account['status']):?>
-                                <div class="mb-3"><span class="badge badge-pill badge-success"><?php _l('active')?></span></div>
-                            <?php else:?>
-                                <div class="mb-3"><span class="badge badge-pill badge-danger"><?php _l('disabled')?></span></div>
-                            <?php endif?>
+            <?php endforeach?>
+        </div>
+    <?php endif?>
+</div>
 
+<div class="modal  modal-right modal-right-lg" tabindex="-1" id="addAccountModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="<?php echo url('accounts')?>" method="post" class="general-form short-form">
+            <div class="modal-content">
+                <div class="modal-header">
 
-                            <div class="media">
-                                <img class="mr-3" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
-                                <div class="media-body">
-                                    <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
-                                    <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
+                </div>
+                <div class="modal-body">
+                    <div class="stepper-horiz">
+                        <div class="stepper active detail-stepper pl-0">
+                            <div class="stepper-icon">
+                                <span>1</span>
+                            </div>
+                            <span class="stepper-text"><?php _l('provide-login-details')?></span>
+                        </div>
+                        <div class="stepper verification-stepper">
+                            <div class="stepper-icon">
+                                <span>2</span>
+                            </div>
+                            <span class="stepper-text"><?php _l('verify-account')?></span>
+                        </div>
+                        <div class="stepper">
+                            <div class="stepper-icon">
+                                <span>3</span>
+                            </div>
+                            <span class="stepper-text"><?php _l('completed')?></span>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-7">
+                            <div class="account-add-first-step">
+                                <div class="form-group  floating-label mt-3">
+                                    <label>Instagram <?php echo mb_strtolower(l('username'))?></label>
+                                    <input type="text" class="form-control form-control-lg" name="val[username]"/>
+                                </div>
+
+                                <div class="form-group  floating-label">
+                                    <label>Instagram <?php echo mb_strtolower(l('password'))?></label>
+                                    <input type="password" class="form-control form-control-lg" name="val[password]"/>
+                                </div>
+
+                                <div class="mt-5">
+                                    <button type="submit" class="btn btn-primary shadow-none  btn-lg "><?php _l('continue')?></button>
+                                    <button type="button"  data-dismiss="modal" class="btn shadow-none  btn-lg"><?php _l('cancel')?></button>
+                                </div>
+                            </div>
+                            <div class="account-add-second-step">
+                                <h6><?php _l('verification-needed')?></h6>
+                                <div class="bold p-2 pl-0 verification-text"></div>
+                                <div class="digit-group" data-group-name="digits" >
+                                    <input type="number" id="digit-1" name="val[digit_1]" data-next="digit-2" />
+                                    <input type="number" id="digit-2" name="val[digit_2]" data-next="digit-3" data-previous="digit-1" />
+                                    <input type="number" id="digit-3" name="val[digit_3]" data-next="digit-4" data-previous="digit-2" />
+                                    <span class="splitter">&ndash;</span>
+                                    <input type="number" id="digit-4" name="val[digit_4]" data-next="digit-5" data-previous="digit-3" />
+                                    <input type="number" id="digit-5" name="val[digit_5]" data-next="digit-6" data-previous="digit-4" />
+                                    <input type="number" id="digit-6" name="val[digit_6]" data-previous="digit-5" />
+                                </div>
+
+                                <div class="mt-5">
+                                    <button type="submit" class="btn btn-primary shadow-none  btn-lg "><?php _l('continue')?></button>
+                                    <button type="button" data-dismiss="modal" class="btn shadow-none  btn-lg"><?php _l('cancel')?></button>
                                 </div>
                             </div>
 
-                            <div class="each-footer clearfix">
-                                <div class="float-left" style="width:60%">
-                                    <a data-ajax="true" href="<?Php echo url('dashboard', array('switch' => $account['username']))?>" class=" btn-block btn btn-primary "><?php _l('enter')?></a>
-                                </div>
-                                <div class="float-right " style="width:40%">
-                                    <a href="<?php echo url('accounts', array('action' => 'delete', 'id' => $account['id']))?>" data-ajax-action="true" class=" btn btn-float btn-sm  float-right shadow-none confirm mtitle" title="<?php _l('delete-account')?>" data-message="<?php _l('confirm-delete-account')?>"><i class="las la-trash-alt"></i></a>
-
-                                </div>
-
+                        </div>
+                        <div class="col-md-5">
+                            <div class="side-help">
+                                <h3><?php _l('why-my-password')?></h3>
+                                <img src="<?php echo assetUrl('styles/main/images/add-account.png')?>" style="width: 100%;"/>
+                                <p><?php _l('why-my-password-note')?>  </p>
                             </div>
                         </div>
                     </div>
 
-                <?php endforeach?>
+
+                </div>
+
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="side-help">
-                <h3><?php _l('add-account')?></h3>
-                <p>
-                    <?php _l('add-account-help-note')?>
-                </p>
+        </form>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-sm" id="accountOptionModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered ">
+        <div class="modal-content shadow-10">
+            <div class="account-add-startup">
+                <a href="">
+                    <i class="lab la-facebook-f"></i>
+                    <div>
+                        <span class="title"><?php _l('login-with-facebook')?></span>
+                        <span><?php _l('using-instagram-api')?></span>
+                    </div>
+                </a>
+                <a href="" onclick="return Account.open()">
+                    <i class="las la-user-circle"></i>
+                    <div>
+                        <span class="title"><?php _l('login-with-credential')?></span>
+                        <span><?php _l('using-username-password')?></span>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </div>
-

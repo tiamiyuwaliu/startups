@@ -16,6 +16,12 @@
             <a aria-controls="authentication" aria-selected="false" class="nav-link" data-toggle="tab" href="#authentication" id="contact-tab" role="tab"><?php _l('authentication')?></a>
         </li>
         <li class="nav-item">
+            <a aria-controls="authentication" aria-selected="false" class="nav-link" data-toggle="tab" href="#facebook" id="contact-tab" role="tab"><?php _l('facebook')?></a>
+        </li>
+        <li class="nav-item">
+            <a aria-controls="authentication" aria-selected="false" class="nav-link" data-toggle="tab" href="#twitter" id="contact-tab" role="tab"><?php _l('twitter')?></a>
+        </li>
+        <li class="nav-item">
             <a aria-controls="others" aria-selected="false" class="nav-link" data-toggle="tab" href="#others" id="contact-tab" role="tab"><?php _l('others')?></a>
         </li>
     </ul>
@@ -180,6 +186,23 @@
                         </div>
                         <hr/>
 
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.registration')?>
+                        <div class="floating-button">
+                            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div aria-labelledby="contact-tab" class="tab-pane fade" id="facebook" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+
                         <div class="custom-control custom-checkbox mb-4">
                             <input type="hidden" name="val[facebook-login]" value="0"/>
                             <input type="checkbox" name="val[facebook-login]" <?php echo config('facebook-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck4">
@@ -197,7 +220,21 @@
                             <input type="text" class="form-control" value="<?php echo config('facebook-app-secret')?>" name="val[facebook-app-secret]"/>
                         </div>
 
-                        <hr/>
+                        <?php echo Hook::getInstance()->fire('admin.settings.facebook')?>
+                        <div class="floating-button">
+                            <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div aria-labelledby="contact-tab" class="tab-pane fade" id="twitter" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
                         <div class="custom-control custom-checkbox mb-4">
                             <input type="hidden" name="val[twitter-login]" value="0"/>
                             <input type="checkbox" name="val[twitter-login]" <?php echo config('twitter-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck5">
@@ -215,25 +252,8 @@
                             <input type="text" class="form-control" value="<?php echo config('twitter-consumer-secret')?>" name="val[twitter-consumer-secret]"/>
                         </div>
 
-                        <hr/>
-                        <div class="custom-control custom-checkbox mb-4">
-                            <input type="hidden" name="val[google-login]" value="0"/>
-                            <input type="checkbox" name="val[google-login]" <?php echo config('google-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck6">
-                            <label class="custom-control-label" for="customCheck6"><?php _l('enable-google-login')?></label>
-                        </div>
 
-
-                        <div class="form-group floating-label <?php echo config('google-client-id') ? 'has-value':null?>">
-                            <label><?php _l('client-id')?></label>
-                            <input type="text" class="form-control" value="<?php echo config('google-client-id')?>" name="val[google-client-id]"/>
-                        </div>
-
-                        <div class="form-group floating-label <?php echo config('google-client-secret')? 'has-value':null?>">
-                            <label><?php _l('client-secret-key')?></label>
-                            <input type="text" class="form-control" value="<?php echo config('google-client-secret')?>" name="val[google-client-secret]"/>
-                        </div>
-
-                        <?php echo Hook::getInstance()->fire('admin.settings.registration')?>
+                        <?php echo Hook::getInstance()->fire('admin.settings.twitter')?>
                         <div class="floating-button">
                             <button class="btn btn-float btn-primary"><i class="las la-check"></i></button>
                         </div>

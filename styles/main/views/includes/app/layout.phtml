@@ -1,5 +1,5 @@
 <div id="app-container" class="clearfix <?php echo (session_get('open_menu', 0) == 1) ? 'opened-menu' : null?>">
-    <div class="menu-pane shadow-1">
+    <div class="menu-pane">
         <div class="icon-menus">
             <a class="logo" href="<?php echo url('dashboard')?>" data-ajax="true">
                 <img class="light-logo" src="<?php echo assetUrl(config('site_short_icon','assets/images/short-logo.png'))?>"/>
@@ -7,8 +7,8 @@
             </a>
 
             <div class="menu-list-container">
-                <ul class="dropright">
-                    <li><a class="account-icon" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" href="">
+                <ul class="dropright" style="display: none">
+                    <li style="display:none"><a class="account-icon" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" href="">
                             <img src="<?php echo ($C->selectedAccount) ? assetUrl($C->selectedAccount['avatar']) : model('user')->getAvatar()?>"/>
                         </a>
                         <div class="dropdown-menu social-accounts-menu" >
@@ -22,29 +22,53 @@
                             <a href="<?php echo url('accounts')?>" class="dropdown-item" data-ajax="true"><?php _l('manage-accounts')?></a>
                         </div>
                     </li>
-                    <li><a href="" data-toggle="modal" data-target="#addAccountModal" title="<?php _l('add-account')?>" class="btn btn-light btn-float shadow-none add-button mtitle-right"><i class="las la-plus"></i></a> </li>
+                    <li style="display:none"><a href="" data-toggle="modal" data-target="#addAccountModal" title="<?php _l('add-account')?>" class="btn btn-light btn-float shadow-none add-button mtitle-right"><i class="las la-plus"></i></a> </li>
                     <li><a href="<?php echo url('posts')?>" data-ajax="true" title="<?php _l('compose-new-post')?>" class="btn compose-menu btn-primary mtitle-right btn-float shadow-none add-button"><i class="las la-edit"></i></a> </li>
                 </ul>
 
                 <ul class="main">
-                    <li><a href="<?php echo url('dashboard')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'dashboard') ? 'active':null?>" title="<?php _l('dashboard')?>"><i class="icons icon-home"></i> </a></li>
-                    <li><a  href="<?php echo url('bio')?>" data-ajax="true" class="btn bio-menu btn-primary mtitle-right btn-float shadow-none btn-sm <?php echo ($C->activeIconMenu == 'bio') ? 'active':null?>" title="<?php _l('bio-link')?>"><i class="icons icon-link"></i></a></li>
-                    <li><a href="<?php echo url('chat')?>" data-ajax="true" class="btn chat-menu btn-primary mtitle-right btn-float shadow-none btn-sm <?php echo ($C->activeIconMenu == 'chat') ? 'active':null?>" title="<?php _l('chat')?>"><i class="icons icon-bubble"></i></a></li>
-                    <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>"><i class="icons icon-graph"></i></a></li>
-                    <li><a href="<?php echo url('calendar')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'calendar') ? 'active':null?>" title="<?php _l('calendar')?>"><i class="icons icon-calendar"></i> </a></li>
+                    <li><a href="<?php echo url('posts')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'posts') ? 'active':null?>" title="<?php _l('dashboard')?>">
+                            <i class="icons icon-paper-plane"></i>
+                            Publishing
+                        </a></li>
+                    <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
+                            <i class="icons icon-bubble"></i>
+                            Conversation
+                        </a></li>
+                    <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
+                            <i class="icons icon-link"></i>
+                            Bio Link
+                        </a></li>
+                     <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
+                             <i class="icons icon-graph"></i>
+                             Insights
+                         </a></li>
+                    <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('templates')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'captions' ? 'active':null?>">
+                            <i class="icons icon-grid"></i>
+                            Templates
+                        </a> </li>
+                    <li><a href="<?php echo url('files')?>" data-ajax="true" title="<?php _l('file-manager')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'files' ? 'active':null?>">
+                            <i class="icons icon-folder"></i>
+                            Media
+                        </a> </li>
 
                 </ul>
-                <ul class="main">
-                    <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('templates')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'captions' ? 'active':null?>"><i class="icons icon-grid"></i></a> </li>
-                    <li><a href="<?php echo url('files')?>" data-ajax="true" title="<?php _l('file-manager')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'files' ? 'active':null?>"><i class="icons icon-folder"></i></a> </li>
 
-                </ul>
             </div>
         </div>
 
     </div>
     <div class="content-pane">
+
         <div class="header">
+            <div class="user-accounts clearfix">
+                <?php foreach(model('social')->getAccounts() as $account):?>
+                    <a data-ajax="true" title="<?php echo $account['username']?>" href="<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>"
+                       class="mtitle <?php echo ($C->selectedAccount['id'] == $account['id']) ? 'active' : null?>" ><img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/> </a>
+                <?php endforeach;?>
+
+                <a href="<?php echo url('accounts')?>" data-ajax="true"  class="add"><i class="icons icon-user-follow"></i></a>
+            </div>
             <ul>
                 <li class="dropdown">
                     <?php $languages = model('admin')->getLanguages()?>
@@ -71,7 +95,9 @@
                 </li>
             </ul>
         </div>
+
         <?php echo $content?>
+
     </div>
 
 </div>
@@ -81,88 +107,6 @@
         <div class="modal-content p-0">
             <img src="<?php echo assetUrl('assets/images/loader.gif')?>"/>
         </div>
-    </div>
-</div>
-<div class="modal  modal-right modal-right-lg" tabindex="-1" id="addAccountModal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <form action="<?php echo url('accounts')?>" method="post" class="general-form short-form">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                </div>
-                <div class="modal-body">
-                    <div class="stepper-horiz">
-                        <div class="stepper active detail-stepper pl-0">
-                            <div class="stepper-icon">
-                                <span>1</span>
-                            </div>
-                            <span class="stepper-text"><?php _l('provide-login-details')?></span>
-                        </div>
-                        <div class="stepper verification-stepper">
-                            <div class="stepper-icon">
-                                <span>2</span>
-                            </div>
-                            <span class="stepper-text"><?php _l('verify-account')?></span>
-                        </div>
-                        <div class="stepper">
-                            <div class="stepper-icon">
-                                <span>3</span>
-                            </div>
-                            <span class="stepper-text"><?php _l('completed')?></span>
-                        </div>
-                    </div>
-                    <div class="row mt-5">
-                        <div class="col-md-7">
-                            <div class="account-add-first-step">
-                                <div class="form-group  floating-label mt-3">
-                                    <label>Instagram <?php echo mb_strtolower(l('username'))?></label>
-                                    <input type="text" class="form-control form-control-lg" name="val[username]"/>
-                                </div>
-
-                                <div class="form-group  floating-label">
-                                    <label>Instagram <?php echo mb_strtolower(l('password'))?></label>
-                                    <input type="password" class="form-control form-control-lg" name="val[password]"/>
-                                </div>
-
-                                <div class="mt-5">
-                                    <button type="submit" class="btn btn-primary  btn-lg "><?php _l('continue')?></button>
-                                    <button type="button" class="btn  btn-lg"><?php _l('cancel')?></button>
-                                </div>
-                            </div>
-                            <div class="account-add-second-step">
-                                <h6><?php _l('verification-needed')?></h6>
-                                <div class="bold p-2 pl-0 verification-text"></div>
-                                <div class="digit-group" data-group-name="digits" >
-                                    <input type="number" id="digit-1" name="val[digit_1]" data-next="digit-2" />
-                                    <input type="number" id="digit-2" name="val[digit_2]" data-next="digit-3" data-previous="digit-1" />
-                                    <input type="number" id="digit-3" name="val[digit_3]" data-next="digit-4" data-previous="digit-2" />
-                                    <span class="splitter">&ndash;</span>
-                                    <input type="number" id="digit-4" name="val[digit_4]" data-next="digit-5" data-previous="digit-3" />
-                                    <input type="number" id="digit-5" name="val[digit_5]" data-next="digit-6" data-previous="digit-4" />
-                                    <input type="number" id="digit-6" name="val[digit_6]" data-previous="digit-5" />
-                                </div>
-
-                                <div class="mt-5">
-                                    <button type="submit" class="btn btn-primary  btn-lg "><?php _l('continue')?></button>
-                                    <button type="button" class="btn  btn-lg"><?php _l('cancel')?></button>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-5">
-                            <div class="side-help">
-                                <h3><?php _l('why-my-password')?></h3>
-                                <img src="<?php echo assetUrl('styles/main/images/add-account.png')?>" style="width: 100%;"/>
-                                <p><?php _l('why-my-password-note')?>  </p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-            </div>
-        </form>
     </div>
 </div>
 

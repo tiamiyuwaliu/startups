@@ -272,5 +272,11 @@ return array(
     'please_select_live_video_error2' => 'You need to select a video for a Instagram Live video',
     'please_select_igtv_error2' => 'You need to select a video for a Instagram IGTV',
     'please_select_one_account' => 'Please atleast one account to post to',
-    'need_edit_file_video' => 'You need to edit the selected file to be a video '
+    'need_edit_file_video' => 'You need to edit the selected file to be a video ',
+    'media' => 'Media',
+    'set-active-account' => 'Set active account',
+    'using-instagram-api' => 'Using official Instagram API',
+    'login-with-facebook' => 'Login with Facebook',
+    'login-with-credential' => 'Login with Credential',
+    'using-username-password' => 'Using username & password',
 );

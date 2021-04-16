@@ -70,6 +70,7 @@ class Controller {
 
         Hook::getInstance()->fire('controller.loaded', null, array($this));
 
+
     }
 
     public function isDemo() {
@@ -132,20 +133,6 @@ class Controller {
     }
 
     public function render($content, $wrap = false) {
-        $this->selectedAccount = $this->model('social')->firstAccount();
-        if ($switchAccount = $this->request->input('switch')) {
-            $account = $this->model('social')->findAccount($switchAccount);
-            if ($account)  {
-                $this->selectedAccount = $account;
-                session_put('selected-account', $switchAccount);
-
-            }
-        }
-
-        if ($selectedAccount = session_get('selected-account') ) {
-            $account = $this->model('social')->findAccount($selectedAccount);
-            if ($account) $this->selectedAccount = $account;
-        }
 
         if ($wrap) {
             $content = $this->view($this->wrapLayout, array('content' => $content));
@@ -282,6 +269,20 @@ class Controller {
     public function after(){}
 
     public function before() {
+        $this->selectedAccount = $this->model('social')->firstAccount();
+        if ($switchAccount = $this->request->input('switch')) {
+            $account = $this->model('social')->findAccount($switchAccount);
+            if ($account)  {
+                $this->selectedAccount = $account;
+                session_put('selected-account', $switchAccount);
+
+            }
+        }
+
+        if ($selectedAccount = session_get('selected-account') ) {
+            $account = $this->model('social')->findAccount($selectedAccount);
+            if ($account) $this->selectedAccount = $account;
+        }
     }
 
     public function securePage() {

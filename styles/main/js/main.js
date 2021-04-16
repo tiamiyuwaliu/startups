@@ -1721,3 +1721,14 @@ var Filemanager = {
         return false;
     }
 }
+
+var Account = {
+    open: function() {
+        $('#accountOptionModal').modal('hide');
+        $('#addAccountModal').modal('show');
+        return false;
+    },
+    close: function() {
+        $('#addAccountModal').modal('hide');
+    }
+}

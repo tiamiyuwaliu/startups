@@ -43,6 +43,8 @@
             <h6><?php _l('configuration')?></h6>
             <ul>
                 <li><a href="<?php echo url('admincp/settings')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'settings' ? 'active' : null?>"><i class="las la-cog"></i> <span><?php _l('settings')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/media')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'media' ? 'active' : null?>"><i class="las la-image"></i> <span><?php _l('media')?></span></a> </li>
+
                 <li><a href="<?php echo url('admincp/email/setup')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-setup' ? 'active' : null?>"><i class="las la-envelope"></i> <span><?php _l('email-setup')?></span></a> </li>
                 <li><a href="<?php echo url('admincp/email/templates')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-templates' ? 'active' : null?>"><i class="las la-envelope-open-text"></i> <span><?php _l('email-templates')?></span></a> </li>
             </ul>

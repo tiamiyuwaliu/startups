@@ -2,7 +2,7 @@
 class PostController extends Controller {
     public function index() {
         $this->setTitle(l('posts'));
-
+        $this->activeIconMenu = 'posts';
         if ($val = $this->request->input('val')) {
             if (isset($val['draft'])) {
                 if (isset($val['edit_post'])) {
