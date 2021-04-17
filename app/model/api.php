@@ -18,10 +18,11 @@ class ApiModel extends Model {
          * @var $size
          * @var $time
          * @var $state
+         * @var $design
          */
         extract($val);
-        return $this->db->query("INSERT INTO cylinders (userid,label,location,use_time,size,state)VALUES(?,?,?,?,?,?)",
-            model('user')->authId, $label, $location, $time, $size,$state);
+        return $this->db->query("INSERT INTO cylinders (userid,label,location,use_time,size,state,design)VALUES(?,?,?,?,?,?,?)",
+            model('user')->authId, $label, $location, $time, $size,$state,$design);
     }
 
     public function saveGas($val, $id) {
@@ -31,10 +32,11 @@ class ApiModel extends Model {
          * @var $size
          * @var $time
          * @var $state
+         * @var $design
          */
         extract($val);
-        return $this->db->query("UPDATE cylinders SET label=?,location=?,use_time=?,size=?,state=? WHERE id=?",
-            $label, $location, $time, $size,$state, $id);
+        return $this->db->query("UPDATE cylinders SET label=?,location=?,use_time=?,size=?,state=?,design=? WHERE id=?",
+            $label, $location, $time, $size,$state,$design, $id);
     }
 
     public function getCylinders() {

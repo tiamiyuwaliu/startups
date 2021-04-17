@@ -100,7 +100,8 @@ class ApiController  extends Controller {
             'location' => $this->request->input('location'),
             'time' => $this->request->input('time'),
             'size' => $this->request->input('size'),
-            'state' => $this->request->input('state')
+            'state' => $this->request->input('state'),
+            'design' => $this->request->input('design')
         );
         if ($id) {
             $this->model('api')->saveGas($val, $id);
@@ -165,11 +166,11 @@ class ApiController  extends Controller {
         $this->tokenRequired();
         return json_encode(array(
             'gas_rate' => 400,
-            'conviniency_fee' => 200,
+            'conviniency_fee' => 0,
             'referral_amount' => 100,
             'referral_bonus' => $this->model('user')->authUser['referral_bonus'],
             'available_gas' => array(6, '12.5'),
-            'video_id' => 'Pjz8-yknF_s',
+            'video_id' => 'njqTktgLKBk',
             'states' => array(
                 'osogbo',
                 'ede',
