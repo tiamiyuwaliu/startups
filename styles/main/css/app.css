@@ -377,7 +377,7 @@ body {
 }
 .grid-container .each-container .each {
     width:100%;
-    background: #F6F6F6;
+    border: solid 1px #F6F6F6;
     height: 200px;
     border-radius:10px;
     display: block;
