@@ -1,68 +1,62 @@
 <div class="content-top">
     <div class="left-actions">
-        <div class="btn-group shadow-none">
-            <a href="" class="btn btn-light shadow-none btn-sm"><i class="icons icon-grid"></i></a>
-            <a href="" class="btn btn-light shadow-none btn-sm"><i class="las la-list"></i></a>
-        </div>
-
+        <h6 class="mt-2"><?php _l('manage-accounts')?></h6>
     </div>
     <div class="right-actions">
-        <a href="" class="btn btn-primary btn-sm shadow-none" data-toggle="modal" data-target="#accountOptionModal">Add New Account</a>
+        <div class="btn-group shadow-none">
+            <a href="" class="btn btn-light active shadow-none btn-sm"><i class="icons icon-grid"></i></a>
+            <a href="" class="btn btn-light shadow-none btn-sm"><i class="las la-list"></i></a>
+        </div>
     </div>
 </div>
 
 
 <div class="content-body content-scroller content-body.with-tabs">
-    <?php $accounts = model('social')->getAccounts()?>
-    <?php if(empty($accounts)):?>
-        <div class="empty-result">
-            <img src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="account-add-startup shadow-1" >
+                <h5 class="text-center p-3"><span class="badge badge-pill  badge-light " style="width:30px;height: 30px;border-radius:100px;"><i class="icons icon-user-follow"></i></span> <?php _l('add-account')?></h5>
+                <a href="">
+                    <i class="lab la-facebook-f"></i>
+                    <div>
+                        <span class="title"><?php _l('login-with-facebook')?></span>
+                        <span><?php _l('using-instagram-api')?></span>
+                    </div>
+                </a>
+                <a href="" onclick="return Account.open()">
+                    <i class="las la-user-circle"></i>
+                    <div>
+                        <span class="title"><?php _l('login-with-credential')?></span>
+                        <span><?php _l('using-username-password')?></span>
+                    </div>
+                </a>
 
-            <h5>No accounts added yet </h5>
-        </div>
-    <?php else:?>
-        <div class="grid-container clearfix">
-            <div class="each-container" style="display:none">
-                <div class="each ">
-
-                </div>
+                <img style="width: 100%;" src="<?php echo assetUrl('styles/main/images/add-account.png')?>"/>
             </div>
+        </div>
+        <div class="col-md-9">
+            <?php $accounts = model('social')->getAccounts()?>
+            <?php if(empty($accounts)):?>
+                <div class="empty-result">
+                    <img src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
 
-            <?php foreach($accounts as $account):?>
-                <div class="each-container">
-                    <div class="each each-account ">
-                        <?php if($account['status']):?>
-                            <div class="mb-3"><span class="badge badge-pill badge-success"><?php _l('active')?></span></div>
-                        <?php else:?>
-                            <div class="mb-3"><span class="badge badge-pill badge-danger"><?php _l('disabled')?></span></div>
-                        <?php endif?>
-
-
-                        <div class="media">
-                            <img class="mr-3" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
-                            <div class="media-body">
-                                <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
-                                <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
-                            </div>
-                        </div>
-
-                        <div class="each-footer clearfix">
-                            <div class="float-left" style="width:60%">
-
-                                <a data-ajax="true" href="<?Php echo url('dashboard', array('switch' => $account['username']))?>" title="<?php _l('set-active-account')?>" class="btn-float btn btn-sm shadow-none mtitle <?php echo ($C->selectedAccount['id'] == $account['id']) ? 'btn-primary' : null?> "><i class="las la-check"></i></a>
-                            </div>
-                            <div class="float-right " style="width:40%">
-                                <a href="<?php echo url('accounts', array('action' => 'delete', 'id' => $account['id']))?>" data-ajax-action="true" class=" btn btn-float btn-sm  float-right shadow-none confirm mtitle" title="<?php _l('delete-account')?>" data-message="<?php _l('confirm-delete-account')?>"><i class="las la-trash-alt"></i></a>
-
-                            </div>
+                    <h5>No accounts added yet </h5>
+                </div>
+            <?php else:?>
+                <div class="grid-container clearfix">
+                    <div class="each-container" style="display:none">
+                        <div class="each ">
 
                         </div>
                     </div>
-                </div>
 
-            <?php endforeach?>
+                    <?php foreach($accounts as $account):?>
+                        <?php echo view('account/display', array('account' => $account));?>
+                    <?php endforeach?>
+                </div>
+            <?php endif?>
         </div>
-    <?php endif?>
+    </div>
 </div>
 
 <div class="modal  modal-right modal-right-lg" tabindex="-1" id="addAccountModal" role="dialog">
@@ -133,8 +127,7 @@
                         </div>
                         <div class="col-md-5">
                             <div class="side-help">
-                                <h3><?php _l('why-my-password')?></h3>
-                                <img src="<?php echo assetUrl('styles/main/images/add-account.png')?>" style="width: 100%;"/>
+                                <img src="<?php echo assetUrl('styles/main/images/add-account-2.png')?>" style="width: 60%;margin: 10px auto;display: block"/>
                                 <p><?php _l('why-my-password-note')?>  </p>
                             </div>
                         </div>
@@ -148,24 +141,9 @@
     </div>
 </div>
 <div class="modal fade bd-example-modal-sm" id="accountOptionModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal- modal-dialog-centered ">
+    <div class="modal-dialog modal-sm modal-dialog-centered ">
         <div class="modal-content shadow-10">
-            <div class="account-add-startup">
-                <a href="">
-                    <i class="lab la-facebook-f"></i>
-                    <div>
-                        <span class="title"><?php _l('login-with-facebook')?></span>
-                        <span><?php _l('using-instagram-api')?></span>
-                    </div>
-                </a>
-                <a href="" onclick="return Account.open()">
-                    <i class="las la-user-circle"></i>
-                    <div>
-                        <span class="title"><?php _l('login-with-credential')?></span>
-                        <span><?php _l('using-username-password')?></span>
-                    </div>
-                </a>
-            </div>
+
         </div>
     </div>
 </div>
