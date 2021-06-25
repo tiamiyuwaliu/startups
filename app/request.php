@@ -62,7 +62,9 @@ class Request {
 
         $this->loadSettings();
 
+
         $query = Database::getInstance()->query("SELECT id FROM plugins");
+
         while($fetch = $query->fetch(PDO::FETCH_ASSOC)) {
             include path('module/'.$fetch['id'].'/bootstrap.php');
             $this->loadedModules[] = $fetch['id'];

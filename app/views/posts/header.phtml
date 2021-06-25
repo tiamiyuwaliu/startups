@@ -1,21 +1,28 @@
 <div class="content-top">
-    <h3> <?php _l('posts')?></h3>
-
     <div class="nav-tabs-scrollable">
-        <ul class="nav nav-justified nav-tabs" id="justifiedTab" role="tablist">
+        <ul class="nav  nav-tabs" id="justifiedTab" role="tablist">
             <li class="nav-item">
-                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($active == 'compose')? 'active': null?>" data-ajax="true" href="<?php echo url('posts')?>" id="home-tab" role="tab"><?php _l('compose')?></a>
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($active == 'compose')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing')?>" id="home-tab" role="tab"><?php _l('calendar')?></a>
             </li>
             <li class="nav-item">
-                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'bulk')? 'active': null?>" data-ajax="true" href="<?php echo url('posts/bulk')?>" id="profile-tab" role="tab"><?php _l('bulk')?></a>
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'bulk')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/bulk')?>" id="profile-tab" role="tab"><?php _l('planner')?></a>
             </li>
             <li class="nav-item">
-                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'drafts')? 'active': null?>" data-ajax="true" href="<?php echo url('posts/drafts')?>" id="profile-tab" role="tab"><?php _l('drafts')?></a>
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'drafts')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/drafts')?>" id="profile-tab" role="tab"><?php _l('drafts')?></a>
             </li>
             <li class="nav-item">
-                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'history')? 'active': null?>" data-ajax="true" href="<?php echo url('posts/history')?>" id="profile-tab" role="tab"><?php _l('history')?></a>
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'approval')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/approval')?>" id="profile-tab" role="tab"><?php _l('awaiting-approval')?></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($active == 'history')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/history')?>" id="profile-tab" role="tab"><?php _l('history')?></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" title="<?php _l('publishing-settings')?>" class="mtitle nav-link <?php echo ($active == 'settings')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/setting')?>" id="profile-tab" role="tab"><i class="las la-cog"></i></a>
             </li>
         </ul>
     </div>
 
+    <div class="right-actions">
+        <a href="" class="btn btn-primary btn-sm mt-3"> <i class="las la-pen"></i> <?php _l('compose')?></a>
+    </div>
 </div>

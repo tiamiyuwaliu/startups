@@ -1,0 +1,43 @@
+<?php echo view('posts/header', array('active' => 'compose'))?>
+<div class="pane-container">
+    <div class="pane-left" >
+        <div id="side-filemanager">
+            <div class="title-container">
+                <a href="" onclick="return Filemanager.showCollection(this, 'side')" class="mtitle new-folder-btn" title="<?php _l('browse-collections')?>"><i class="icons icon-folder"></i></a>
+                <div class="mini-media-upload-container">
+                    <a href="" class="mtitle" title="<?php _l('import-from-google-drive')?>"><i class="lab la-google-drive"></i></a>
+                    <a href="" class="mtitle" title="<?php _l('import-from-dropbox')?>"><i class="lab la-dropbox"></i></a>
+                    <a href="" class="mtitle" title="<?php _l('upload-media')?>"><i class="las la-cloud-upload-alt"></i></a>
+
+                </div>
+                <a href="" class="mtitle filter-media-btn" title="<?php _l('filter-media')?>"><i class="las la-sliders-h"></i></a>
+
+
+            </div>
+            <div class="side-collections-container">
+                <h6  class="clearfix head"><?php _l('collections')?> <a href="" class="float-right" data-toggle="modal" data-target="#addFolderModal"><i class="las la-plus-circle"></i></a> </h6>
+                <div class="collection-list">
+                    <?php foreach(model('file')->getFolders() as $folder):?>
+                        <?php echo view('files/collection', array('folder' => $folder));?>
+                    <?php endforeach?>
+                </div>
+                <a href="" data-toggle="modal" data-target="#addFolderModal" class="foot"><?php _l('new-collection')?></a>
+            </div>
+            <div class="scroll-paginate"
+                 data-container=".files-grid"
+                 data-url=""
+                 data-offset="0"
+            >
+                <div class="files-grid clearfix content-scroller the-content side-medias" data-height="50">
+                    <?php $files = model('file')->getFiles(0); foreach($files as $file):?>
+                        <?php echo view('files/display', array('file' => $file));?>
+                    <?php endforeach?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="pane-right">
+        <div id="calendar"  style="width: 100%"></div>
+    </div>
+</div>

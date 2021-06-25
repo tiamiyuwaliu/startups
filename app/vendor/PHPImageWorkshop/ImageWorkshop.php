@@ -4,18 +4,13 @@ namespace PHPImageWorkshop;
 
 use PHPImageWorkshop\Core\ImageWorkshopLayer as ImageWorkshopLayer;
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
-use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
-
-// If no autoloader, uncomment these lines:
-require_once(__DIR__.'/Core/ImageWorkshopLayer.php');
-require_once(__DIR__.'/Exception/ImageWorkshopException.php');
+use PHPImageWorkshop\Exception\ImageWorkshopException;
 
 /**
  * ImageWorkshop class
  *
  * Use this class as a factory to initialize ImageWorkshop layers
  *
- * @version 2.0.6
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
@@ -52,6 +47,8 @@ class ImageWorkshop
      * @param bool $fixOrientation
      *
      * @return ImageWorkshopLayer
+     *
+     * @throws ImageWorkshopException
      */
     public static function initFromPath($path, $fixOrientation = false)
     {
@@ -60,12 +57,13 @@ class ImageWorkshop
         }
 
         if (false === ($imageSizeInfos = @getImageSize($path))) {
-            throw new ImageWorkshopException('Can\'t open the file at "'.$path.'" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
+            throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
         }
 
         $mimeContentType = explode('/', $imageSizeInfos['mime']);
-        if (!$mimeContentType || !isset($mimeContentType[1])) {
-            throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
+        if (!isset($mimeContentType[1])) {
+            $givenType = isset($mimeContentType[1]) ? $mimeContentType[1] : 'none';
+            throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$givenType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
         }
 
         $mimeContentType = $mimeContentType[1];
@@ -75,23 +73,28 @@ class ImageWorkshop
             case 'jpeg':
                 $image = imageCreateFromJPEG($path);
 
-                break;
+                if (function_exists('exif_read_data') && false !== ($data = @exif_read_data($path))) {
+                    $exif = $data;
+                }
+            break;
 
             case 'gif':
                 $image = imageCreateFromGIF($path);
-                break;
+            break;
 
             case 'png':
                 $image = imageCreateFromPNG($path);
-                break;
+            break;
+
+            case 'webp':
+                $image = imagecreatefromwebp($path);
+            break;
 
             default:
-                throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
-                break;
+                throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$mimeContentType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
         }
 
         if (false === $image) {
-
             throw new ImageWorkshopException('Unable to create image with file found at "'.$path.'"');
         }
 
@@ -109,10 +112,10 @@ class ImageWorkshop
      *
      * @param string $text
      * @param string $fontPath
-     * @param integer $fontSize
+     * @param int $fontSize
      * @param string $fontColor
-     * @param integer $textRotation
-     * @param integer $backgroundColor
+     * @param int $textRotation
+     * @param string $backgroundColor
      *
      * @return ImageWorkshopLayer
      */
@@ -129,8 +132,8 @@ class ImageWorkshop
     /**
      * Initialize a new virgin layer
      *
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param string $backgroundColor
      *
      * @return ImageWorkshopLayer
@@ -150,7 +153,7 @@ class ImageWorkshop
     /**
      * Initialize a layer from a resource image var
      *
-     * @param \resource $image
+     * @param resource $image
      *
      * @return ImageWorkshopLayer
      */

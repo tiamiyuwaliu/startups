@@ -27,29 +27,29 @@
                 </ul>
 
                 <ul class="main">
-                    <li><a href="<?php echo url('posts')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'posts') ? 'active':null?>" title="<?php _l('dashboard')?>">
+                    <li><a href="<?php echo url('publishing')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'publishing') ? 'active':null?>" title="<?php _l('publishing')?>">
                             <i class="icons icon-paper-plane"></i>
-                            Publishing
+                            <?php _l('publishing')?>
                         </a></li>
-                    <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
+                    <li><a href="<?php echo url('conversation')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'conversation') ? 'active':null?>" title="<?php _l('conversation')?>">
                             <i class="icons icon-bubble"></i>
-                            Conversation
+                            <?php _l('conversation')?>
                         </a></li>
-                    <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
+                    <li><a href="<?php echo url('bio')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'bio') ? 'active':null?>" title="<?php _l('linkin-bio')?>">
                             <i class="icons icon-link"></i>
-                            Linkin.Bio
+                            <?php _l('linkin-bio')?>
                         </a></li>
                      <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
                              <i class="icons icon-graph"></i>
-                             Insights
+                             <?php _l('insights')?>
                          </a></li>
                     <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('templates')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'captions' ? 'active':null?>">
                             <i class="icons icon-grid"></i>
-                            Templates
+                            <?php _l('templates')?>
                         </a> </li>
                     <li><a href="<?php echo url('files')?>" data-ajax="true" title="<?php _l('file-manager')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'files' ? 'active':null?>">
-                            <i class="icons icon-folder"></i>
-                            Media
+                            <i class="icons icon-folder-alt"></i>
+                            <?php _l('media')?>
                         </a> </li>
 
                 </ul>
@@ -62,12 +62,27 @@
 
         <div class="header">
             <div class="user-accounts clearfix">
-                <?php foreach(model('social')->getAccounts() as $account):?>
+                <?php $account = $C->selectedAccount?>
+                <?php if($account):?>
                     <a data-ajax="true" title="<?php echo $account['username']?>" href="<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>"
-                       class="mtitle <?php echo ($C->selectedAccount['id'] == $account['id']) ? 'active' : null?>" ><img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/> </a>
-                <?php endforeach;?>
+                       class="mtitle active"  style="position: relative">
+                        <img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/>
+                        <span class="selected-account-mark"><i class="las la-check"></i></span>
+                    </a>
+                <?php endif?>
+                <?php $i= 0;$accounts = model('social')->getAccounts(($account)? $C->selectedAccount['id'] : ''); foreach($accounts as $account):?>
+                    <?php if($i< 6):?>
+                        <a data-ajax="true" title="<?php echo $account['username']?>" href="<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>"
+                           class="mtitle" ><img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/> </a>
+                    <?php endif?>
+                    <?php $i++; endforeach;?>
 
-                <a href="<?php echo url('accounts')?>" data-ajax="true"  class="add"><i class="icons icon-user-follow"></i></a>
+                <?php if(count($accounts) < 6):?>
+                    <a href="<?php echo url('accounts')?>" data-ajax="true"  class="add"><i class="icons icon-user-follow"></i></a>
+                <?php else:?>
+                    <a href="" data-toggle="modal" data-target="#switchAccountsModal"  class="add"><i class="las la-angle-double-down"></i></a>
+
+                <?php endif?>
             </div>
             <ul>
                 <li class="dropdown">
@@ -110,6 +125,34 @@
     </div>
 </div>
 
+<div class="modal  modal-right modal-right" tabindex="-1" id="switchAccountsModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header pl-0 pr-0">
+                <h5 class="modal-title"><?php _l('choose-account')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <?php $accounts = model('social')->getAccounts();?>
+            <div  class="modern-table">
+                <div class="table-body clearfix">
+                    <?php foreach($accounts as $account):?>
+                        <a href="" onclick="return Account.switchAccount('<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>')" class="table-row clearfix" style="display: block">
+                            <div class="each">
+                                <div class="avatar-sm-round" style="background-image: url(<?php echo assetUrl($account['avatar'])?>)"></div>
+                            </div>
+                            <div class="each">
+                                <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
+                                <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
+                            </div>
+                        </a>
+                    <?php endforeach?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade bd-example-modal-lg " id="fileManagerModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -160,5 +203,49 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+
+<div class="modal  modal-right" tabindex="-1" id="addFolderModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="<?php echo url('files')?>" method="post" class="general-form short-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php _l('create-collection')?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="val[folder]" value="1"/>
+                    <input type="hidden" name="val[folder_id]" value="0"/>
+                    <div class="form-group floating-label mt-4">
+                        <label><?php _l('collection-title')?></label>
+                        <input type="text" class="form-control" name="val[name]"/>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <label><?php _l('collection-color')?></label>
+
+                        <div class="btn-group-toggle folder-color-chooser" data-toggle="buttons">
+                            <?php $i=0; foreach(model('file')->getFolderColors() as $color):?>
+                                <label class="btn btn-secondary btn-float <?php echo ($i == 0) ? 'active':null?> btn-sm shadow-none" style="background-color:<?php echo $color?>">
+                                    <input type="radio" name="val[color]" <?php echo ($i == 0) ? 'checked':null?> id="option<?php echo $i?>" autocomplete="off" value="<?php echo $color?>">
+                                </label>
+
+                                <?php $i++; endforeach;?>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

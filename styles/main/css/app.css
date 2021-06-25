@@ -1,4 +1,105 @@
 @import "global.css";
+.fc-icon, .fc-icon-close, .fc-icon-error, .fc-icon-gallery, .fc-icon-gallery--white, .fc-icon-help, .fc-icon-instant, .fc-icon-instant--error, .fc-icon-left, .fc-icon-move, .fc-icon-note, .fc-icon-right, .fc-icon-settings, .fc-icon-verified, .fc-icon-warning {
+    display: inline-block;
+    position: relative;
+    background-image: url(../images/fc-icons.svg);
+    background-size: auto 100%;
+    vertical-align: middle;
+}
+.fc-button-primary {
+    background: #fff !important;
+    color: grey !important;
+    border: solid 1px #E8EAED !important;
+}
+.fc-button-primary.fc-button-active {
+    color: #000 !important;
+    font-weight: bold;
+}
+.fc button .fc-icon {
+    position: relative;
+    top: -.05em;
+    margin: 0 .2em;
+    vertical-align: middle;
+}
+.fc-icon-chevron-right {
+    background-position: -1rem;
+}
+.fc-icon-chevron-left{
+    background-position: 0;
+}
+.fc-icon-chevron-right:before , .fc-icon-chevron-left:before{
+    content: '';
+}
+.fc-next-button, .fc-prev-button, .fc .fc-today-button {
+    background: none !important;
+    border: none !important;
+}
+.fc .fc-today-button {
+    color: #000;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.fc .fc-today-button:disabled, .fc .fc-today-button:hover {
+    background: none;
+    border: none;
+    color: #7B2DE0;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+.fc-timegrid-slot-label-cushion, .fc-col-header-cell-cushion  {
+    text-transform: uppercase !important;
+    color: #7C8994 !important;
+}
+
+.fc .fc-timegrid-axis-cushion, .fc-timeGridWeek-view .fc-scrollgrid-sync-table {
+    display: none;
+}
+.fc-theme-standard .fc-scrollgrid {
+    border: none;
+
+}
+.fc .fc-toolbar.fc-header-toolbar {
+    height: 40px;
+    padding-top: 15px;
+    position: relative;
+}
+.fc .fc-toolbar.fc-header-toolbar .fc-toolbar-chunk:first-child {
+    position: absolute;
+    left: 170px;
+    top: 15px;
+}
+.fc .fc-toolbar.fc-header-toolbar .fc-toolbar-chunk:first-child h2{
+    font-size: 15px !important;
+}
+.fc .fc-toolbar.fc-header-toolbar .fc-toolbar-chunk:last-child {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.fc .fc-toolbar.fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+.fc .fc-toolbar.fc-header-toolbar .fc-toolbar-chunk:nth-child(2) button{
+    text-transform: uppercase;
+}
+.fc .fc-timegrid-col.fc-day-today , .fc-day-today{
+    background: #F4F5FA;
+}
+th.fc-day-today {
+    background: none !important;
+}
+.fc .fc-view-harness  {
+    height: calc(100vh - 180px) !important;
+}
+.fc-theme-standard td, .fc-theme-standard th {
+    border-left: solid 4px #fff !important;
+    border-right: solid 4px #fff !important;
+}
+.fc .fc-timegrid-slot {
+    height: 1.9em;
+}
 .padding-sm {
     padding-left: 10px;
     padding-right:10px;
@@ -62,8 +163,9 @@
 }
 #app-container .menu-pane .icon-menus ul li >  a {
     display: block;
+    text-transform: uppercase;
     margin: 10px auto;
-    font-size:10px;
+    font-size:9px;
 }
 
 #app-container .menu-pane .icon-menus ul li > a i {
@@ -119,11 +221,19 @@
     overflow: hidden;
 }
 #app-container .content-pane .content-top{
-    border-top: solid 1px #F6F6F6;
-    border-bottom: solid 1px #F6F6F6;
+    border-top: solid 1px #E6E6E6;
+    border-bottom: solid 1px #E6E6E6;
     padding: 5px 20px;
     position: relative;
     min-height: 40px;
+}
+#app-container .content-pane .content-top .nav-tabs-scrollable {
+    box-shadow: none;
+    position: relative;
+    top: 6px;
+}
+#app-container .content-pane .content-top .nav-tabs .nav-link {
+    text-transform: capitalize;
 }
 #app-container .content-pane .content-top .left-actions {
     position: relative;
@@ -131,7 +241,7 @@
 #app-container .content-pane .content-top .right-actions {
     position: absolute;
     right: 20px;
-    top: 5px;
+    top: 0px;
 }
 body {
     overflow: hidden;
@@ -210,6 +320,37 @@ body {
     width:30px;
     height:30px;
     border-radius:100px;
+}
+#side-filemanager {
+    position: relative;
+}
+#side-filemanager .new-folder-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 20px;
+    z-index: 99;
+    color: lightgrey;
+}
+#side-filemanager .new-folder-btn.active , #side-filemanager .new-folder-btn:hover , #side-filemanager .filter-media-btn:hover, .mini-media-upload-container a:hover{
+    color: #7827EA;
+}
+#side-filemanager .filter-media-btn {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    font-size: 20px;
+    z-index: 99;
+    color: lightgrey;
+}
+.mini-media-upload-container {
+    position: relative;
+    padding: 0 10px;
+    text-align: center;
+}
+.mini-media-upload-container a {
+    font-size: 40px;
+    color: lightgrey;
 }
 .sub-title {
     font-size:15px;
@@ -368,6 +509,30 @@ body {
     margin: 10px 0;
     border-radius: 5px ;
 }
+.pane-container {
+    width: 100%;
+    position: relative;
+    height: calc(100vh - 114px);
+}
+.pane-container .pane-left {
+    position: absolute;
+    top: 0;
+    padding: 7px;
+    width: 330px;
+    border-right: solid 1px #F6F6F6;
+    height: 100%;
+    z-index: 99;
+}
+.pane-container .pane-left .title-container {
+    height: 60px;
+    border-bottom: solid 1px #E6E6E6;
+}
+.pane-container .pane-right {
+    position: relative;
+    padding-left: 330px;
+    width: 100%;
+    height: 100%;
+}
 .grid-container {
     width: 100%;
 }
@@ -384,6 +549,10 @@ body {
     display: block;
     margin-bottom: 15px;
 }
+.grid-container .each-container .each:hover{
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12),0 8px 10px 0 rgba(0,0,0,.2)!important;
+
+}
 .grid-container .each-container .each-add {
     background: #ffffff;
     text-align: center;
@@ -396,16 +565,63 @@ body {
 
 }
 .grid-container .each-container .each-account {
-    padding: 20px;
+    padding: 0;
+    height: auto;
     position: relative;
-
+}
+.grid-container .each-container .each-account .custom-checkbox {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+.grid-container .each-container .each-account .dropleft {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+.grid-container .each-container .each-account .dropleft > a {
+    font-size:25px;
+    color: #000;
+}
+.grid-container .each-container .each-account .account-media {
+    width:120px;
+    height: 120px;
+    border-radius:100px;
+    background-position:center;
+    background-size:cover;
+    margin: 20px auto;
+    position: relative;
+}
+.grid-container .each-container .each-account .account-media div{
+    position: absolute;
+    bottom: -20px;
+    margin: auto;
+    text-align: center;
+    width: 100%;
+}
+.grid-container .each-container .each-account .account-media div .badge{
+    font-size:15px;
+    font-weight: 600;
+    padding: 5px 15px;
+}
+.grid-container .each-container .each-account .info {
+    text-align: center;
+    margin-top: 0px;
 }
 .grid-container .each-container .each-account .each-footer {
-    position: absolute;
-    bottom: 0;
-    padding: 10px 20px;
-    left: 0px;
+    position: relative;
+    background: #F4F5FA;
     width: 100%;
+    margin-top:15px;
+}
+.grid-container .each-container .each-account .each-footer .list-group-item {
+    box-shadow: none;
+    background: none;
+}
+.account-dropdown {
+    width: 300px;
+    padding-bottom: 0;
+    margin-top: 15px;
 }
 .account-add-startup a {
     display: block;
@@ -904,6 +1120,133 @@ img.emojione {
 }
 #postPreviewModal .modal-dialog {
     max-width: 20rem;
+}
+#accounts-container .list-container {
+    display: none;
+}
+.accounts-container-list .grid-container {
+    display: none;
+}
+.accounts-container-list .list-container {
+    display: block !important;
+}
+.avatar-sm-round {
+    width:40px;
+    height: 40px;
+    background-position: center;
+    background-size: cover;
+    border-radius:100%;
+}
+.account-list-statistic {
+    position: relative;
+    width: 100%;
+}
+.account-list-statistic .each-stat {
+    float: left;
+    width:33.3%;
+    text-align: center;
+}
+.selected-account-mark {
+    position:absolute;
+    top:-7px;
+    text-align:center;
+    right:0px;
+    width:20px;
+    height: 20px;
+    background:#fff;
+    border-radius:100px;
+    border: solid 1px #7B2DE0;
+    font-size:9px;
+    padding: 3px
+}
+.side-medias {
+    padding: 10px 10px;
+    padding-right: 0;
+}
+.side-medias .each-container {
+    width:33.3%;
+    padding-right: 5px;
+}
+.side-medias .each-container .each {
+    height: 90px;
+    margin-bottom: 5px;
+}
+.side-medias .each-container .each.each-folder i {
+    font-size: 25px;
+}
+.side-medias .each-container .each.each-folder h6 {
+    text-align: left !important;
+    font-size: 10px;
+}
+.side-collections-container {
+    width: 100%;
+    height: calc(100vh - 195px);
+    background: #fff;
+    z-index: 999;
+    display: none;
+    position: relative;
+}
+.side-collections-container .head {
+    padding: 10px 0;
+    font-size: 17px;
+    font-weight: bold;
+}
+.side-collections-container .head i {
+    font-size:19px
+}
+.side-collections-container .collection-list {
+    max-height: calc(100% - 80px);
+    border-left: solid 1px #D3D3D3;
+}
+.side-collections-container .foot {
+    border-top: solid 1px #F1F3F4;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    display: block;
+    color: grey;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.collection-list {
+
+}
+.collection-list .each {
+    display: block;
+    width: 100%;
+    padding: 7px 2px;
+    border-radius:4px;
+    color: grey;
+    font-size: 13px;
+    position: relative;
+}
+.collection-list .each:hover {
+    background: #F1F3F4;
+}
+.collection-list .each .line {
+    width:10px;
+    border-top: solid 1px #D3D3D3;
+    display: inline-block;
+    position: relative;
+    bottom: 7px;
+}
+.collection-list .each .color {
+    display: inline-block;
+    width:15px;
+    height: 15px;
+    font-size: 20px  !important;
+    margin-right: 15px;
+}
+.collection-list .each .text {
+    position: relative;
+    display: inline-block;
+    bottom: 3px;
+}
+.collection-list .each .count {
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 @media(max-width:800px) {
     .modern-table .table-body .table-row .each .left {

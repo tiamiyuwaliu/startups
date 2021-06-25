@@ -19,7 +19,7 @@ return array(
     /**
      * Option to enable https
      */
-    'https' => true,
+    'https' => false,
 
     /**
      * cookie path

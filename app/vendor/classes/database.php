@@ -9,7 +9,7 @@ class Database {
 
     private $db;
     private $driver;
-
+    private $port;
     private $dbPrefix;
 
     public function __construct() {
@@ -29,12 +29,13 @@ class Database {
         $this->username = $databaseDetails['db_username'];
         $this->password = $databaseDetails['db_password'];
         $this->driver = $databaseDetails['driver'];
+        $this->port = $databaseDetails['port'];
 
         /**
          * Try make connection to the database
          */
         try {
-            $this->db = new \PDO("{$this->driver}:host={$this->host};dbname={$this->dbName}", $this->username, $this->password);
+            $this->db = new \PDO("{$this->driver}:host={$this->host};dbname={$this->dbName};port={$this->port}", $this->username, $this->password);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->db->query("SET NAMES 'utf8'");
             $this->db->query('SET CHARACTER SET utf8');

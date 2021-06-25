@@ -1,8 +1,8 @@
 <?php
-class PostController extends Controller {
+class PublishingController extends Controller {
     public function index() {
-        $this->setTitle(l('posts'));
-        $this->activeIconMenu = 'posts';
+        $this->setTitle(l('publishing'));
+        $this->activeIconMenu = 'publishing';
         if ($val = $this->request->input('val')) {
             if (isset($val['draft'])) {
                 if (isset($val['edit_post'])) {
@@ -110,7 +110,7 @@ class PostController extends Controller {
                 }
             }
         }
-        return $this->render($this->view('posts/compose'), true);
+        return $this->render($this->view('posts/calendar'), true);
     }
 
     public function fetchLocation() {

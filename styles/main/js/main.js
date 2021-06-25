@@ -299,7 +299,14 @@ function reloadInit(paginate) {
             }
         });
     });
-
+    if ($('#calendar').length > 0) {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            headerToolbar: { center: 'timeGridWeek,dayGridMonth' },
+        });
+        calendar.render();
+    }
     $('.content-scroller').each(function() {
         var h = ($(this).data('height') !== undefined) ? $(this).data('height') : 0;
         h += $('.content-top').height();
@@ -962,6 +969,8 @@ $(function() {
     });
 
 
+
+
 });
 
 
@@ -1211,6 +1220,7 @@ var PostEditor = {
     locationInterval: null,
     lastLocationText: '',
     locationSearching: false,
+
 
     addAccount: function(id, name, avatar, force) {
         if (this.accountExists(id) && force === undefined) {
@@ -1681,7 +1691,16 @@ var PostEditor = {
 
 var Filemanager = {
     func : null,
-
+    showCollection: function(t, w) {
+        if($('.side-collections-container').css('display') === 'none') {
+            $('.side-collections-container').fadeIn();
+            $(t).addClass('active')
+        } else {
+            $('.side-collections-container').hide();
+            $(t).removeClass('active')
+        }
+        return false;
+    },
     add: function() {
         var result = [];
         $("#fileManagerModal .selected").each(function() {
@@ -1719,6 +1738,9 @@ var Filemanager = {
             }
         })
         return false;
+    },
+    collectionCreated: function(c) {
+        $('.collection-list').append(c);
     }
 }
 
@@ -1730,5 +1752,67 @@ var Account = {
     },
     close: function() {
         $('#addAccountModal').modal('hide');
+    },
+    changeView: function(t, w) {
+        $('.change-view-btn').removeClass('active');
+        $(t).addClass('active');
+        if (w === 'list') {
+            $('#accounts-container').addClass('accounts-container-list');
+        } else {
+            $('#accounts-container').removeClass('accounts-container-list');
+        }
+        return false;
+    },
+    multiAction: function(a, account) {
+        var selectedAccounts = (account !== undefined) ? [account] : this.selectedAccounts() ;
+        if (selectedAccounts.length < 1) {
+            notify(strings.select_account_actions, 'danger');
+            return false;
+        }
+        //continue action
+        pageLoader(true);
+        $.ajax({
+            url: buildLink('accounts'),
+            data: {accounts: selectedAccounts, action: a},
+            success: function(s) {
+                pageLoaded();
+                if (a === 'sync') {
+                    notify(strings.accounts_synced, 'success');
+                    load_page(window.location.href);
+                } else if(a === 'delete-action') {
+                    notify(strings.accounts_deleted, 'success');
+                    load_page(window.location.href);
+                }
+            }
+        })
+
+        return false;
+    },
+    selectedAccounts: function() {
+        var accounts = [];
+        $('.account-checkbox').each(function() {
+            if ($(this).is(':checked')) accounts.push($(this).data('id'));
+        });
+        return accounts;
+    },
+    search: function(t) {
+        var term = $(t).val();
+        if (term !== '') {
+            pageLoader();
+            $('#accounts-container').html('')
+            $.ajax({
+                url:buildLink('accounts'),
+                data:{term: term, action:'search'},
+                success: function(d) {
+                    pageLoaded();
+                    $('#accounts-container').html(d)
+                }
+            })
+        }
+    },
+    switchAccount: function(url) {
+        $('#switchAccountsModal').modal('hide');
+        load_page(url);
+        return false;
     }
 }

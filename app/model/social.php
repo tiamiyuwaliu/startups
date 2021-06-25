@@ -39,6 +39,21 @@ class SocialModel extends Model {
 
     }
 
+    function getCurrentUser(){
+        try {
+            $user = $this->instagram->account->getCurrentUser();
+            return json_decode($user);
+        } catch (\Exception $e) {
+        }
+    }
+
+    public function getSelfInfo() {
+        try {
+            $user = $this->instagram->people->getSelfInfo();
+            return json_decode($user);
+        } catch (\Exception $e) {
+        }
+    }
 
     public function addAccount($user, $password,  $proxy = '') {
         $this->db->query("INSERT INTO accounts (userid,username,full_name, password,user_pk,avatar,proxy,created)VALUES(?,?,?,?,?,?,?,?)",
@@ -86,8 +101,17 @@ class SocialModel extends Model {
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAccounts() {
-        $query = $this->db->query("SELECT * FROM accounts WHERE userid=?", model('user')->authOwnerId);
+    public function getAccounts($except = null, $term = null) {
+        $sql = "SELECT * FROM accounts WHERE userid=? ";
+        $param  = array(model('user')->authOwnerId);
+        if ($except) {
+            $sql .= " AND id!=? ";
+            $param[] = $except;
+        }
+        if ($term) {
+            $sql .= " AND (username LIKE '%$term%' OR full_name LIKE '%$term%')";
+        }
+        $query = $this->db->query($sql, $param);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -100,6 +124,10 @@ class SocialModel extends Model {
     public function findOneActive() {
         $query = $this->db->query("SELECT * FROM accounts WHERE userid=? AND status=? ORDER BY rand() LIMIT 1", model('user')->authOwnerId, 1);
         return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function sync($medias,$followers,$following, $id) {
+        $this->db->query("UPDATE accounts SET posts=?,followers=?,following=?,last_sync=? WHERE id=?", $medias, $followers, $following,time(), $id);
     }
 
     public function deleteAccount($id) {

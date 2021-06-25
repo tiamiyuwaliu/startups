@@ -143,8 +143,17 @@ a {
     }
 }
 
-.btn-primary {
+.btn-primary, .badge-primary {
     background:#7828EA !important;
+}
+.primary-color {
+    color: #7828EA !important;
+}
+.info-color {
+    color: #2197F3 !important;
+}
+.dark-color {
+    color: #424242 !important;
 }
 .btn-outline-primary {
     border-color: #7828EA !important;

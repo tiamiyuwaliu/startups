@@ -12,6 +12,7 @@ define("APP_BASE_PATH", __DIR__.'/');
 define("VERSION", '1.0');
 
 include_once "app/request.php";
+
 include_once "app/vendor/utils.php";
 
 Request::instance()->start();

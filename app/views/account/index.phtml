@@ -1,11 +1,51 @@
 <div class="content-top">
     <div class="left-actions">
-        <h6 class="mt-2"><?php _l('manage-accounts')?></h6>
+        <h6 class=""><?php _l('instagram-profiles')?>
+            <span class="dropdown ml-3">
+                <a data-toggle="dropdown" href="" class="btn btn-primary btn-float btn-sm"><i class="las la-plus"></i></a>
+                <div class="dropdown-menu account-dropdown">
+                    <div class="account-add-startup" >
+                        <h5 class="text-center p-3"><span class="badge badge-pill  badge-light " style="width:30px;height: 30px;border-radius:100px;"><i class="icons icon-user-follow"></i></span> <?php _l('add-account')?></h5>
+                        <a href="">
+                            <i class="lab la-facebook-f"></i>
+                            <div>
+                                <span class="title"><?php _l('login-with-facebook')?></span>
+                                <span><?php _l('using-instagram-api')?></span>
+                            </div>
+                        </a>
+                        <a href="" onclick="return Account.open()">
+                            <i class="las la-user-circle"></i>
+                            <div>
+                                <span class="title"><?php _l('login-with-credential')?></span>
+                                <span><?php _l('using-username-password')?></span>
+                            </div>
+                        </a>
+
+                        <img style="width: 100%;" src="<?php echo assetUrl('styles/main/images/add-account.png')?>"/>
+                    </div>
+                </div>
+            </span>
+        </h6>
+
     </div>
     <div class="right-actions">
+        <form class="form-inline" style="display: inline-block">
+            <div class="form-group floating-label">
+                <label ><?php _l('search-accounts')?></label>
+                <input onkeyup="return Account.search(this)" type="text" class="form-control mb-2 mr-sm-2" >
+            </div>
+        </form>
         <div class="btn-group shadow-none">
-            <a href="" class="btn btn-light active shadow-none btn-sm"><i class="icons icon-grid"></i></a>
-            <a href="" class="btn btn-light shadow-none btn-sm"><i class="las la-list"></i></a>
+            <a href="" onclick="return Account.changeView(this, 'grid')" class="btn btn-light change-view-btn active shadow-none btn-sm"><i class="icons icon-grid"></i></a>
+            <a href="" onclick="return Account.changeView(this, 'list')"  class="btn btn-light change-view-btn shadow-none btn-sm"><i class="las la-list"></i></a>
+
+        </div>
+        <div class="dropleft" style="display: inline-block">
+            <a href="" data-toggle="dropdown" class="btn btn-light shadow-none"><i class="las la-bars"></i></a>
+            <div class="dropdown-menu-lg dropdown-menu">
+                <a href="" class="dropdown-item" onclick="return Account.multiAction('sync')"><i class="las la-check"></i>  Synchronize</a>
+                <a href="" class="dropdown-item" onclick="return Account.multiAction('delete-action')"><i class="las la-trash-alt"></i> Delete accounts</a>
+            </div>
         </div>
     </div>
 </div>
@@ -13,7 +53,7 @@
 
 <div class="content-body content-scroller content-body.with-tabs">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 hide">
             <div class="account-add-startup shadow-1" >
                 <h5 class="text-center p-3"><span class="badge badge-pill  badge-light " style="width:30px;height: 30px;border-radius:100px;"><i class="icons icon-user-follow"></i></span> <?php _l('add-account')?></h5>
                 <a href="">
@@ -34,27 +74,9 @@
                 <img style="width: 100%;" src="<?php echo assetUrl('styles/main/images/add-account.png')?>"/>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-12" id="accounts-container">
             <?php $accounts = model('social')->getAccounts()?>
-            <?php if(empty($accounts)):?>
-                <div class="empty-result">
-                    <img src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
-
-                    <h5>No accounts added yet </h5>
-                </div>
-            <?php else:?>
-                <div class="grid-container clearfix">
-                    <div class="each-container" style="display:none">
-                        <div class="each ">
-
-                        </div>
-                    </div>
-
-                    <?php foreach($accounts as $account):?>
-                        <?php echo view('account/display', array('account' => $account));?>
-                    <?php endforeach?>
-                </div>
-            <?php endif?>
+            <?php echo view('account/list', array('accounts' => $accounts))?>
         </div>
     </div>
 </div>

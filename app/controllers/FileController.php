@@ -10,6 +10,7 @@ class FileController extends Controller {
                 if ($files = $this->request->inputFile('file')) {
 
                     $uploadedFiles = array();
+
                     foreach($files as $file) {
                         if (!$this->model('user')->canUpload()) {
                             return json_encode(array(
@@ -32,6 +33,7 @@ class FileController extends Controller {
                                 ));
                             }
                         }
+
                         $upload = new Uploader($file, (isImage($file)) ? 'image' : 'video');
                         (isImage($file)) ? $upload->setPath("files/images/".model('user')->authOwnerId.'/'.time().'/') : $upload->setPath('files/videos/'.model('user')->authOwnerId.'/');
                         if ($upload->passed()) {
@@ -102,9 +104,11 @@ class FileController extends Controller {
                 $id = $this->model('file')->addFolder($val);
                 $folder = $this->model('file')->find($id);
                 return json_encode(array(
-                    'type' => 'reload-modal',
-                    'message' => l('folder-created'),
-                    'content' => '#addFolderModal'
+                    'type' => 'modal-function',
+                    'message' => l('collection-created'),
+                    'value' => 'Filemanager.collectionCreated',
+                    'content' => $this->view('files/collection', array('folder' => $folder)),
+                    'modal' => '#addFolderModal'
                 ));
             }
 

@@ -37,6 +37,11 @@ class AccountController extends Controller {
                     } else {
                         $this->model('social')->addAccount($user, $this->password);
                     }
+                    $account = $this->model('social')->find($user->user->username);
+                    $social = $this->model('social')->login($account);
+                    $userDetails = $social->getSelfInfo();
+                    $this->model('social')->sync($userDetails->user->media_count, $userDetails->user->follower_count, $userDetails->user->following_count, $account['id']);
+
                     return json_encode(array(
                         'type' => 'function',
                         'value' => 'accountAddedSuccess',
@@ -65,6 +70,25 @@ class AccountController extends Controller {
                     'value' => url('accounts'),
                     'message' => l('account-deleted')
                 ));
+            }elseif($action == 'delete-action'){
+                foreach($this->request->input('accounts') as $account) {
+                    $this->model('social')->deleteAccount($account);
+                }
+            } elseif($action == 'sync') {
+                foreach($this->request->input('accounts') as $account) {
+                    $account = $this->model('social')->find($account);
+                    if ($account['is_official']) {
+
+                    } else {
+                        $social = $this->model('social')->login($account);
+                        $userDetails = $social->getSelfInfo();
+                        $this->model('social')->sync($userDetails->user->media_count, $userDetails->user->follower_count, $userDetails->user->following_count, $account['id']);
+                    }
+
+                }
+            } elseif($action == 'search') {
+                $accounts = model('social')->getAccounts(null,$this->request->input('term'));
+                return view('account/list', array('accounts' => $accounts));
             }
         }
 

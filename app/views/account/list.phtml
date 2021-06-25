@@ -1,0 +1,28 @@
+<?php if(empty($accounts)):?>
+    <div class="empty-result">
+        <img src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+        <h5><?php _l('no-accounts-added-yet')?> </h5>
+    </div>
+<?php else:?>
+    <div class="grid-container clearfix">
+        <div class="each-container" style="display:none">
+            <div class="each ">
+
+            </div>
+        </div>
+
+        <?php foreach($accounts as $account):?>
+            <?php echo view('account/display', array('account' => $account));?>
+        <?php endforeach?>
+    </div>
+    <div class="list-container">
+        <div class="modern-table">
+            <div class="table-body">
+                <?php foreach($accounts as $account):?>
+                    <?php echo view('account/display-list', array('account' => $account));?>
+                <?php endforeach?>
+            </div>
+        </div>
+    </div>
+<?php endif?>
