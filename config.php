@@ -5,7 +5,7 @@ return array(
      */
     'db_host' => 'localhost',
     'db_username' => 'root',
-    'db_name' => 'carcare',
+    'db_name' => 'gr8coda',
     'db_password' => '',
     'c' => '',
 
