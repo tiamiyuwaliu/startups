@@ -5,7 +5,7 @@ return array(
      */
     'db_host' => 'localhost',
     'db_username' => 'root',
-    'db_name' => 'gr8coda',
+    'db_name' => 'socialgrip',
     'db_password' => '',
     'c' => '',
 
