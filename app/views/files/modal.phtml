@@ -1,0 +1,155 @@
+<div class="modal  modal-right" tabindex="-1" id="addFolderModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="<?php echo url('files')?>" method="post" class="general-form short-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php _l('create-collection')?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="val[folder]" value="1"/>
+                    <input type="hidden" name="val[folder_id]" value="0"/>
+                    <div class="form-group floating-label mt-4">
+                        <label><?php _l('collection-title')?></label>
+                        <input type="text" class="form-control" name="val[name]"/>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <label><?php _l('collection-color')?></label>
+
+                        <div class="btn-group-toggle folder-color-chooser" data-toggle="buttons">
+                            <?php $i=0; foreach(model('file')->getFolderColors() as $color):?>
+                                <label class="btn btn-secondary btn-float <?php echo ($i == 0) ? 'active':null?> btn-sm shadow-none" style="background-color:<?php echo $color?>">
+                                    <input type="radio" name="val[color]" <?php echo ($i == 0) ? 'checked':null?> id="option<?php echo $i?>" autocomplete="off" value="<?php echo $color?>">
+                                </label>
+
+                                <?php $i++; endforeach;?>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade modal-right " id="fileManagerModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="icons icon-folder-alt"></i> <?php _l('choose-media')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="file-choose-head" >
+                <div class= "float-left">
+                    <select onchange="Filemanager.loadCollections(this)" class="form-control popup-folder-input">
+                        <option value="0"><?php _l('all-collections')?></option>
+                        <?php foreach(model('file')->getFolders() as $folder):?>
+                            <option value="<?php echo $folder['id']?>"><?php echo $folder['file_name']?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+                <div class="float-right file-upload-btn-container">
+
+                    <a href="" style="position:relative;height: 35px;width:35px;overflow: hidden;display: inline-block" title="<?php _l('upload-from-computer')?>" class="mtitle" >
+
+                        <form method="post"  data-upload="#upload-progress" action="<?php echo url('files')?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                            <input type="hidden" name="val[upload]" value="1"/>
+                            <input type="hidden" name="val[folder_id]" value="<?php echo $C->request->segment(1, 0)?>" class="file-folder-id-input"/>
+                            <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                            <i class="las la-cloud-upload-alt"></i>
+                        </form>
+                    </a>
+                    <a href="" style="position:relative;height: 35px;width:35px;overflow: hidden;display: inline-block" data-toggle="modal"  data-target="#importImageModal" title="<?php _l('upload-from-link')?>" class="mtitle"><i class="las la-link"></i></a>
+                    <a href="" style="position:relative;height: 35px;width:35px;overflow: hidden;display: inline-block" onclick="return openGoogleDrivePicker()" title="<?php _l('import-from-google-drive')?>" class="mtitle"><i class="lab la-google-drive"></i></a>
+                    <a href="" style="position:relative;height: 35px;width:35px;overflow: hidden;display: inline-block" onclick="return openDropboxPicker()" title="<?php _l('import-from-dropbox')?>" class="mtitle"><i class="lab la-dropbox"></i></a>
+                    <span class="dropdown">
+                        <a href="" data-toggle="dropdown" style="position:relative;height: 35px;width:35px;overflow: hidden;display: inline-block;top: 7px" title="<?php _l('design-with-canva')?>" class="mtitle"><img src="<?php echo assetUrl('assets/images/canva.png')?>" style="width:25px;height:25px;border-radius:100px"/></a>
+                        <div class="dropdown-menu">
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('FacebookPost')" class="dropdown-item">Facebook Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('InstagramPost')" class="dropdown-item">Instagram Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('TwitterPost')" class="dropdown-item">Twitter Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('LinkedInBanner')" class="dropdown-item">LinkedIn Post</a>
+                             <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('PinterestGraphic')" class="dropdown-item">Pinterest Graphics</a>
+
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('SocialMedia')" class="dropdown-item">Custom Post</a>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-body p-0"  >
+                <div id="choose-files-container" data-container="#choose-files-container" data-paginate="true" data-offset="0" data-url="<?php echo url('files/load')?>" class="files-grid files-list clearfix content-scroller pl-4" data-height="190">
+
+                </div>
+            </div>
+            <hr/>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('close')?></button>
+                <button type="button" class="btn btn-primary color-white" onclick="return Filemanager.add()"><?php _l('add')?></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="copyToModal" tabindex="-1" role="dialog"  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('copy-to-collection')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?php echo url('files')?>" method="post" class="general-form">
+                <input type="hidden" name="val[action]" value="copy"/>
+                <input type="hidden" name="val[id]" value="" id="copy-id-input"/>
+                <input type="hidden" name="val[source]" value="files" id="copy-source-input"/>
+                <div class="modal-body">
+                    <select class="form-control" name="val[folder_id]">
+                        <?php foreach(model('file')->getFolders() as $folder):?>
+                            <option value="<?php echo $folder['id']?>"><?php echo $folder['file_name']?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary"><?php _l('copy')?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="newDesignModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><?php _l('choose-sizes')?></label>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label><?php _l('width')?></label>
+                        <input type="number" class="form-control design-width" value="1000" placeholder="<?php _l('width')?>(PX)"/>
+                    </div>
+                    <div class="col-6">
+                        <label><?php _l('height')?></label>
+                        <input type="number" class="form-control design-height" value="800" placeholder="<?php _l('height')?>(PX)"/>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <button class="btn btn-primary btn-block" onclick="return PhotoEditor.startNew()"><?php _l('create-design')?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,26 +1,38 @@
-<div class="clearfix">
-    <a href="<?php echo url('login')?>" data-ajax="true" class="auth-btn float-right btn btn-outline-primary rounded"><?php _l('login')?></a>
-</div>
-
-<div class="welcome-title">
-    <h5><?php _l('forgot-password')?> !</h5>
-    <h6><?php _l('forgot-password-note')?></h6>
-</div>
-
-<form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
-    <div class="alert alert-warning " style="display: none;" id="activationEmailSuccess">
-        <strong><?php _l('email-sent-successful')?></strong><br/>
-        <span><?php _l('reset-email-check')?></span>
-    </div>
-    <div class="form-group">
-
-        <div class="input-group mb-2">
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="la la-mail-bulk"></i></div>
-            </div>
-            <input type="text" placeholder="<?php _l('email-address')?>" class="form-control" name="val[email]" >
+<div class="user-data-page clearfix d-lg-flex">
+    <div class="illustration-wrapper d-flex align-items-center justify-content-between flex-column">
+        <h3 class="font-rubik">Want to save huge  <br>time? <a href="<?php echo url('signup')?>">Sign up for account</a></h3>
+        <div class="illustration-holder">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.svg')?>" alt="" class="illustration">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.1.svg')?>" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.2.svg')?>" alt="" class="shapes shape-two">
         </div>
-    </div>
+    </div> <!-- /.illustration-wrapper -->
 
-    <button class="btn btn-block btn-primary btn-lg mt-3"><?php _l('submit')?></button>
-</form>
+    <div class="form-wrapper">
+        <div class="d-flex justify-content-between">
+            <div class="logo"><a href="<?php echo url()?>"><img src="<?php echo url('styles/main/images/timably-logo.png')?>" alt="" style="width:150px"></a></div>
+            <a href="<?php echo url('login')?>" class="font-rubik go-back-button">Log in</a>
+        </div>
+        <form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
+            <h2>Reset Password</h2>
+            <p class="header-info pt-30 pb-50">Still don't have an account? <a href="<?php echo url('signup')?>">Getstarted</a></p>
+            <div class="alert alert-warning " style="display: none;margin-bottom: 15px" id="activationEmailSuccess">
+                <strong><?php _l('email-sent-successful')?></strong><br/>
+                <span><?php _l('reset-email-check')?></span>
+            </div>
+            <div class="row " style="margin-top: 30px !important;">
+
+                <div class="col-12">
+                    <div class="input-group-meta mb-40 sm-mb-40">
+                        <label>Email</label>
+                        <input name="val[email]" type="email" placeholder="bolcovfed@ce.edu">
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button class="theme-btn-one mt-20 mb-50">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div> <!-- /.form-wrapper -->
+</div> <!-- /.user-data-page -->

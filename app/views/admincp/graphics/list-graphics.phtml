@@ -1,0 +1,148 @@
+<?php $categories = model('admin')->getGraphicCategories($category)?>
+
+<div class="modern-table">
+    <div class="table-head clearfix">
+        <div class="each" style="width: 10%;">
+            <?php _l('preview')?>
+        </div>
+        <div class="each" style="width: 10%;">
+            <?php _l('Studio ID')?>
+        </div>
+        <div class="each" style="width: 40%;">
+            <?php _l('title')?>
+        </div>
+        <div class="each" style="width: 30%;">
+            <?php _l('Styles & Colors')?>
+        </div>
+
+        <div class="each" style="width: 10%;">
+            <?php _l('action')?>
+        </div>
+    </div>
+
+    <div class="table-body" >
+
+        <?php foreach(model('admin')->getGraphics($subCategory) as $graphic):?>
+            <div class="table-row clearfix shadow-0">
+                <div class="each clearfix" style="width: 10%;">
+                    <div class="left">
+                        <?php _l('preview')?>
+                    </div>
+                    <div class="right">
+                        <div style="width:45px;height:45px;background-position:center;background-size:cover;background-image:url(<?php echo assetUrl($graphic['file_url'])?>)"></div>
+                    </div>
+                </div>
+
+                <div class="each clearfix" style="width: 10%;">
+                    <div class="left">
+                        <?php _l('Studio ID')?>
+                    </div>
+                    <div class="right">
+                        <span class="badge badge-primary">HTML</span>
+                    </div>
+                </div>
+                <div class="each clearfix" style="width: 40%;">
+                    <div class="left">
+                        <?php _l('title')?>
+                    </div>
+                    <div class="right">
+                        <?php echo $graphic['title']?>
+                    </div>
+                </div>
+
+                <div class="each clearfix" style="width: 30%;">
+                    <div class="left">
+                        <?php _l('Styles & Color')?>
+                    </div>
+                    <div class="right">
+                        <?php foreach(explode(',', $graphic['styles']) as $style):?>
+                            <span class="badge badge-light"><?php echo $style?></span>
+                        <?php endforeach;?>
+                        <br/>
+                        <div class="mt-2">
+                            <?php foreach(explode(',', $graphic['colors']) as $color):?>
+                                <span style="background-color:<?php echo $color?>;width:15px;height:15px;border-radius:100px;display:inline-block"></span>
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                </div>
+                <div class="each clearfix" style="width: 10%;">
+                    <div class="left">
+                        <?php _l('action')?>
+                    </div>
+                    <div class="right">
+                        <a href="" class="btn btn-light" data-toggle="modal" data-target="#editGraphicModal<?php echo $graphic['id']?>" style="min-width: auto"><i class="las la-pen"></i></a>
+                        <a href="<?php echo url('admincp/graphics?action=delete-graphic&id='.$graphic['id'])?>" class="btn btn-danger confirm" data-ajax-action="true" style="min-width: auto"><i class="las la-trash-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal  modal-right" tabindex="-1" id="editGraphicModal<?php echo $graphic['id']?>" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                        <input type="hidden" name="val[action]" value="edit-graphics"/>
+                        <input type="hidden" name="val[id]" value="<?php echo $graphic['id']?>"/>
+                        <div class="modal-content" style="padding: 0">
+                            <div class="modal-header" style="padding: 50px">
+                                <h5 class="modal-title">Edit Graphics</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="padding: 0">
+                                <div class="content-scroller" style="overflow: auto;overflow-x: hidden;padding: 10px 50px" data-height="120">
+                                    <div class="form-group">
+                                        <label>Graphic Category</label>
+                                        <select required class="form-control" name="val[category]">
+                                            <option>Choose category</option>
+                                            <?php foreach ($categories as $c):?>
+                                                <option <?php echo ($c['id'] == $graphic['category_id']) ? 'selected':null?> value="<?php echo $c['id']?>"><?php echo $c['title']?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label><?php _l('title')?></label>
+                                        <input type="text" required class="form-control" value="<?php echo $graphic['title']?>" name="val[title]"/>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label><?php _l('Studio ID')?></label>
+                                        <input type="text" required class="form-control" value="<?php echo $graphic['file_id']?>" name="val[file_id]"/>
+                                    </div>
+
+                                    <input type="hidden" class="form-control" value="<?php echo $graphic['file_url']?>" name="val[img]"/>
+                                    <div class="form-group">
+                                        <label>Change Graphic File (PNG,JPG)</label>
+                                        <input type="file" class="form-control" name="img"/>
+                                    </div>
+                                    <div class="form-group hide">
+                                        <label><?php _l('description')?></label>
+                                        <textarea class="form-control" name="val[description]"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label><?php _l('Colours')?> (Separate by comma (,))</label>
+                                        <input type="text" value="<?php echo $graphic['colors']?>" class="form-control" name="val[colors]"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Styles</label>
+                                        <select name="val[styles][]" multiple  class="input-tags">
+                                            <?php foreach(model('admin')->getGraphicStyles() as $style):$selected = explode(',', $graphic['styles'])?>
+                                                <option <?php echo (in_array($style, $selected)) ? 'selected':null?> value="<?php echo $style?>"><?php echo ucwords($style)?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                                <button type="submit" class="btn btn-primary"  style="color: #ffffff;"><?php _l('save')?></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        <?php endforeach?>
+    </div>
+</div>
+
+

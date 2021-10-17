@@ -1,66 +1,9 @@
 <?php
 class AccountController extends Controller {
-    private $username;
-    private $password;
-    private $digits;
-    private $instagram;
-    private $choice = 0;
+
     public function index() {
         $this->setTitle(l('manage-accounts'));
 
-        if ($val = $this->request->input('val')) {
-            $validator = Validator::getInstance()->scan($val, array(
-                'username' => 'required',
-                'password' => 'required',
-            ));
-
-            if ($validator->passes()) {
-                $this->username = $val['username'];
-                $this->password = $val['password'];
-                $this->digits = $val['digit_1'].$val['digit_2'].$val['digit_3'].$val['digit_4'].$val['digit_5'].$val['digit_6'];
-
-                $this->instagram = $this->model('social')->getObject();
-                $this->choice = config('instagram-challenge-type', '0');
-
-                try {
-                    $result = $this->login();
-                } catch(Exception $e) {
-
-                }
-                if ($result['status'] == 'success') {
-                    //we have loggedIn
-                    $user = $this->instagram->account->getCurrentUser();
-                    $user = json_decode($user);
-                    $account = $this->model('social')->findAccount($user->user->username);
-                    if ($account) {
-                        $this->model('social')->updateAccount($user, $account,$this->password);
-                    } else {
-                        $this->model('social')->addAccount($user, $this->password);
-                    }
-                    $account = $this->model('social')->find($user->user->username);
-                    $social = $this->model('social')->login($account);
-                    $userDetails = $social->getSelfInfo();
-                    $this->model('social')->sync($userDetails->user->media_count, $userDetails->user->follower_count, $userDetails->user->following_count, $account['id']);
-
-                    return json_encode(array(
-                        'type' => 'function',
-                        'value' => 'accountAddedSuccess',
-                        'message' => l('account-added-success')
-                    ));
-                } else {
-                    return json_encode(array(
-                        'type' => 'function',
-                        'value' => 'processAccountResult',
-                        'content' => $result
-                    ));
-                }
-            } else {
-                return json_encode(array(
-                    'type' => 'error',
-                    'message' => $validator->first()
-                ));
-            }
-        }
 
         if ($action = $this->request->input('action')) {
             if ($action == 'delete') {
@@ -74,392 +17,179 @@ class AccountController extends Controller {
                 foreach($this->request->input('accounts') as $account) {
                     $this->model('social')->deleteAccount($account);
                 }
-            } elseif($action == 'sync') {
-                foreach($this->request->input('accounts') as $account) {
-                    $account = $this->model('social')->find($account);
-                    if ($account['is_official']) {
-
-                    } else {
-                        $social = $this->model('social')->login($account);
-                        $userDetails = $social->getSelfInfo();
-                        $this->model('social')->sync($userDetails->user->media_count, $userDetails->user->follower_count, $userDetails->user->following_count, $account['id']);
-                    }
-
-                }
-            } elseif($action == 'search') {
+            }  elseif($action == 'search') {
                 $accounts = model('social')->getAccounts(null,$this->request->input('term'));
                 return view('account/list', array('accounts' => $accounts));
             }
         }
 
-        return $this->render($this->view('account/index'), true);
+        $page  = $this->request->segment(1, 'all');
+        return $this->render($this->view('account/index', array('page' => $page)), true);
     }
 
-
-    public function login() {
-        if (session_get('auth-factor-'.$this->username)) {
-            return $this->processTwoFactor();
+    public function linkedin() {
+        if ($auth = $this->request->input('auth')) {
+            return json_encode(array(
+                'type' => 'normal-url',
+                'value' => $this->api('linkedin')->loginUrl()
+            ));
         }
 
-        try {
-            $result = $this->instagram->login($this->username, $this->password);
-            return $this->checkTwoFactor($result);
-        } catch (\InstagramAPI\Exception\ChallengeRequiredException $e) {
+        $details = array();
 
-            $response = $e->getResponse()->getChallenge();
-            if (is_array($response)) {
-                $apiPath = $response['api_path'];
-            } else {
-                $apiPath = $e->getResponse()->getChallenge()->getApiPath();
-            }
+        if ($code = $this->request->input('code')) {
+            $linkedin = $this->api('linkedin');
+            $token = $linkedin->getToken();
+            $linkedin->setToken($token);
+            $user = (object)$linkedin->getCurrentUser($token);
+            //$companies = $linkedin->getCompanies();
+            $firstName_param = (array)$user->firstName->localized;
+            $lastName_param = (array)$user->lastName->localized;
 
-            return $this->confirmSecurityCode($apiPath);
-
-        } catch (\InstagramAPI\Exception\CheckpointRequiredException $e) {
-
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                'message' => l('login-on-instagram-pass-checkpoint')
-            );
-
-        } catch (\InstagramAPI\Exception\AccountDisabledException $e) {
-
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("account-disabled-voilate")
-            );
-
-        } catch (\InstagramAPI\Exception\SentryBlockException $e) {
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("account-banned-for-spamming")
-            );
-
-        } catch (\InstagramAPI\Exception\IncorrectPasswordException $e) {
-
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("account-password-invalid")
-            );
-
-        } catch (\InstagramAPI\Exception\InstagramException $e) {
-            if ($e->hasResponse()) {
-
-                if($e->getResponse()->getMessage() == "consent_required"){
-                    return array(
-                        "status" => "error",
-                        "error_type" => 'general',
-                        "message" => l("go-to-login-on-instagram-try-again")
-                    );
-                }
-
-                return array(
-                    "status" => "error",
-                    "error_type" => 'general',
-                    "message" => $e->getResponse()->getMessage()
-                );
-
-            } else {
-
-                $message = explode(":", $e->getMessage(), 2);
-                return array(
-                    "status" => "error",
-                    "error_type" => 'general',
-                    "message" => end($message)
-                );
-            }
-
-        } catch (\Exception $e) {
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("oops-something-went-wrong")
-            );
-
-        }
-    }
+            $firstName = reset($firstName_param);
+            $lastName = reset($lastName_param);
+            $fullname = $firstName." ".$lastName;
 
 
-    public function processTwoFactor() {
-        $twoFactorIdentifier = session_get("auth-factor-".$this->username);
-        session_forget("auth-factor-".$this->username);
-        try {
+            $add = $this->model('social')->addAccount('linkedin',$user->id, $fullname,$token,$this->api('linkedin')->getAvatar($user),'profile');
 
-            $this->instagram->finishTwoFactorLogin($this->username, $this->password,  $twoFactorIdentifier, $this->digits);
-
-            return array(
-                "status" => "success",
-                "message" => l("login-successful")
-            );
-
-        } catch (\InstagramAPI\Exception\CheckpointRequiredException $e) {
-
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                'message' => l('login-on-instagram-pass-checkpoint')
-            );
-
-        } catch (\InstagramAPI\Exception\AccountDisabledException $e) {
-
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("account-disabled-voilate")
-            );
-
-        } catch (\InstagramAPI\Exception\SentryBlockException $e) {
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("account-banned-for-spamming")
-            );
-
-        } catch (InstagramAPI\Exception\IncorrectPasswordException $e) {
-
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("account-password-invalid")
-            );
-
-        } catch (\InstagramAPI\Exception\InstagramException $e) {
-
-            if ($e->hasResponse()) {
-
-                if($e->getResponse()->getMessage() == "consent_required"){
-                    return array(
-                        "status" => "error",
-                        "error_type" => 'general',
-                        "message" => l("go-to-login-on-instagram-try-again")
-                    );
-                }
-
-                if ($e->getResponse()->getMessage() == 'challenge_required') {
-                    if (session_get('challenge_hidden_code')) {
-                        $apiPath = $e->getResponse()->getChallenge()->getApiPath();
-                        $this->digits = session_get('challenge_hidden_code');
-
-                        return $this->confirmSecurityCode($apiPath);
+            try {
+                $companies = $linkedin->getCompanies();
+                if(!empty($companies)){
+                    foreach ($companies->elements as $company) {
+                        $company = (array)$company;
+                        $company = $company['organizationalTarget~'];
+                        $account = model('account')->findAccountBySID($company->id, 'linkedin', 'page');
+                        $logo = (array)$company->logoV2;
+                        $logo = $logo['original~'];
+                        $logo = $logo->elements[0]->identifiers[0]->identifier;
+                        if (!$this->model('social')->canAdd()) {
+                            $this->request->redirect(url('accounts/twitter?message=account-limit-reached&type=error'));
+                        }
+                        $add = $this->model('social')->addAccount('linkedin',$company->id, $company->localizedName,$token,$logo,'page');
                     }
-                    $apiPath = $e->getResponse()->getChallenge()->getApiPath();
-                    return $this->sendSecurityCode($apiPath);
+
                 }
-                return array(
-                    "status" => "error",
-                    "error_type" => 'general',
-                    "message" => $e->getResponse()->getMessage()
-                );
+            } catch (Exception $e) {
 
-            } else {
-
-                $message = explode(":", $e->getMessage(), 2);
-                return array(
-                    "status" => "error",
-                    "error_type" => 'general',
-                    "message" => end($message).'its here 2'
-                );
             }
 
-        } catch (\Exception $e) {
-            Database::getInstance()->query("DELETE FROM instagram_sessions WHERE username=?", $this->username);
-            return array(
-                "status" => "error",
-                "error_type" => 'general',
-                "message" => l("oops-something-went-wrong")
-            );
+            return $this->request->redirect(url('accounts/linkedin'));
 
         }
+
+        return $this->index();
     }
+    public function twitter() {
+        if ($auth = $this->request->input('auth')) {
+            return json_encode(array(
+                'type' => 'normal-url',
+                'value' => $this->api('twitter')->loginUrl()
+            ));
 
-    public function checkTwoFactor($response) {
-        try {
-            if (!is_null($response) && $response->isTwoFactorRequired()) {
-
-                $phone_number = $response->getTwoFactorInfo()->getObfuscatedPhoneNumber();
-                $twoFactorIdentifier = $response->getTwoFactorInfo()->getTwoFactorIdentifier();
-                session_put('auth-factor-'.$this->username, $twoFactorIdentifier);
-                if ($this->digits) session_put('challenge_hidden_code', $this->digits);
-
-                return array(
-                    "status"   => "error",
-                    'error_type' => 'enter-digit-two-factor',
-                    "message"  => l("enter-number-sent-to-phone", array('phone' => $phone_number))
-                );
-
-            }
-
-        } catch (Exception $e) {
-            print_r($e);
-            exit;
         }
 
+        if ($verifyIdentifier = $this->request->input('oauth_verifier')) {
+            $twitter = $this->api('twitter')->init();
+            $accessToken = (object)$twitter->getToken();
+            $account = $this->model('social')->findAccountBySID($accessToken->user_id, 'twitter');
+            $avatar = $this->api('twitter')->getAvatar($accessToken->user_id,json_encode($accessToken));
 
-        return array(
-            "status" => "success",
-            "message" => l("login-successful")
-        );
+            $add = $this->model('social')->addAccount('twitter',$accessToken->user_id, $accessToken->screen_name,json_encode($accessToken),$avatar,'');
+
+            return $this->request->redirect(url('accounts/twitter'));
+        }
+
+        return $this->index();
     }
+    public function facebook() {
+        if ($auth = $this->request->input('auth')) {
+            $fbApi = $this->api('facebook')->init(config('facebook-app-id'), config('facebook-app-secret'));
+            $type = $this->request->input('type');
+            session_put('facebook.auth.type', $type);
+            return json_encode(array(
+                'type' => 'normal-url',
+                'value' => $fbApi->loginUrl(url('accounts/facebook'))
+            ));
+        }
 
-    public function  confirmSecurityCode($apiPath) {
-        try {
+        if ($code = $this->request->input('code')) {
+            $this->setTitle(l('choose-account'));
+            $fbApi = $this->api('facebook')->init(config('facebook-app-id'), config('facebook-app-secret'));
+            $accessToken = $fbApi->getUserAccessToken(url('accounts/facebook'));
+            if (!$accessToken) return $this->request->redirect($fbApi->loginUrl(url('accounts/facebook')));
+            $fbApi->setAccessToken($accessToken);
 
-            $confirmSecurityCode = $this->instagram->checkpoint->confirmSecurityCode($this->username, $this->password, $apiPath, $this->digits);
-            return $this->checkTwoFactor($confirmSecurityCode);
-
-        } catch (InvalidArgumentException $e) {
-            return array(
-                "status" => "error",
-                'error_type' => 'general',
-                "message" => $e->getMessage()
-            );
-
-        } catch (Exception $e) {
-
-            if(empty($e)){
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-verify-entered-code")
-                );
+            $user = $fbApi->getLoginUser();
+            $type = session_get('facebook.auth.type');
+            $groups = json_decode(json_encode($fbApi->getGroups(true)), true);
+            if ($type == 'group'){
+                $newData = array();
+                foreach($groups['data'] as $group){
+                    $group['installed'] = $fbApi->isAppInstalled($group['id']);
+                    $newData[] = $group;
+                }
+                $groups['data'] = $newData;
             }
 
-            $response = $e->getResponse();
+            $pages = json_decode(json_encode($fbApi->getPages()), true);
 
-            if($response and $response->getStatus() != "ok"){
-                try {
-                    if($response->getMessage() == "This field is required."){
-                        return $this->sendSecurityCode($apiPath);
+            $instagrams = array();
+            if ($type == 'instagram') {
+
+                foreach($pages['data'] as $page) {
+                    $pageInstagram = $this->api('facebook')->getPageInstagram($page['id']);
+                    if (isset($pageInstagram['instagram_business_account'])){
+                        $instagramId = $pageInstagram['instagram_business_account']['id'];
+                        $instagramDetail = $this->api('facebook')->getInstagramDetails($instagramId);
+                        $instagrams[] = array(
+                            'username' => $instagramDetail->username,
+                            'avatar' => (isset($instagramDetail->profile_picture_url)) ? $instagramDetail->profile_picture_url : assetUrl('assets/images/no-profile.png'),
+                            'id' => $instagramId,
+                        );
                     }
-                    return $this->resendSecurityCode($apiPath);
-                } catch (Exception $e) {
-
-                    return array(
-                        "status" => "error",
-                        'error_type' => 'general',
-                        "message" => $e->getMessage()
-                    );
-
                 }
+            }
+            return $this->render($this->view('account/facebook/index', array('token' => $accessToken,'groups' => $groups, 'pages' => $pages, 'instagrams' => $instagrams, 'type' => $type)), true);
+        }
+
+        if ($action = $this->request->input('action')) {
+            $type = $this->request->input('type');
+            $id = $this->request->input('id');
+            $name = $this->request->input('name');
+            $token = $this->request->input('token');
+            //if (!$this->model('social')->canAdd()) return 0;
+            $avatar = $this->api('facebook')->generateAvatar(html_entity_decode($this->request->input('avatar')));
+
+            if ($type == 'instagram') {
+                $add = $this->model('social')->addAccount('instagram',$id,$name,$token,$avatar,'');
             } else {
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-verify-entered-code")
-                );
+                $add = $this->model('social')->addAccount('facebook',$id,$name,$token,$avatar,$type);
             }
-        }
-    }
+            $lastId = $add;
+            if ($type == 'group') {
+                $fbApi = $this->api('facebook')->init(config('facebook-app-id'), config('facebook-app-secret'));
+                $fbApi->setAccessToken($token);
+                $pages = json_decode(json_encode($fbApi->getPages()), true);
+                $this->model('social')->deletePageGroups($lastId);
+                foreach($pages['data'] as $page) {
+                    $groups = $this->api('facebook')->getPageGroups($page['id']);
 
-    public function sendSecurityCode($apiPath) {
-        try {
-            $sendSecurityCode = $this->instagram->checkpoint->sendSecurityCode($apiPath, $this->choice);
-
-            if(empty($sendSecurityCode) || is_null($sendSecurityCode)){
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-verify-entered-code")
-                );
-            }
-
-            if(isset($sendSecurityCode->message) && strpos($sendSecurityCode->message, "is not one of the available choices") !== false){
-                $new_choice = $this->choice==1?0:1;
-                $sendSecurityCode = $this->instagram->checkpoint->sendSecurityCode($apiPath, $new_choice);
-            }
-
-            if($sendSecurityCode->status != "ok"){
-                if($sendSecurityCode->message == "This field is required."){
-                    return $this->resendSecurityCode($apiPath);
+                    if ($groups and !empty($groups->data)) {
+                        foreach($groups->data as $group) {
+                            if ($group->id == $id) $this->model('social')->addPageGroup($lastId, $page['id'], $token, $page['name']);
+                        }
+                    }
                 }
 
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-verify-entered-code")
-                );
+
             }
 
-            if($sendSecurityCode->step_name == "verify_email"){
-                return array(
-                    "status" => "error",
-                    'error_type' => 'enter-digit',
-                    "message"  => l("enter-number-sent-to-email", array('email' => $sendSecurityCode->step_data->contact_point))
-                );
-            }else{
-                return array(
-                    "status" => "error",
-                    'error_type' => 'enter-digit',
-                    "message"  => l("enter-number-sent-to-phone", array('phone' => $sendSecurityCode->step_data->contact_point))
-                );
-            }
 
-        } catch (InvalidArgumentException $e) {
-
-            return array(
-                "status" => "error",
-                'error_type' => 'general',
-                "message" => $e->getMessage()
-            );
-
+            return 1;
         }
-    }
 
-    public function resendSecurityCode($apiPath) {
-        try {
-            if ($apiPath == '/challenge/') {
-                Database::getInstance()->query("DELETE  FROM instagram_sessions WHERE username=?", $this->username);
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-process-try-again-now")
-                );
-            }
-            $resendSecurityCode = $this->instagram->checkpoint->resendSecurityCode($this->username, $apiPath, $this->choice);
 
-            if(empty($resendSecurityCode) || is_null($resendSecurityCode)){
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-verify-entered-code")
-                );
-            }
-
-            if(isset($resendSecurityCode->message) && strpos($resendSecurityCode->message, "is not one of the available choices") !== false){
-                $new_choice = $this->choice==1?0:1;
-                $resendSecurityCode = $this->instagram->checkpoint->resendSecurityCode($this->username, $apiPath, $new_choice);
-            }
-
-            if($resendSecurityCode->status != "ok"){
-                return array(
-                    "status" => "error",
-                    'error_type' => 'general',
-                    "message" => l("could-not-verify-entered-code")
-                );
-            }
-
-            if($resendSecurityCode->step_name == "verify_email"){
-                return array(
-                    "status" => "error",
-                    'error_type' => 'enter-digit',
-                    "message"  => l("enter-number-sent-to-email", array('email' => $resendSecurityCode->step_data->contact_point))
-                );
-            }else{
-                return array(
-                    "status" => "error",
-                    'error_type' => 'enter-digit',
-                    "message"  => l("enter-number-sent-to-phone", array('phone' => $resendSecurityCode->step_data->contact_point))
-                );
-            }
-        } catch (Exception $e) {
-            return array(
-                "status" => "error",
-                "message" => $e->getMessage()
-            );
-        }
+        return $this->index();
     }
 }

@@ -1,0 +1,174 @@
+<?php
+$postData = perfectUnserialize($post['type_data']);
+
+$account = model('social')->find($post['account']);
+
+autoLoadVendor();
+$emojione = new \Emojione\Client(new \Emojione\Ruleset());
+$caption = $emojione->shortnameToUnicode($postData['content']);
+if ($postData['media']) {
+    $medias = (is_array($postData['media'])) ? $postData['media'] : explode(',', $postData['media']);
+} else {
+    $medias = array();
+}
+?>
+<div class="card mb-4 shadow-1  pr-0" >
+
+    <div class="row p-3">
+        <div class="col-1 ">
+            <div class="custom-control custom-checkbox mt-4">
+                <input onchange="processSelectItems(this)" data-id="<?php echo $post['id']?>" name="val[posts][]" value="<?php echo $post['id']?>"    type="checkbox" class="custom-control-input select-item-input" id="customCheckList<?php echo $post['id']?>">
+                <label class="custom-control-label" for="customCheckList<?php echo $post['id']?>"></label>
+            </div>
+
+            <?php if(model('user')->canDoTeam() and $C->workspace['approval']):?>
+                <a href="<?php echo url('publishing/posts?action=approve&id='.$post['id'])?>" style="height: 40px;padding:0 5px;position:relative;top: 10px;left:-10px" class="btn btn-light btn-float mtitle ajax-action approve-btn-<?php echo $post['id']?> <?php echo ($post['approved']) ? 'approved':null?>" title="<?php echo ($post['approved']) ? l('disapprove-post'):l('approve-post')?>"><i class="las la-check" style="position:relative;bottom: 5px"></i></a>
+            <?php endif?>
+        </div>
+        <div class="col-md-3 p-0">
+            <div class="list-post-preview">
+                <div id="carouselPost<?php echo $post['id']?>" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php $i = 0; foreach($medias as $media):?>
+                            <?php if(isImage($media)):?>
+                                <div style="background-image: url(<?php echo assetUrl($media)?>);" class="carousel-item <?php echo ($i == 0) ? 'active':null?>"></div>
+                            <?php else:?>
+                                <div class="carousel-item <?php echo ($i == 0) ? 'active':null?>">
+                                    <div class="video-content"><video src="<?php echo assetUrl($media)?>"></video></div>
+                                </div>
+                            <?php endif?>
+                            <?php $i++; endforeach?>
+                    </div>
+                    <ol class="carousel-indicators">
+                        <?php $i = 0; foreach($medias as $media):?>
+                            <li data-target="#carouselPost<?php echo $post['id']?>" data-slide-to="<?php echo $i?>" class="<?php echo ($i == 0) ? 'active':null?>"></li>
+                            <?php $i++; endforeach?>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-8 pt-3">
+            <?php if($account):?>
+                <div class="media">
+                    <img class="mr-3 mt-3" style="width: 30px;height:30px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
+                    <div class="media-body pt-1">
+                        <h6 class=" text--wrapping mt-2"><?php echo $account['username']?></h6>
+                        <div>
+                            <span class="badge badge-light"><?php echo date('m/d/Y H:iA', $post['schedule_date'])?></span>
+                        </div>
+                    </div>
+                </div>
+            <?php endif?>
+
+
+            <p style="padding: 15px 10px"><?php echo format_output_text($caption)?></p>
+
+            <div class="post-list-links clearfix  mt-2">
+
+                <div class="float-left">
+                    <a href="" onclick="return PostEditor.loadPost(this)" class="btn shadow-1">
+                        <i class="las la-pen"></i>  <?php _l('edit')?>
+                        <span class="info hide">
+                                    <?php
+                                    $data = array(
+                                        'medias' => $medias,
+                                        'caption' => $caption,
+                                        'account' => $post['account'],
+                                        'status' => $post['status'],
+                                        'time' => date( 'm/d/Y H:i',$post['schedule_date']),
+                                        'id' => $post['id']
+                                    );
+                                    echo json_encode($data);
+                                    ?>
+                                </span>
+                    </a>
+                    <a href="" onclick="return PostEditor.preview('<?php echo implode(',', $medias)?>','', this)" title="<?php _l('preview-post')?>" class="btn mtitle  shadow-1" style="min-width: auto;padding-right: 5px;padding-left: 5px">
+                        <i class="las la-eye"></i>
+                        <span class="hide"><?php echo nl2br($caption)?></span>
+                    </a>
+                    <?php if($post['status'] == 2 or $post['status'] == 4):?>
+                        <a href="<?php echo url('publishing/posts?action=delete&id='.$post['id'])?>" data-message="<?php _l('you-sure-want-delete-post')?>" class="btn  shadow-1 mtitle confirm" data-ajax-action="true" title="<?php _l('delete-post')?>"  style="min-width: auto;padding-right: 0;padding-left: 0"><i class="las la-trash-alt"></i></a>
+                    <?php endif?>
+                </div>
+                <?php if($type == 'drafts'):?>
+                    <div class="float-right">
+                        <a  href="<?php echo url('publishing/posts?action=publish&id='.$post['id'])?>" data-message="<?php _l('you-sure-want-publish-post')?>"  data-ajax-action="true" style="min-width: auto;padding-right: 5px;padding-left: 5px" class="btn  mtitle confirm" title="<?php _l('publish-now')?>"><i class="las la-check"></i></a>
+                        <a  href="<?php echo url('publishing/posts?action=schedule&id='.$post['id'])?>" data-message="<?php _l('you-sure-want-schedule-post')?>" data-ajax-action="true" style="height: 40px;padding-top: 14px" class="btn  confirm"><?php _l('schedule-now')?></a>
+                    </div>
+                <?php endif?>
+            </div>
+        </div>
+    </div>
+    <?php if(model('user')->canDoTeam()):?>
+        <?php $activities = model('post')->getActivities($post['id'])?>
+        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active"  data-toggle="tab" href="#comments<?php echo $post['id']?>" role="tab" aria-controls="home" aria-selected="true"><?php _l('comments')?></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#activities<?php echo $post['id']?>" role="tab" aria-controls="profile" aria-selected="false">
+                    <?php _l('activities')?>
+                    <?php if(count($activities) > 0):?>
+                        <span class="badge badge-dark"><?php echo count($activities)?></span>
+                    <?php endif?>
+                </a>
+            </li>
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="comments<?php echo $post['id']?>" role="tabpanel" aria-labelledby="home-tab">
+                <div class="comment-container">
+                    <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                        <input type="hidden" name="val[action]" value="post-comment"/>
+                        <input type="hidden" name="val[id]" value="<?php echo $post['id']?>"/>
+                        <div class="fake-comment-input">
+                            <input type="text" class="" onfocus="Comment.fakeFocus(this)" placeholder="<?php _l('write-a-comment')?>"/>
+                            <button type="button"  class="" style="min-width: auto"><i class="icons icon-paper-plane"></i></button>
+                        </div>
+                        <div class="original-comment-input comment-form-<?php echo $post['id']?>">
+                            <textarea class="" placeholder="<?php _l('write-a-comment')?>" name="val[text]"></textarea>
+                            <div class="dropdown">
+                                <button type="submit" class="btn btn-primary btn-sm shadow-none"><?php _l('post')?></button>
+                                <button style="position:relative;width: 40px;min-width: auto;height: 35px;" type="button" class="btn btn-light btn-sm shadow-none mtitle" title="<?php _l('attach-files')?>">
+                                    <i class="las la-paperclip"></i>
+                                    <input type="file" name="file" style="width: 100%;height: 100%;opacity: 0;top: 0;left: 0;position: absolute"/>
+                                </button>
+                                <a href="" data-toggle="dropdown" style="color: #000"><span class="peoples-count badge badge-dark">0</span> <?php _l('people-will-notify')?></a>
+                                <div class="dropdown-menu comment-members" style="width: 250px">
+                                    <?php foreach(model('workspace')->getMembers($C->workspaceId) as $member):?>
+                                        <a onclick="return Comment.checkMember(this)" class="dropdown-item" href="">
+                                            <img  src="<?php echo model('user')->getAvatar($member)?>"/>
+                                            <?php echo $member['full_name']?>
+                                            <input style="display: none" type="checkbox" name="val[member][]" value="<?php echo $member['id']?>"/>
+                                            <i class="las la-check"></i>
+                                        </a>
+                                    <?php endforeach;?>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="comment-lists comment-lists-<?php echo $post['id']?>">
+                        <?php foreach(model('post')->getComments($post['id']) as $comment):?>
+                            <?php echo view('posts/comment/display', array('comment' => $comment))?>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="activities<?php echo $post['id']?>" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="comment-container">
+                    <div class="comment-lists ">
+
+                        <?php if(!$activities):?>
+                            <div class="" style="text-align: center"><?php _l('no-activity-yet')?></div>
+                        <?php endif?>
+                        <?php foreach($activities as $activity):?>
+                            <?php echo view('posts/comment/activity', array('activity' => $activity))?>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <?php endif?>
+
+</div>

@@ -1,0 +1,15 @@
+<input type="hidden" class="possible-folder-id" value="<?php echo  $C->request->input('id')?>"/>
+
+<?php if(empty($files)):?>
+    <div class="empty-result">
+        <img style="max-width:70%;margin: 100px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+        <h5><?php _l('no-media-added-yet')?> </h5>
+        <a href="" class="btn btn-sm btn-primary shadow-none"  onclick="return Filemanager.openCollection('')"><?php _l('go-back')?></a>
+    </div>
+<?php else:?>
+    <?php foreach($files as $file):?>
+        <?php echo view('files/display', array('file' => $file, 'min' => true));?>
+    <?php endforeach?>
+    <?php echo view('files/filler')?>
+<?php endif?>

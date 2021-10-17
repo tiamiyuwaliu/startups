@@ -32,9 +32,10 @@ class FileModel extends Model {
             '#32ff7e'
         );
     }
-    public function getFiles($offset = 0, $folderId = 0, $type = 'all') {
-        $sql = "SELECT * FROM files WHERE userid=? ";
-        $param = array(model('user')->authOwnerId);
+    public function getFiles($offset = 0, $folderId = 0, $type = 'all',$limit = 40, $term = null) {
+
+        $sql = "SELECT * FROM files WHERE userid=? AND workspace_id=?";
+        $param = array(model('user')->authOwnerId, $this->controller()->workspaceId);
         if ($type == 'all') {
             $sql .= " AND (file_type=? OR file_type=?) ";
             $param[] = 'image';
@@ -43,31 +44,42 @@ class FileModel extends Model {
             $sql .= " AND file_type=? ";
             $param[] = $type;
         }
-        if ($folderId != 'all') {
-            $sql .= " AND folder_id=?";
-            $param[] = $folderId;
-        } elseif ($folderId == 0) {
-            $sql .= " AND folder_id=0 ";
+        if ($folderId) {
+            if ($folderId == 'design') {
+                $sql .= " AND via_design=? ";
+                $param[] = 1;
+            } else {
+                $sql .= " AND folder_id=?";
+                $param[] = $folderId;
+            }
         }
 
-        $sql .= " ORDER BY sort_number ASC LIMIT 40 OFFSET $offset ";
+        if ($term) {
+            $sql .= " AND description LIKE '%$term%'";
+        }
+        if ($folderId and $folderId != 'design') {
+            $sql .= " ORDER BY sort_number ASC ";
+        } else {
+            $sql .= " ORDER BY id DESC ";
+        }
+        if ($limit) $sql .= " LIMIT 40 OFFSET $offset ";
         $query  = $this->db->query($sql, $param);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getFolders($id = null) {
         if($id) {
-            $query = $this->db->query("SELECT * FROM files WHERE userid=? AND file_type=? AND folder_id=? ORDER BY sort_number ASC", model('user')->authOwnerId, 'folder', $id);
+            $query = $this->db->query("SELECT * FROM files WHERE userid=? AND workspace_id=? AND file_type=? AND folder_id=? ORDER BY sort_number ASC", model('user')->authOwnerId, $this->controller()->workspaceId, 'folder', $id);
         } else {
-            $query = $this->db->query("SELECT * FROM files WHERE userid=? AND file_type=? AND folder_id=? ORDER BY sort_number ASC", model('user')->authOwnerId, 'folder', 0);
+            $query = $this->db->query("SELECT * FROM files WHERE userid=? AND workspace_id=? AND file_type=? AND folder_id=? ORDER BY sort_number ASC", model('user')->authOwnerId, $this->controller()->workspaceId, 'folder', 0);
 
         }
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function loadFiles($offset = 0, $folderId = 0, $limit =  100) {
-        $sql = "SELECT * FROM files WHERE userid=? AND (file_type=? OR file_type=?) AND folder_id=?";
-        $param = array(model('user')->authOwnerId, 'image', 'video', $folderId);
+        $sql = "SELECT * FROM files WHERE userid=? AND workspace_id=? AND (file_type=? OR file_type=?) AND folder_id=?";
+        $param = array(model('user')->authOwnerId, $this->controller()->workspaceId, 'image', 'video', $folderId);
 
 
         $sql .= " ORDER BY sort_number ASC ";
@@ -83,15 +95,17 @@ class FileModel extends Model {
          * @var $color
          */
         extract($val);
-        $this->db->query("INSERT INTO files (userid,resize_image,file_name,file_size,file_type,created,folder_id,folder_color)VALUES(?,?,?,?,?,?,?,?)",
-            model('user')->authOwnerId,'',$name,0,'folder',time(),$folder_id, $color);
+        $this->db->query("INSERT INTO files (userid,workspace_id,action_userid,resize_image,file_name,file_size,file_type,created,folder_id,folder_color)VALUES(?,?,?,?,?,?,?,?,?,?)",
+            model('user')->authOwnerId, $this->controller()->workspaceId,$this->model('user')->authId,'',$name,0,'folder',time(),$folder_id, $color);
         $fileId =  $this->db->lastInsertId();
         Hook::getInstance()->fire('new.file.folder', null, array($val, $fileId));
         return $fileId;
     }
 
-    public function move($file, $folder) {
-        $this->db->query("UPDATE files SET folder_id=? WHERE id=?", $folder, $file);
+
+    public function countDesigns() {
+        $query = $this->db->query("SELECT * FROM files WHERE workspace_id=? AND via_design=?", $this->controller()->workspaceId, 1);
+        return $query->rowCount();
     }
 
     public function saveFolder($val) {
@@ -111,7 +125,8 @@ class FileModel extends Model {
             'file_size' => '',
             'file_type' => '',
             'resize_image' => '',
-            'folder_id' => '0'
+            'folder_id' => '0',
+            'via_design' => 0
         );
         /**
          * @var $file_name
@@ -119,13 +134,16 @@ class FileModel extends Model {
          * @var $file_type
          * @var $resize_image
          * @var $folder_id
+         * @var $via_design
          */
         extract(array_merge($ext, $val));
 
         $file_size = round($file_size / 1024);
-        $query = $this->db->query("INSERT INTO files (userid,resize_image,file_name,file_size,file_type,created,folder_id,sort_number) VALUES(?,?,?,?,?,?,?,?)",
-            model('user')->authOwnerId,$resize_image,$file_name,$file_size,$file_type, time(),$folder_id, 0);
-        return $this->db->lastInsertId();
+        $query = $this->db->query("INSERT INTO files (via_design,userid,workspace_id,action_userid,resize_image,file_name,file_size,file_type,created,folder_id,sort_number) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            $via_design,model('user')->authOwnerId, $this->controller()->workspaceId, $this->model('user')->authId,$resize_image,$file_name,$file_size,$file_type, time(),$folder_id, 0);
+        $fileId = $this->db->lastInsertId();
+        if ($folder_id) $this->rearrangeFolder($folder_id);
+        return $fileId;
     }
 
     public function find($id) {
@@ -142,7 +160,7 @@ class FileModel extends Model {
                 $this->delete($fetch['id']);
             }
         } else {
-            delete_file(path($file['file_name']));
+            //delete_file(path($file['file_name']));
             if($file['resize_image']) delete_file(path($file['resize_image']));
             $this->db->query("DELETE FROM files WHERE id=?", $id);
         }
@@ -164,5 +182,73 @@ class FileModel extends Model {
         $query = $this->db->query("SELECT * FROM files WHERE file_name=?", $media);
         $file =  $query->fetch(PDO::FETCH_ASSOC);
         return ($file) ? $file['id'] : '';
+    }
+
+    public function countMedia($id = null) {
+        $sql = "SELECT id FROM files WHERE workspace_id=? ";
+        $param = array($this->controller()->workspaceId);
+        if ($id) {
+            $sql .= " AND  folder_id=?";
+            $param[] = $id;
+        } else {
+            $sql .= " AND file_size !=? ";
+            $param[] = 0;
+        }
+        $query = $this->db->query($sql, $param);
+        return $query->rowCount();
+    }
+
+    public function rearrangeFolder($folderId) {
+        $files = $this->getFiles(0, $folderId, 'all', false);
+        $i = 1;
+        foreach($files as $file) {
+            $this->db->query("UPDATE files SET sort_number=? WHERE id=?", $i, $file['id']);
+            $i++;
+        }
+    }
+
+    public function copy($ids, $folderId, $source) {
+
+        foreach(explode(',', $ids) as $id) {
+
+            if ($source == 'files') {
+                $file = $this->find($id);
+                $this->db->query("INSERT INTO files (userid,workspace_id,action_userid,resize_image,file_name,file_size,file_type,folder_id,created,description)VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    $this->model('user')->authOwnerId, $this->controller()->workspaceId,$this->model('user')->authId,$file['resize_image'], $file['file_name'],$file['file_size'],$file['file_type'],$folderId,time(),$file['description']);
+            }  elseif($source == 'graphics') {
+                $file = $this->model('admin')->findGraphic($id);
+                $this->db->query("INSERT INTO files (userid,workspace_id,action_userid,resize_image,file_name,file_size,file_type,folder_id,created,description)VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    $this->model('user')->authOwnerId, $this->controller()->workspaceId,$this->model('user')->authId,$file['file_url'], $file['file_url'],0,'image',$folderId,time(),$file['title']);
+
+            }
+        }
+        $this->rearrangeFolder($folderId);
+    }
+
+    public function moveByIds($ids, $folderId) {
+        foreach(explode(',', $ids) as $id) {
+            $this->move($id, $folderId);
+        }
+    }
+    public function move($file, $folder) {
+        $this->db->query("UPDATE files SET folder_id=? WHERE id=?", $folder, $file);
+        $this->rearrangeFolder($folder);
+    }
+
+    public function reOrder($files) {
+        $i = 1;
+        foreach($files as $file) {
+            $this->db->query("UPDATE files SET sort_number=? WHERE id=?", $i, $file);
+            $i++;
+        }
+    }
+
+    public function saveDescription($id, $text) {
+        $this->db->query("UPDATE files SET description=? WHERE id=?", $text, $id);
+    }
+
+    public function countSearch($term) {
+        $query = $this->db->query("SELECT * FROM files WHERE description LIKE '%$term%' AND workspace_id=? ORDER BY id DESC", $this->controller()->workspaceId);
+        return $query->rowCount();
     }
 }

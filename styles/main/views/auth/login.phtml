@@ -1,42 +1,56 @@
-
-
-
-<div class="welcome-title">
-    <h3><?php _l('login')?></h3>
-</div>
-
-<form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
-
-    <div class="form-group">
-        <div class="floating-label">
-            <label for="loginEmailAddress"><?php _l('email-address')?></label>
-            <input aria-describedby="exampleFloatingLabel1Help" name="val[email]" class="form-control" id="loginEmailAddress" placeholder="<?php _l('email-address')?>" type="text">
+<div class="user-data-page clearfix d-lg-flex">
+    <div class="illustration-wrapper d-flex align-items-center justify-content-between flex-column">
+        <h3 class="font-rubik">Want to save huge  <br>time? <a href="<?php echo url('signup')?>">Sign up for account</a></h3>
+        <div class="illustration-holder">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.svg')?>" alt="" class="illustration">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.1.svg')?>" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.2.svg')?>" alt="" class="shapes shape-two">
         </div>
-    </div>
-    <div class="form-group">
-        <div class="floating-label">
-            <label for="loginPassword"><?php _l('password')?></label>
-            <input aria-describedby="exampleFloatingLabel1Help" name="val[password]" class="form-control" id="loginPassword" placeholder="<?php _l('password')?>" type="password">
+    </div> <!-- /.illustration-wrapper -->
+
+    <div class="form-wrapper">
+        <div class="d-flex justify-content-between">
+            <div class="logo"><a href="<?php echo url()?>"><img src="<?php echo url('styles/main/images/timably-logo.png')?>" alt="" style="width:150px"></a></div>
+            <a href="<?php echo url()?>" class="font-rubik go-back-button">Go to home</a>
         </div>
-    </div>
+        <form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
+            <h2>Hi, welcome  Back!</h2>
+            <p class="header-info pt-30 pb-50"></p>
 
+            <div class="row">
+                <div class="col-12">
+                    <div class="input-group-meta mb-40 sm-mb-40">
+                        <label>Email</label>
+                        <input name="val[email]" type="email" placeholder="bolcovfed@ce.edu">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group-meta mb-15">
+                        <label>Password</label>
+                        <input name="val[password]" type="password" placeholder="Enter Password" class="pass_log_id">
+                        <span class="placeholder_icon"><span class="passVicon"><img src="<?php echo assetUrl('styles/main/images/icon/view.svg')?>" alt=""></span></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="agreement-checkbox d-flex justify-content-between align-items-center">
+                        <div style="opacity: 0">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Keep me logged in</label>
+                        </div>
+                        <a href="<?php echo url('forgot')?>">Forget Password?</a>
+                    </div> <!-- /.agreement-checkbox -->
+                </div>
+                <div class="col-12">
+                    <button class="theme-btn-one mt-10 mb-10">Login</button>
+                </div>
+                <div class="social-login-container">
+                    <h6>LOGIN WITH </h6>
 
-    <div  class="clearfix">
-        <div class="float-left">
-
-        </div>
-        <div class="float-right">
-            <a href="<?php echo url('forgot')?>" data-ajax="true" class="float-right mt-4 color-gr" ><?php _l('forgot-password')?>?</a>
-        </div>
-    </div>
-
-    <button class="btn btn-block btn-raised btn-primary mt-3 btn-lg"><?php _l('login')?></button>
-</form>
-
-
-<?php if(config('user-signup', true) and !config('disable-landing', false)):?>
-    <div class="clearfix mt-5">
-
-        <a href="<?php echo url('signup')?>" data-ajax="true" class="color-grey font-bg mt-5"><?php _l('signup')?></a>
-    </div>
-<?php endif?>
+                    <a href="<?php echo url('facebook/auth')?>" class="facebook"><i class="lab la-facebook-f"></i></a>
+                    <a href="<?php echo url('twitter/auth')?>" class="twitter"><i class="lab la-twitter"></i></a>
+                    <a href="<?php echo url('google/auth')?>"  class="google"><i class="lab la-google"></i></a>
+                </div>
+            </div>
+        </form>
+    </div> <!-- /.form-wrapper -->
+</div> <!-- /.user-data-page -->

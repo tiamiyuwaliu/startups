@@ -1,6 +1,16 @@
-<a href="" class="each">
-    <span class="line"></span>
-    <i style="color:  <?php echo $folder['folder_color'] ? $folder['folder_color'] : '#000'?> !important" class="icons color icon-folder-alt"></i>
-    <span class="text"><?php echo $folder['file_name']?></span>
-    <span class="count">2</span>
-</a>
+<?php if(isset($page)):?>
+
+    <a href="<?php echo url('files/'.$folder['id'])?>" data-id="<?php echo $folder['id']?>" data-ajax="true" class="each each-collection each-collection-<?php echo $folder['id']?>">
+        <span class="line"></span>
+        <i style="color:  <?php echo $folder['folder_color'] ? $folder['folder_color'] : '#000'?> !important" class="icons color icon-folder-alt"></i>
+        <span class="text"><?php echo $folder['file_name']?></span>
+        <span class="count"><?php echo model('file')->countMedia($folder['id'])?></span>
+    </a>
+<?php else:?>
+    <a href="" onclick="return Filemanager.openCollection('<?php echo $folder['id']?>')" data-id="<?php echo $folder['id']?>" class="each each-collection each-collection-<?php echo $folder['id']?>">
+        <span class="line"></span>
+        <i style="color:  <?php echo $folder['folder_color'] ? $folder['folder_color'] : '#000'?> !important" class="icons color icon-folder-alt"></i>
+        <span class="text"><?php echo $folder['file_name']?></span>
+        <span class="count"><?php echo model('file')->countMedia($folder['id'])?></span>
+    </a>
+<?php endif?>

@@ -1,0 +1,244 @@
+<div class="content-top">
+    <div class="clearfix">
+        <div class="float-left">
+            <h3><?php _l('Helps & Blog')?> </h3>
+
+        </div>
+        <div class="float-right">
+            <a href="" data-toggle="modal" data-target="#addModal" class="btn btn-primary">Add New</a>
+
+        </div>
+    </div>
+</div>
+
+<div class="content-body">
+    <div class="modern-table">
+        <div class="table-head clearfix">
+
+            <div class="each" style="width: 40%;">
+                <?php _l('title')?>
+            </div>
+            <div class="each" style="width: 10%;">
+                <?php _l('Type')?>
+            </div>
+            <div class="each" style="width: 20%;">
+                <?php _l('Tags')?>
+            </div>
+            <div class="each" style="width: 10%;">
+                <?php _l('Views')?>
+            </div>
+            <div class="each" style="width: 20%;">
+                <?php _l('action')?>
+            </div>
+        </div>
+
+        <div class="table-body" >
+            <?php foreach($helps->results() as $help):?>
+            <div class="table-row clearfix shadow-0">
+                <div class="each clearfix" style="width:40%;">
+                    <div class="left">
+                        <?php _l('title')?>
+                    </div>
+                    <div class="right">
+                        <?php echo $help['title']?>
+                    </div>
+                </div>
+                <div class="each clearfix" style="width:10%;">
+                    <div class="left">
+                        <?php _l('Type')?>
+                    </div>
+                    <div class="right">
+                        <?php if($help['type']):?>
+                            <span class="badge badge-dark">Blog</span>
+                        <?php else:?>
+                            <span class="badge badge-dark">Help</span>
+                        <?php endif?>
+                    </div>
+                </div>
+
+                <div class="each clearfix" style="width:20%;">
+                    <div class="left">
+                        <?php _l('Tags')?>
+                    </div>
+                    <div class="right">
+                        <span class="badge badge-dark"><?php echo $help['tags']?></span>
+                    </div>
+                </div>
+                <div class="each clearfix" style="width:10%;">
+                    <div class="left">
+                        <?php _l('Views')?>
+                    </div>
+                    <div class="right">
+                        <span class="badge badge-success"><?php echo $help['views']?></span>
+                    </div>
+                </div>
+
+                <div class="each clearfix" style="width:20%;">
+                    <div class="left">
+                        <?php _l('Action')?>
+                    </div>
+                    <div class="right">
+                        <a href="" data-toggle="modal" data-target="#editModal<?php echo $help['id']?>" class="btn btn-light"><i class="las la-pencil-alt"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+                <div class="modal  modal-right" id="editModal<?php echo $help['id']?>">
+                    <div class="modal-dialog" style="width: 100%;max-width: 100%" >
+                        <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                            <input type="hidden" name="val[action]" value="edit"/>
+                            <input type="hidden" name="val[id]" value="<?php echo $help['id']?>"/>
+
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">New Help</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="height: 100vh;overflow: auto">
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input type="text" value="<?php echo $help['title']?>" class="form-control" name="val[title]"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Type</label>
+                                        <select class="form-control" name="val[type]">
+                                            <option <?php echo ($help['type'] == 0) ? 'selected':null?> value="0">Help</option>
+                                            <option <?php echo ($help['type'] == 1) ? 'selected':null?> value="1">Blog </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select class="form-control" name="val[category]">
+                                            <option value="">Choose category</option>
+                                            <?php foreach(model('admin')->getHelpCategories() as $category => $title):?>
+                                                <option <?php echo ($help['category'] == $category) ? 'selected':null?> value="<?php echo $category?>"><?php echo $title?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Short Description</label>
+                                        <input value="<?php echo $help['description']?>" type="text" class="form-control" name="val[description]"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Content</label>
+                                        <textarea name="val[content]" id="editor-<?php echo $help['id']?>" class=" trumbowyg-editor"><?php echo $help['content']?></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Banner</label>
+                                        <input type="file" name="img" class="form-control"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Video Link</label>
+                                        <input value="<?php echo $help['video_link']?>" type="text" name="val[video]" class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tags</label>
+                                        <input value="<?php echo $help['tags']?>" type="text" name="val[tags]" class="form-control"/>
+                                    </div>
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="hidden" name="val[basic]" value="0"/>
+                                        <input <?php echo ($help['basic']) ? 'checked':null?> type="checkbox" name="val[basic]" value="1" class="custom-control-input" id="customCheckBasic<?php echo $help['id']?>">
+                                        <label class="custom-control-label" for="customCheckBasic<?php echo $help['id']?>">Learning Basic</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="hidden" name="val[goals]" value="0"/>
+                                        <input <?php echo ($help['goals']) ? 'checked':null?> type="checkbox" name="val[goals]" value="1" class="custom-control-input" id="customCheckGoals<?php echo $help['id']?>">
+                                        <label class="custom-control-label" for="customCheckGoals<?php echo $help['id']?>">Goals</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                                    <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+</div>
+
+<div class="modal  modal-right" id="addModal" >
+    <div class="modal-dialog" style="width: 100%;max-width: 100%" >
+        <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+            <input type="hidden" name="val[action]" value="add"/>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Help</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height: 100vh;overflow: auto">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" required class="form-control" name="val[title]"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select class="form-control" name="val[type]">
+                            <option value="0">Help</option>
+                            <option value="1">Blog </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-control" name="val[category]">
+                            <option value="">Choose category</option>
+                            <?php foreach(model('admin')->getHelpCategories() as $category => $title):?>
+                                <option value="<?php echo $category?>"><?php echo $title?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Description</label>
+                        <input required type="text" class="form-control" name="val[description]"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea name="val[content]" id="main-editor-help" class=" trumbowyg-editor"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Banner</label>
+                        <input type="file" name="img" class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Video Link</label>
+                        <input type="text" name="val[video]" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <input type="text" name="val[tags]" class="form-control"/>
+                    </div>
+
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="val[basic]" value="0"/>
+                        <input type="checkbox" name="val[basic]" value="1" class="custom-control-input" id="customCheckBasic">
+                        <label class="custom-control-label" for="customCheckBasic">Learning Basic</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="val[goals]" value="0"/>
+                        <input type="checkbox" name="val[goals]" value="1" class="custom-control-input" id="customCheckGoals">
+                        <label class="custom-control-label" for="customCheckGoals">Goals</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

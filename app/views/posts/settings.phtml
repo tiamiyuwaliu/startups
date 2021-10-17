@@ -1,0 +1,112 @@
+<div class="content-top">
+    <?php $page = $C->request->segment(1, 'calendar')?>
+    <?php echo view('posts/menu')?>
+</div>
+<div class="pane-container">
+    <div class="pane-head">
+        <h4 class="m-4 mb-1"><?php _l('publishing-settings')?> </h4>
+    </div>
+    <div class="content-scroller" data-height="200">
+        <form action="<?php echo getFullUrl()?>" method="post" class="general-form page-padding">
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <?php _l('timezone')?>
+                        </div>
+                        <div class="col-7">
+                            <select class="form-control" name="val[timezone]">
+                                <?php foreach(getTimezones() as $timezone => $title):?>
+                                    <option <?php echo ($timezone == $C->workspace['timezone']) ? 'selected':null?> value="<?php echo $timezone?>"><?php echo $title?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <?php if(model('user')->canDoTeam()):?>
+                        <div class="alert alert-light" role="alert">
+                            <?php _l('post-approval-info-note')?> <strong><?php _l('team-members')?></strong>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-4">
+                                <?php _l('enable-post-approval')?>
+                            </div>
+                            <div class="col-4">
+                                <div class="custom-control custom-checkbox mtitle"  >
+                                    <input <?php echo (!model('user')->canDoTeam()) ? 'disabled ': null?> <?php echo ($C->workspace['approval']) ? 'checked':null?> name="val[approval]" value="1" type="checkbox" class="custom-control-input mtitle" id="customCheckApproval">
+                                    <label class="custom-control-label mtitle"  for="customCheckApproval"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php endif?>
+                    <div class="clearfix mt-4 mb-3">
+                        <h4 class="float-left"><?php _l('post-labels')?> </h4>
+                        <a href="" onclick="return Timably.addLabel()" class="btn btn-float btn-primary btn-sm float-right"><i class="las la-plus"></i></a>
+                    </div>
+
+                    <div class="post-labels-container">
+                        <?php if(!$C->workspace['labels']):?>
+                            <div class="label-alert alert alert-light" role="alert" style="text-align: center;font-style: italic">
+                                <?php _l('no-post-labels')?>
+                            </div>
+                        <?php endif?>
+                        <?php
+                        $labels = perfectUnserialize($C->workspace['labels']);
+                        if(!$labels) $labels = array();
+                        ?>
+                        <?php $i = 0; foreach($labels as $label): list($r, $g, $b) = sscanf($label['color'], "#%02x%02x%02x");?>
+
+                            <div class="each" style="background-color:rgba(<?php echo $r?>,<?php echo $g?>,<?php echo $b?>,0.1);border-color:<?php echo $label['color']?>">
+                                <div class="color-container">
+                                    <input data-result="Timably.labelColorChanged" type="text" value="<?php echo $label['color']?>" class="color" name="label[<?php echo $i?>][color]"/>
+                                </div>
+                                <input style="color: <?php echo $label['color']?>" name="label[<?php echo $i?>][title]" type="text" value="<?php echo $label['title']?>" class="label-text" placeholder="<?php _l('label-title')?>" />
+                                <a href="" onclick="return Timably.removeLabel(this)" class="delete-btn"><i class="las la-times"></i></a>
+                            </div>
+                        <?php $i++; endforeach;?>
+
+                    </div>
+
+
+                </div>
+                <div class="col-9">
+                    <div class="clearfix mt-4">
+                        <h4 class="float-left"><?php _l('auto-schedule-settings')?></h4>
+                        <!--<a href="" class="btn btn-light btn-sm float-right">Auto fill</a>-->
+                    </div>
+
+                    <div class="queue-settings-container clearfix">
+                        <?php $data = perfectUnserialize($C->workspace['timetable']);?>
+                        <?php foreach(array('monday','tuesday','wednesday','thursday','friday','saturday','sunday') as $day):?>
+                            <div class="each">
+                                <div class="top"><?php _l($day)?></div>
+                                <div class="times <?php echo $day?>">
+                                    <div onclick="return Timably.addNewTime('<?php echo $day?>')" class="time add">
+                                        <i class="las la-plus"></i> <?php _l('add-time')?>
+                                    </div>
+                                    <?php if(isset($data[$day])):?>
+                                        <?php $i = 0; foreach($data[$day] as $time):?>
+                                            <div class="time each-time shadow-1">
+                                                <input id='time-<?php echo time().$i?>' name="val[<?php echo $day?>][]" type='text' class='input-timepicker' value='<?php echo $time?>' min='01' max='24'/>
+                                                <a href="" onclick="return Timably.removeTime(this)"><i class="las la-times"></i></a>
+                                            </div>
+                                        <?php endforeach?>
+                                    <?php endif?>
+                                </div>
+                            </div>
+
+                        <?php endforeach;?>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+            <button type="submit" class="btn btn-primary"><?php _l('save-settings')?></button>
+        </form>
+    </div>
+
+</div>

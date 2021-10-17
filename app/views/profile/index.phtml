@@ -1,27 +1,37 @@
 <div class="content-top">
-    <h3> <?php _l('my-account')?></h3>
-
+    <?php $page = $C->request->segment(1, 'profile')?>
     <div class="nav-tabs-scrollable">
         <ul class="nav nav-justified nav-tabs" id="justifiedTab" role="tablist">
             <li class="nav-item">
-                <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab" href="#profile" id="home-tab" role="tab"><?php _l('profile')?></a>
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'profile') ? 'active':null?>" data-toggle="tab" href="#profile" id="home-tab" role="tab"><?php _l('profile')?></a>
+            </li>
+            <?php if(model('user')->hasTried()):?>
+                <li class="nav-item">
+                    <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($page == 'billing') ? 'active':null?>" data-toggle="tab" href="#billing" id="profile-tab" role="tab"><?php _l('billing')?></a>
+                </li>
+            <?php endif?>
+            <li class="nav-item">
+                <a aria-controls="profile" aria-selected="false" class="nav-link <?php echo ($page == 'refer') ? 'active':null?>" data-toggle="tab" href="#refer" id="profile-tab" role="tab"><?php _l('refer-earn')?></a>
             </li>
             <li class="nav-item">
                 <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#password" id="profile-tab" role="tab"><?php _l('password')?></a>
             </li>
 
             <?php Hook::getInstance()->fire('profile.tabs')?>
-            <li class="nav-item">
-                <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#cancel" id="profile-tab" role="tab"><?php _l('cancel-account')?></a>
-            </li>
+            <?php if(model('user')->hasTried()):?>
+                <li class="nav-item">
+                    <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#cancel" id="profile-tab" role="tab"><?php _l('cancel-account')?></a>
+                </li>
+            <?php endif?>
+
         </ul>
     </div>
 
 </div>
 
-<div class="content-body">
+<div class="content-body content-scroller" data-height="80" style="overflow: auto">
     <div class="tab-content" id="justifiedTabContent">
-        <div  class="tab-pane fade show active" id="profile" role="tabpanel">
+        <div  class="tab-pane fade show <?php echo ($page == 'profile') ? 'active':null?>" id="profile" role="tabpanel">
             <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
                 <div class="row">
                     <div class="col-md-6">
@@ -61,7 +71,7 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group hide">
                                     <label><?php _l('date-format')?></label>
                                     <select class="form-control" name="val[date_format]">
                                         <?php foreach(getDateFormats() as $key => $value):?>
@@ -77,6 +87,405 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div  class="tab-pane fade show <?php echo ($page == 'billing') ? 'active':null?>" id="billing" role="tabpanel">
+            <div class="row">
+                <div class="col-5">
+                    <div class="box">
+                        <h3><?php _l('Subscription')?></h3>
+
+                        <div class="row mt-4">
+                            <div class="col-6">Current Plan</div>
+                            <div class="col-6 clearfix" >
+                                <span class="float-right">
+                                    <?php
+                                        $user = model('user')->authUser;
+                                        $nextBillDate = ($user['expire_date']) ? date('m/d/Y', $user['expire_date']) : 'Nil';
+                                        $amount = 'Nil';
+                                        if ($user['package'] and $user['package'] != 'trial') {
+                                            if ($user['payment_cycle'] == 'monthly'){
+                                                $amount = ($user['package'] == 'professional')  ? '$15' : '$29';
+                                            } else {
+                                                $amount = ($user['package'] == 'professional')  ? '$165' : '$319';
+                                            }
+                                        }
+
+                                        $buttonTitle = (!$user['package'] or $user['package'] == 'trial') ? 'Activate Subscription': 'Upgrade';
+                                    ?>
+                                    <div class="clearfix">
+                                        <span class="float-right"><?php echo ($user['package']) ? l($user['package']) : 'Nil';?></span>
+                                                </div>
+
+                                    <?php if($user['package'] == 'trial'):$time = model('user')->authOwner['expire_date'];?>
+                                        <div>
+                                            <?php if($time < time()):?>
+                                                <div class="clearfix">
+                                                    <span class="badge badge-danger float-right">Expired</span>
+                                                </div>
+                                            <?php else:?>
+                                                <?php
+                                                $earlier = new DateTime(date('Y-m-d'));
+                                                $later = new DateTime(date('Y-m-d', $time));
+
+                                                $abs_diff = $later->diff($earlier)->format("%a");
+                                                ?>
+                                                <span class="badge badge-danger">Expire in <?php $abs_diff?> Day(s)</span>
+                                            <?php endif?>
+                                        </div>
+                                    <?php endif?>
+
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-6">Billing Frequency</div>
+                            <div class="col-6 clearfix" ><span class="float-right"><?php echo ($user['payment_cycle'] == 'yearly') ? 'Yearly' : 'Monthly'?></span></div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-6">Next Billing Date</div>
+                            <div class="col-6 clearfix" ><span class="float-right"><?php echo $nextBillDate?></span></div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-6">Next Billing Amount</div>
+                            <div class="col-6 clearfix" ><span class="float-right colored badge badge-dark"><?php echo $amount?></span></div>
+                        </div>
+
+                        <div class="mt-5">
+                            <button data-toggle="modal" data-target="#choosePlanModal" class="btn btn-primary btn-block shadow-none"><?php echo $buttonTitle?></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-7">
+                    <h3>Payments & Billing History</h3>
+
+                    <hr/>
+                    <div class="modern-table">
+                        <div class="table-head clearfix" style="margin-top: 10px;padding:0 20px">
+                            <div class="each" style="width: 30%;">
+                                <?php _l('Date')?>
+                            </div>
+                            <div class="each" style="width: 20%;">
+                                <?php _l('Status')?>
+                            </div>
+                            <div class="each" style="width: 20%;">
+                                <?php _l('Amount')?>
+                            </div>
+                            <div class="each" style="width: 30%;">
+                                <span class="float-right"><?php _l('Billing Period')?></span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="table-body">
+                            <?php $transactions = model('admin')->getTransactions(model('user')->authId); foreach($transactions as $transaction):?>
+                            <div class="table-row clearfix shadow-0" style="padding:5px 20px">
+
+
+                                <div class="each clearfix" style="width: 30%;">
+                                    <div class="left">
+                                        <?php _l('Date')?>
+                                    </div>
+                                    <div class="right">
+                                        <?php echo date('', $transaction['date_created'])?>
+                                    </div>
+                                </div>
+
+                                <div class="each clearfix" style="width: 20%;">
+                                    <div class="left">
+                                        <?php _l('Status')?>
+                                    </div>
+                                    <div class="right">
+                                        <span class="badge badge-success">Success</span>
+                                    </div>
+                                </div>
+
+                                <div class="each clearfix" style="width: 20%;">
+                                    <div class="left">
+                                        <?php _l('Amount')?>
+                                    </div>
+                                    <div class="right">
+                                        <span class="badge badge-dark">$<?php echo $transaction['amount']?></span>
+                                    </div>
+                                </div>
+
+                                <div class="each clearfix" style="width: 30%;">
+                                    <div class="left">
+                                        <?php _l('Billing Period')?>
+                                    </div>
+                                    <div class="right">
+                                        <?php echo $transaction['period_time']?>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <?php endforeach;?>
+
+                            <?php if(!$transactions):?>
+                                <div class="empty-result">
+                                    <img style="max-width:40%;margin: 0px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+                                    <h5><?php _l('No transactions recorded yet')?> </h5>
+                                </div>
+                            <?php endif?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div  class="tab-pane fade show <?php echo ($page == 'refer') ? 'active':null?>" id="refer" role="tabpanel">
+            <?php $referral = model('user')->findReferral(); if ($referral):?>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="box">
+                                    <h4>Share the link below</h4>
+                                    <input id="refer-link-input" type="text" disabled class="disabled form-control" value="<?php echo url('refer/'.$referral['referral_code'])?>"/>
+                                    <a href="" onclick="return Timably.copyReferLink()" class="btn shadow-none btn-block mt-3">Copy this link</a>
+
+                                    <div class="social-share-links">
+                                        <?php
+
+                                            $message = "Would you like to save time? i recommend Timably for your social profile scheduling task try it out ".urlencode(url('refer/'.$referral['referral_code']))
+                                        ?>
+                                        <a target="_blank" href="https://www.facebook.com/dialog/share?app_id=558941382144086&display=popup&href=<?php echo urlencode(url('refer/'.$referral['referral_code']))?>" class="facebook"><i class="lab la-facebook-f"></i></a>
+                                        <a  href="https://twitter.com/intent/tweet?text=<?php echo $message?>" class="twitter"><i class="lab la-twitter"></i></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="box" style="height: 220px">
+                                    <h5>Your commission rates</h5>
+                                    <div class="row mt-4">
+                                        <div class="col-10">New Customers</div>
+                                        <div class="col-2 clearfix"><?php echo model('user')->authUser['referral_bonus']?>%</div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-10">Recurring</div>
+                                        <div class="col-2 clearfix"><?php echo model('user')->authUser['referral_rbonus']?>%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stats-container row">
+                            <div class="col-sm-4">
+                                <div class="each clearfix">
+                                    <div class="float-left">
+                                        <i class="las la-user-friends"></i>
+                                        <h6>Total User Signup</h6>
+                                    </div>
+                                    <div class="float-right">
+                                        <div class="count"><?php echo model('user')->getTotalReferrals()?></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="each clearfix bg-lightblue">
+                                    <div class="float-left">
+                                        <i class="las la-language"></i>
+                                        <h6>Paying Users</h6>
+                                    </div>
+                                    <div class="float-right">
+                                        <div class="count"><?php echo model('user')->countActiveReferrals()?></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="each clearfix bg-red">
+                                    <div class="float-left">
+                                        <i class="las la-puzzle-piece"></i>
+                                        <h6>Balance</h6>
+                                    </div>
+                                    <div class="float-right">
+                                        <div class="count"><?php echo formatMoney($referral['balance'])?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#members" role="tab" aria-controls="home" aria-selected="true">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#payouts" role="tab" aria-controls="profile" aria-selected="false">Payouts</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#marketing" role="tab" aria-controls="profile" aria-selected="false">Marketing resources</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#faqs" role="tab" aria-controls="profile" aria-selected="false">FAQS</a>
+                            </li>
+                            <a href="" data-toggle="modal" data-target="#requestPayoutModal"  class="btn btn-light <?php echo ($referral['balance'] > 20) ? null : 'disabled'?>" style="position:absolute;right: 10px">Request Payout</a>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="home-tab">
+                                <?php $users = model('user')->getReferrals();foreach($users as $user):$user = model('user')->getUser($user['f_userid'])?>
+                                    <?php if($user):?>
+                                        <div class="each-user">
+                                            <div class="avatar" style="background-image:url(<?php echo model('user')->getAvatar($user)?>)"></div>
+                                            <div class="info clearfix">
+                                                <h6 class="float-left"><?php echo $user['full_name']?></h6>
+                                                <div class="float-right">
+                                                    <?php if($user['package'] == 'trial'):?>
+                                                        <span class="badge badge-dark">On Trial</span>
+                                                    <?php else:?>
+                                                        <?php if($user['expire_date']<time()):?>
+                                                            <span class="badge badge-danger">Expired</span>
+                                                        <?php else:?>
+                                                            <span class="badge badge-success">Active</span>
+                                                        <?php endif?>
+                                                    <?php endif?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif?>
+                                <?php endforeach?>
+                                <?php if(empty($users)):?>
+                                    <div class="empty-result">
+                                        <img style="max-width:40%;margin: 0px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+                                        <h5><?php _l('No user sign up yet')?> </h5>
+                                    </div>
+                                <?php endif?>
+                            </div>
+                            <div class="tab-pane fade" id="payouts" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="modern-table">
+                                    <div class="table-head clearfix" style="margin-top: 10px;padding:0 20px">
+                                        <div class="each" style="width: 20%;">
+                                            <?php _l('Amount')?>
+                                        </div>
+                                        <div class="each" style="width: 20%;">
+                                            <?php _l('Status')?>
+                                        </div>
+
+                                        <div class="each" style="width: 25%;">
+                                            <?php _l('Created')?>
+                                        </div>
+                                        <div class="each" style="width: 35%;">
+                                            <span class="float-right"><?php _l('Paid On')?></span>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div class="table-body">
+                                        <?php $payouts = model('user')->getMyPayouts();foreach($payouts as $payout):?>
+                                        <div class="table-row clearfix shadow-0" style="padding:5px 20px">
+
+
+                                            <div class="each clearfix" style="width: 20%;">
+                                                <div class="left">
+                                                    <?php _l('Amount')?>
+                                                </div>
+                                                <div class="right">
+                                                    <?php echo formatMoney($payout['amount'])?>
+                                                </div>
+                                            </div>
+                                            <div class="each clearfix" style="width: 20%;">
+                                                <div class="left">
+                                                    <?php _l('Status')?>
+                                                </div>
+                                                <div class="right">
+                                                    <?php if($payout['status']):?>
+                                                        <span class="badge badge-success">Paid</span>
+                                                    <?php else:?>
+                                                        <span class="badge badge-dark">Pending</span>
+                                                    <?php endif?>
+                                                </div>
+                                            </div>
+                                            <div class="each clearfix" style="width: 25%;">
+                                                <div class="left">
+                                                    <?php _l('Created')?>
+                                                </div>
+                                                <div class="right">
+                                                    <?php echo date('m/d/Y', $payout['created'])?>
+                                                </div>
+                                            </div>
+                                            <div class="each clearfix" style="width: 20%;">
+                                                <div class="left">
+                                                    <?php _l('Paid On')?>
+                                                </div>
+                                                <div class="right">
+                                                    <span class="float-right"><?php echo (!$payout['paid_date']) ? 'Nil' : date('m/d/Y', $payout['paid_date'])?></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <?php endforeach?>
+                                    </div>
+                                </div>
+
+                                <?php if(empty($payouts)):?>
+                                    <div class="empty-result">
+                                        <img style="max-width:40%;margin: 0px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+                                        <h5><?php _l('No payout issued yet')?> </h5>
+                                    </div>
+                                <?php endif?>
+                            </div>
+                            <div class="tab-pane fade" id="marketing" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="p-3">Coming soon</div>
+                            </div>
+                            <div class="tab-pane fade" id="faqs" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="p-3">Coming soon</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+
+
+            <?php else:?>
+                <div class="referral-welcome">
+                    <div>
+                        <h1>Lets grow together</h1>
+                        <p>Join our referral program and earn up to <span>50%</span> commission on every members you referral to Timably on their first payment and up to <span>20%</span> on recurring payments for life</p>
+
+                        <div class="mt-5">
+                            <?php if($user['package'] == 'trial'):?>
+                                <button data-toggle="modal" data-target="#upgradeModal" class="btn btn-primary btn-lg shadow-none">Upgrade Account</button>
+                            <?php else:?>
+                                <a href="<?php echo url('profile/refer?action=enable-referral')?>" class="btn btn-primary btn-lg shadow-none ajax-action">Become a member</a>
+                            <?php endif?>
+                        </div>
+                    </div>
+                    <img src="<?php echo assetUrl('styles/main/images/referral.png')?>"/>
+
+                </div>
+                <div class="how-work">
+                    <h4>How it works</h4>
+                    <p>Lets explain how it work for you</p>
+
+                    <div class="row">
+                        <div class="col-sm-4 each">
+                            <div class="count">1</div>
+                            <div class="info">
+                                <h6>Become a member</h6>
+                                <p>Be a member and create your referral code & link</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 each">
+                            <div class="count">2</div>
+                            <div class="info">
+                                <h6>Share Timably</h6>
+                                <p>with your family, friends, colleagues or anyone on the Internet using your link</p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 each">
+                            <div class="count">3</div>
+                            <div class="info">
+                                <h6>Get Paid</h6>
+                                <p>for every paying customer that sign up through your link</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif?>
+
         </div>
         <div  class="tab-pane fade" id="password" role="tabpanel">
             <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
@@ -144,3 +553,37 @@
     </div>
 </div>
 
+
+<div class="modal  modal-right" tabindex="-1" id="requestPayoutModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+            <input type="hidden" name="val[action]" value="request-payout"/>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php _l('Request Payout')?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group ">
+                        <label><?php _l('PayPal Email')?></label>
+                        <input type="text" value="<?php echo (isset($referral)) ? $referral['paypal_email']: null?>" class="form-control" required name="val[email]"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('Amount')?></label>
+                        <input type="number" value="20" class="form-control" required name="val[amount]"/>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

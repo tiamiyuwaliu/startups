@@ -1,0 +1,82 @@
+<div class="main-page-wrapper  font-gordita">
+    <!-- ===================================================
+        Loading Transition
+    ==================================================== -->
+
+    <!--
+    =============================================
+        Theme Main Menu
+    ==============================================
+    -->
+    <?php echo view('home/menu-page')?>
+
+    <div class="fancy-hero-one">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 m-auto">
+                    <h2 class="font-rubik">Help & Support</h2>
+                    <p class="sub-heading">Trainings from our expert and proffessional Team</p>
+                </div>
+            </div>
+            <form action="<?php echo url('helps')?>" class="search-form" method="get">
+                <input type="text" name="term" value="<?php echo $term?>" data-auto="false" placeholder="Search for help...">
+                <button><img src="<?php echo assetUrl('styles/main/images/icon/47.svg')?>" alt=""></button>
+            </form>
+        </div>
+        <div class="bubble-one"></div>
+        <div class="bubble-two"></div>
+        <div class="bubble-three"></div>
+        <div class="bubble-four"></div>
+        <div class="bubble-five"></div>
+        <div class="bubble-six"></div>
+    </div>
+    <div class="faqs-inner-page">
+        <img src="<?php echo assetUrl('styles/main/images/shape/66.svg')?>" alt="" class="shapes shape-one">
+        <div class="shapes shape-two"></div>
+        <div class="shapes shape-three"></div>
+        <div class="shapes shape-four"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-11 m-auto">
+                    <?php if(!$category and !$term):?>
+                    <div class="all-faqs">
+                        <div class="faqs-all-qus">
+                            <?php foreach(model('admin')->getHelpCategories() as $category => $title):?>
+                                <div class="article-preview d-flex" onclick="location.href='<?php echo url('helps/'.$category)?>';">
+                                    <img src="<?php echo assetUrl('styles/main/images/icon/48.svg')?>" alt="" class="avatar-img">
+                                    <div>
+                                        <h3 class="font-rubik"><?php echo $title?> </h3>
+                                        <div class="avatar-info">
+                                            10 Articles
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+
+                        </div>
+                    </div>
+                    <?php else:?>
+                        <div class="all-faqs">
+                            <div class="faqs-all-qus">
+                                <?php foreach($helps->results() as $help):?>
+                                    <div class="article-preview d-flex" onclick="location.href='<?php echo url('help/'.$help['slug'])?>';">
+                                        <img src="<?php echo assetUrl($help['banner'])?>" alt="" class="avatar-img">
+                                        <div>
+                                            <h3 class="font-rubik"><?php echo $help['title']?></h3>
+                                            <div class="avatar-info">
+                                                Created on: <?php echo date('d M, Y', $help['created_at'])?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach;?>
+                            </div>
+                        </div>
+                    <?php endif?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <?php echo view('home/footer')?>
+</div>

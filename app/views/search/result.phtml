@@ -1,0 +1,34 @@
+<?php if($graphics):?>
+    <a href="<?php echo url('graphics?term='.$term)?>" data-ajax="true">Graphics <span class=""><?php echo $graphics?></span></a>
+<?php endif?>
+<?php if($drafts):?>
+    <a href="<?php echo url('publishing/posts?term='.$term)?>" data-ajax="true">Draft Posts <span class=""><?php echo $drafts?></span></a>
+<?php endif?>
+
+<?php if($scheduled):?>
+    <a href="<?php echo url('publishing/history/scheduled?term='.$term)?>" data-ajax="true">Scheduled Posts <span class=""><?php echo $scheduled?></span></a>
+<?php endif?>
+
+<?php if($party):?>
+    <a href="<?php echo url('publishing/parties?term='.$term)?>" data-ajax="true">Parties <span class=""><?php echo $party?></span></a>
+<?php endif?>
+
+<?php if($templates):?>
+    <a href="<?php echo url('publishing/parties/templates?term='.$term)?>" data-ajax="true">Party Templates <span class=""><?php echo $templates?></span></a>
+<?php endif?>
+
+<?php if($file):?>
+    <a href="<?php echo url('files?term='.$term)?>" data-ajax="true">My Uploads <span class=""><?php echo $file?></span></a>
+<?php endif?>
+
+<?php if($caption):?>
+    <a href="<?php echo url('captions?term='.$term)?>" data-ajax="true">Captions <span class=""><?php echo $caption?></span></a>
+<?php endif?>
+
+<?php if($hashtag):?>
+    <a href="<?php echo url('hashtags?term='.$term)?>" data-ajax="true">Hashtags <span class=""><?php echo $hashtag?></span></a>
+<?php endif?>
+
+<?php if($published):?>
+    <a href="<?php echo url('publishing/history/published?term='.$term)?>" data-ajax="true">Published Posts <span class=""><?php echo $published?></span></a>
+<?php endif?>

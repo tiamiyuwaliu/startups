@@ -23,6 +23,8 @@
         "symfony/process": "^3.4|^4.0",
         "winbox/args": "1.0.0",
         "defuse/php-encryption": "^2.0",
-        "jbzoo/image": "^4.0"
+        "jbzoo/image": "^4.0",
+        "joypixels/emoji-toolkit": "^6.6",
+        "firebase/php-jwt": "^5.4"
     }
 }

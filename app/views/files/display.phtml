@@ -1,11 +1,14 @@
-<div class="each-container">
-    <div class="each shadow-1 each-file each-file-<?php echo $file['id']?> <?php echo (isset($selected) and $selected) ? 'selected' : null?>"
+<?php
+$min = (isset($min)) ? $min : false;
+?>
+<div data-type="<?php echo $file['file_type']?>"  class="each-container sort each-file-drag fc-event <?php echo $file['file_type']?>-media" data-raw="<?php echo $file['file_name']?>" data-id="<?php echo $file['id']?>" data-file="<?php echo assetUrl($file['file_name'])?>">
+    <div onclick="selectThisFile(this)" class="each shadow-1 each-file each-file-<?php echo $file['id']?> <?php echo (isset($selected) and $selected) ? 'selected' : null?>"
          style="background-image: <?php echo ($file['file_type'] == 'image') ? 'url('.assetUrl($file['file_name']).')': 'none'?>;"
          data-raw="<?php echo $file['file_name']?>"
          data-id="<?php echo $file['id']?>"
          data-thumbnail="<?php echo assetUrl($file['resize_image'])?>"
          data-file="<?php echo assetUrl($file['file_name'])?>" data-type="<?php echo $file['file_type']?>">
-        <input type="hidden" value="<?php echo $file['id']?>" name="val[filesi][]"/>
+        <input type="hidden" value="<?php echo $file['id']?>" name="val[files][]"/>
         <div class="video-content" style="width:100%;height:100%;overflow: hidden;position:relative;">
             <?php if($file['file_type'] == 'video'):?>
                 <video src='<?php echo assetUrl($file['file_name'])?>' playsinline='' muted='' loop=''></video>
@@ -16,14 +19,8 @@
         <div class="the-content">
             <div class="clearfix">
                 <div class="float-left dropdown">
-                    <?php if(!isset($load)):?>
-                        <a href="" data-toggle="dropdown" class="menu "><i class="las la-ellipsis-v"></i></a>
-                        <div class="dropdown-menu">
-                            <a href="" onclick="return previewFile(this,'<?php echo assetUrl($file['file_name'])?>','<?php echo $file['file_type']?>')" class="dropdown-item">View</a>
-                            <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('files', array('action' => 'delete','id' => $file['id']))?>">Delete</a>
-
-                        </div>
-                    <?php endif?>
+                    <a href=""  onclick="return previewFile(this,'<?php echo assetUrl($file['file_name'])?>','<?php echo $file['file_type']?>')" class="btn btn-light menu" ><i class="las la-eye"></i></a>
+                    <a href="" onclick="return Filemanager.scheduleSinglePhoto('<?php echo $file['file_name']?>')" class="btn btn-light menu"><i class="icons icon-paper-plane"></i></a>
                 </div>
                 <div class="float-right">
                     <div class="custom-control custom-checkbox">
@@ -32,9 +29,29 @@
                     </div>
                 </div>
             </div>
-            <span class="badge badge-primary"><?php echo ($file['file_type'] == 'image') ? l('image') : l('video')?></span>
+            <a href="" onclick="return Filemanager.editDescrition('#editMediaDescriptionModal<?php echo $file['id']?>')" class="btn btn-primary edit-btn"><i class="las la-pen"></i></a>
 
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editMediaDescriptionModal<?php echo $file['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('edit-description')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea name="val[text]" class="form-control" rows="3"><?php echo $file['description']?></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                <button type="button" class="btn btn-primary" onclick="Filemanager.saveDescription('<?php echo $file['id']?>')"><?php _l('save')?></button>
+            </div>
         </div>
     </div>
 </div>

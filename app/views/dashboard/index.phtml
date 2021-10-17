@@ -1,48 +1,106 @@
-<div class="content-top">
-    <h3><?php _l('hi')?>! <?php echo model('user')->authUser['full_name']?></h3>
-</div>
+<div class="row"  style="padding: 15px 20px;">
+    <div class="col-7">
+        <div class="clearfix" style="background: #F9F6FD;padding: 10px;border-radius:10px">
+            <div class="media float-left" >
+                <img style="width:30px;height:30px;border-radius:100px;margin-right: 10px" src="<?php echo model('user')->getAvatar()?>"/>
+                <div class="media-body">
+                    <h6 style="margin-top: 7px;margin-bottom: 5px"> <strong><?php echo greetingWord()?></strong>, <?php echo model('user')->authUser['full_name']?></h6>
 
-<div class="content-body">
-    <div class="stats-container row">
-        <div class="col-sm-4">
-            <div class="each clearfix bg-dummy">
-                <div class="float-left">
-                    <i class="las la-user-friends"></i>
-                    <h6></h6>
-                </div>
-                <div class="float-right">
-                    <div class="count"></div>
                 </div>
             </div>
+
+            <div class="float-right">
+                <a href=""  onclick="return Timably.openPane('#new-account-modal')" class="btn btn-outline-primary " style="background: none !important;"><?php _l('Connect social profiles')?></a>
+                |
+                <a href="<?php echo url('profile')?>" data-ajax="true" class="btn btn-outline-primary " style="background: none !important;"><?php _l('edit-profile')?></a>
+
+            </div>
+
         </div>
-        <div class="col-sm-4">
-            <div class="each clearfix bg-dummy">
-                <div class="float-left">
-                    <i class="las la-language"></i>
-                    <h6></h6>
-                </div>
-                <div class="float-right">
-                    <div class="count"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="each clearfix bg-dummy">
-                <div class="float-left">
-                    <i class="las la-puzzle-piece"></i>
-                    <h6></h6>
-                </div>
-                <div class="float-right">
-                    <div class="count"></div>
-                </div>
-            </div>
+
+    </div>
+    <div class="col-5">
+
+        <div class="float-right" style="padding-top:20px;padding-right: 50px">
+
+            <?php if(model('user')->authOwner['package']):?>
+                <span style="color:grey">Subscription: </span> <a href="" class="btn btn-success shadow-none">Active</a>
+
+            <?php else:?>
+                <?php $time = model('user')->authOwner['expire_date']; if($time > time()):?>
+                    <?php if(model('user')->authOwner['package'] == 'trial'):?>
+                        <?php
+                        $earlier = new DateTime(date('Y-m-d'));
+                        $later = new DateTime(date('Y-m-d', $time));
+
+                        $abs_diff = $later->diff($earlier)->format("%a");
+                        ?>
+                        <span style="color:grey">Trial ending <?php echo $abs_diff?> day(s)</span> <a href="" class="btn btn-primary shadow-none">Start Subscription</a>
+
+                    <?php else:?>
+                        <span style="color:grey">Subscription: </span> <a href="" class="btn btn-success shadow-none">Active</a>
+
+                    <?php endif?>
+                <?php else:?>
+                    <span style="color:grey">Subscription expired </span> <a href="" data-toggle="modal" data-target="#choosePlanModal" class="btn btn-primary shadow-none">Upgrade</a>
+                <?php endif?>
+            <?php endif?>
         </div>
     </div>
+</div>
+<div class="content-body content-scroller" style="overflow: auto">
 
-    <div class="no-account-info">
-        <p><?php _l('no-accounts-info')?></p>
+    <div class="row">
 
-        <button class="btn btn-primary my-1" type="button"><?php _l('add-accounts')?></button>
+        <div class="col-md-7 dashboard-menu">
+
+            <div class="row ">
+                <div class="col-6">
+                    <a href="<?php echo url('publishing')?>" data-ajax="true"  class="box " >
+                        <i class="las la-pen-alt"></i>
+                        <h5><?php _l('publish-view-planner')?></h5>
+                        <p><?php _l('publish-view-planner-note')?></p>
+                        <div class="line"></div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="<?php echo url('files')?>" data-ajax="true" style="display: block" class="box">
+                        <i class="las la-shapes"></i>
+                        <h5><?php _l('content-studio-full')?></h5>
+                        <p><?php _l('content-studio-note')?></p>
+                        <div class="line"></div>
+                    </a>
+                </div>
+
+
+            </div>
+            <div class=" mt-5">
+                <div class="clearfix">
+                    <div class="float-left" style="font-size:20px;">New Design templates</div>
+                    <div class="float-right">
+                        <a data-ajax="true" href="<?php echo url('graphics')?>">View more</a>
+                        <a href="" data-toggle="modal" data-target="#newDesignModal" class="btn btn-light shadow-none">Create new Design</a>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="files-list files-grid">
+                    <?php $graphics = model('admin')->getGraphics(null,null,null, 4);?>
+
+                    <?php foreach($graphics as $graphic):?>
+                        <?php echo view('files/graphics/display', array('graphic' => $graphic))?>
+                    <?php endforeach;?>
+                    <?php echo view('files/filler')?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <img style="width: 100%;margin-top: 10px" src="<?php echo assetUrl('styles/main/images/content-curation.webp')?>"/>
+
+            <div class="" style="text-align: center">
+                <a href="" class="btn  shadow-none"><i class="lab la-facebook"></i> Join our Facebook club</a>
+            </div>
+        </div>
     </div>
 
 </div>

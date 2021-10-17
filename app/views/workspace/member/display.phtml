@@ -1,0 +1,44 @@
+
+<div class="table-row clearfix member-row-<?php echo $user['wid']?>" >
+    <div class="each clearfix" style="width: 70%">
+        <div class="left"><?php _l('info')?></div>
+        <div class="right">
+            <div class="media">
+                <img style="width: 40px" class="mr-3" src="<?php echo model('user')->getAvatar($user)?>" alt="Generic placeholder image">
+                <div class="media-body">
+                    <h5 class="mt-0">
+                        <?php echo $user['full_name']?>
+                        <?php if(!$user['user_status']):?>
+                            <span style="font-size:12px" class="badge badge-dark"><?php _l('pending')?></span>
+                        <?php else:?>
+                            <span style="font-size:12px" class="badge badge-info badge-sm"><?php echo ($user['user_type'] == 1) ? l('team') : l('external')?></span>
+                        <?php endif?>
+                    </h5>
+                    <?php echo $user['email']?>
+                    <?php if($user['user_type'] == 2):?>
+                    <div>
+                        <?php _l('access-link')?> : <a target="_blank" href="<?php echo url('client/'.$user['slug'])?>"><?php _l('client-portal')?></a>
+
+                    </div>
+                    <?php endif?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="each clearfix" style="width: 30%">
+        <div class="left"><?php _l('action')?></div>
+        <div class="right">
+            <div class="badge badge-light mt-3"><?php echo model('workspace')->getPermissionName($user)?></div>
+            <span class="dropdown">
+                <a href="" style="font-size:20px" data-toggle="dropdown"><i class="las la-ellipsis-h"></i></a>
+                <div class="dropdown-menu">
+                    <?php if(!$user['user_status']):?>
+                        <a href="<?php echo url('workspace?action=resend-invite&id='.$user['wid'])?>" class="dropdown-item confirm " data-ajax-action="true"><?php _l('resend-invite')?></a>
+                    <?php endif?>
+                    <a href="<?php echo url('workspace?action=delete-member&id='.$user['wid'])?>" class="dropdown-item confirm" data-ajax-action="true"><?php _l('delete')?></a>
+
+                </div>
+            </span>
+        </div>
+    </div>
+</div>

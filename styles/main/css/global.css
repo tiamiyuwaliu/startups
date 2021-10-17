@@ -92,6 +92,7 @@ a {
     -webkit-animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-up .3s ease-out 1;
     animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-up .3s ease-out 1;
 }
+
 #cover-loader {
     position: fixed;
     top: 0;
@@ -99,7 +100,7 @@ a {
     width: 100%;
     text-align: center;
     background: rgba(255,255,255, 0.8);
-    z-index: 4999;
+    z-index: 499999999999999999;
     display:none;
 }
 
@@ -194,8 +195,7 @@ a {
 
 div::-webkit-scrollbar
 {
-    width: 4px;
-
+    width: 10px;
     background-color: #F5F5F5;
 }
 ::-webkit-scrollbar{width:4px;height:4px;}
@@ -208,7 +208,7 @@ div::-webkit-scrollbar
 div::-webkit-scrollbar-thumb
 {
     border-radius: 10px;
-    background:  #2F2D2D;
+    background:  grey;
 }
 .float-btn-text i{
     display: inline-block;

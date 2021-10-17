@@ -1,0 +1,115 @@
+<div class="content-top">
+    <div class="nav-tabs-scrollable">
+        <ul class="nav  nav-tabs" id="justifiedTab" role="tablist">
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'workspace')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing')?>" id="home-tab" role="tab"><?php _l('workspaces')?></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="right-actions">
+        <div class="btn-group shadow-none" style="margin-top:10px" >
+            <?php if(model('user')->canDoTeam()):?>
+                <a href=""   onclick="return Timably.createWorkspace(<?php echo model('workspace')->canCreate()?>)"  class="btn btn-primary btn-sm  shadow-none"> <i class="las la-plus"></i> <?php _l('new-workspace')?></a>
+
+            <?php else:?>
+                <?php if(model('user')->hasTried()):?>
+                    <a href=""   data-toggle="modal" data-target="#upgradeModal"  class="btn btn-primary btn-sm  shadow-none"> <i class="las la-plus"></i> <?php _l('new-workspace')?></a>
+                <?php else:?>
+                    <a href=""   data-toggle="modal" data-target="#becomeModal"  class="btn btn-primary btn-sm  shadow-none"> <i class="las la-plus"></i> <?php _l('new-workspace')?></a>
+
+                <?php endif?>
+            <?php endif?>
+
+        </div>
+    </div>
+</div>
+
+<div class="pane-container">
+    <div class="scroll-paginate">
+        <div class="content-scroller the-content padding-content" data-height="16" >
+            <div class="workspaces-container general-view-container">
+
+                <h5><?php _l('my-workspace')?></h5>
+                <hr/>
+                <div class="grid-container clearfix">
+
+                    <?php foreach(model('workspace')->getMyWorkspace() as $workspace):?>
+                        <?php echo view('workspace/display', array('workspace' => $workspace))?>
+                    <?php endforeach?>
+
+
+
+                    <?php if(model('user')->canDoTeam() and model('user')->hasTried()):?>
+                        <div class="each-container" >
+                            <a href="" onclick="return Timably.createWorkspace(<?php echo model('workspace')->canCreate()?>)" class="each each-add">
+                                <i class="las la-plus"></i>
+                                <?php _l('create-new-workspace')?>
+                            </a>
+                        </div>
+                    <?php else:?>
+                        <?php if(model('user')->hasTried()):?>
+                            <div class="each-container" >
+                                <a href="" data-toggle="modal" data-target="#upgradeModal"  class="each each-add">
+                                    <i class="las la-plus"></i>
+                                    <?php _l('create-new-workspace')?>
+                                </a>
+                            </div>
+                        <?php else:?>
+                            <div class="each-container" >
+                                <a href="" data-toggle="modal" data-target="#becomeModal"  class="each each-add">
+                                    <i class="las la-plus"></i>
+                                    <?php _l('create-new-workspace')?>
+                                </a>
+                            </div>
+                        <?php endif?>
+                    <?php endif?>
+                </div>
+
+                <?php $others = model('workspace')->getAssignedWorkspace();?>
+                <?php if($others):?>
+                    <h5 class="mt-4"><?php _l('other-workspace')?></h5>
+                    <hr/>
+                    <div class="grid-container clearfix">
+                        <?php foreach($others as $workspace):?>
+                            <?php echo view('workspace/display', array('workspace' => $workspace))?>
+                        <?php endforeach?>
+                    <?php endif?>
+                    </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal  modal-right " tabindex="-1" id="newWorkspaceModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="" method="post" class="general-form">
+                <input type="hidden" name="val[action]" value="new-workspace"/>
+                <div class="modal-header">
+                    <h4><?php _l('new-workspace')?></h4>
+                </div>
+                <div class="modal-body pt-3">
+                    <div class="form-group floating-label">
+                        <label><?php _l('workspace-name')?></label>
+                        <input type="text" class="form-control"  name="val[title]"/>
+                    </div>
+                    <div class="form-group " style="margin-top: 30px">
+                        <label><?php _l('workspace-timezone')?></label>
+                        <select class="form-control" name="val[timezone]">
+                            <?php foreach(getTimezones() as $timezone => $title):?>
+                                <option  value="<?php echo $timezone?>"><?php echo $title?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+
+                    <button style="margin-top: 30px" type="submit" class="btn btn-primary"><?php _l('create')?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

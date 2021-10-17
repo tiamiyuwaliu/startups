@@ -10,12 +10,7 @@
     'use strict';
     $.extend(true, $.trumbowyg, {
         langs: {
-            de: {
-                history: {
-                    redo: 'Wiederholen',
-                    undo: 'Rückgängig'
-                }
-            },
+            // jshint camelcase:false
             en: {
                 history: {
                     redo: 'Redo',
@@ -28,22 +23,28 @@
                     undo: 'Fortryd'
                 }
             },
+            de: {
+                history: {
+                    redo: 'Wiederholen',
+                    undo: 'Rückgängig'
+                }
+            },
+            et: {
+                history: {
+                    redo: 'Võta tagasi',
+                    undo: 'Tee uuesti'
+                }
+            },
             fr: {
                 history: {
                     redo: 'Annuler',
                     undo: 'Rétablir'
                 }
             },
-            zh_tw: {
-               history: {
-                   redo: '重做',
-                   undo: '復原'
-               }
-            },
-            pt_br: {
+            hu: {
                 history: {
-                    redo: 'Refazer',
-                    undo: 'Desfazer'
+                    redo: 'Visszállít',
+                    undo: 'Visszavon'
                 }
             },
             ko: {
@@ -52,6 +53,19 @@
                     undo: '되돌리기'
                 }
             },
+            pt_br: {
+                history: {
+                    redo: 'Refazer',
+                    undo: 'Desfazer'
+                }
+            },
+            zh_tw: {
+               history: {
+                   redo: '重做',
+                   undo: '復原'
+               }
+            },
+            // jshint camelcase:true
         },
         plugins: {
             history: {

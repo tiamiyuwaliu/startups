@@ -6,6 +6,7 @@ class ProfileController extends Controller {
 
         $user = $this->model('user')->getUser($this->model('user')->authId);
 
+        if ($this->request->segment(1) == 'refer') $this->setActiveIconMenu('refer');
         if ($val = $this->request->input('val')) {
             $this->defendDemo();
             if ($val['action'] == 'profile') {
@@ -76,8 +77,32 @@ class ProfileController extends Controller {
                 ));
             }
 
+            if ($val['action'] == 'request-payout') {
+                $result = $this->model('user')->addPayout($val);
+                if ($result) {
+                    return json_encode(array(
+                        'type' => 'reload',
+                        'message' => 'Payout request has been submit , You will receive your payment on our pay day, Thanks'
+                    ));
+                } else {
+                    return json_encode(array(
+                        'type' => 'error',
+                        'message' => 'Something went wrong, make sure your balance is more than $20'
+                    ));
+                }
+            }
 
-
+        }
+        if ($action = $this->request->input('action')) {
+            switch($action) {
+                case 'enable-referral':
+                    $this->model('user')->enableReferral();
+                    return json_encode(array(
+                        'type' => 'reload',
+                        'message' => 'Congrats! Referral program enabled successfully'
+                    ));
+                    break;
+            }
         }
         return $this->render($this->view('profile/index', array('user' => $user)), true);
     }

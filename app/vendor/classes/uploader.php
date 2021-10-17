@@ -84,14 +84,14 @@ class Uploader {
     {
         $this->source = $source;
         $this->type = $type;
-        $this->maxFileSize = model('user')->getAllowSize() * 10000000;
-        $this->maxVideoSize = model('user')->getAllowSize() * 10000000;
+        $this->maxFileSize = 100 * 10000000;
+        $this->maxVideoSize = 100 * 10000000;
         $audioSize = config('audio-file-size', 55) * 10000000;
-        $this->maxAudioSize = model('user')->getAllowSize() * 10000000;
+        $this->maxAudioSize = 100 * 10000000;
         $imagesSize = config('image-file-size', 2) * 10000000;
-        $this->maxImageSize = model('user')->getAllowSize() * 10000000;
+        $this->maxImageSize = 100 * 10000000;
         $videoSize = config('video-file-size', 55) * 10000000;
-        $this->maxVideoSize = model('user')->getAllowSize() * 10000000;
+        $this->maxVideoSize = 100 * 10000000;
         $this->animatedGif = config("support-animated-image", $this->animatedGif);
         $this->imageTypes = explode(',', config('image-file-types', 'jpg,png,gif,jpeg'));
         $this->videoTypes = explode(',', config('video-file-types', 'mp4,mov,wmv,3gp,avi,flv,f4v,webm'));
@@ -324,6 +324,7 @@ class Uploader {
                 fclose($file);
             }
         }
+
         $this->destinationPath = $path;
         return $this;
     }

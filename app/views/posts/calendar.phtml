@@ -1,43 +1,128 @@
-<?php echo view('posts/header', array('active' => 'compose'))?>
+<div class="content-top">
+    <?php $page = $C->request->segment(1, 'calendar')?>
+    <?php echo view('posts/menu')?>
+
+
+</div>
 <div class="pane-container">
     <div class="pane-left" >
         <div id="side-filemanager">
             <div class="title-container">
                 <a href="" onclick="return Filemanager.showCollection(this, 'side')" class="mtitle new-folder-btn" title="<?php _l('browse-collections')?>"><i class="icons icon-folder"></i></a>
                 <div class="mini-media-upload-container">
-                    <a href="" class="mtitle" title="<?php _l('import-from-google-drive')?>"><i class="lab la-google-drive"></i></a>
-                    <a href="" class="mtitle" title="<?php _l('import-from-dropbox')?>"><i class="lab la-dropbox"></i></a>
-                    <a href="" class="mtitle" title="<?php _l('upload-media')?>"><i class="las la-cloud-upload-alt"></i></a>
+                    <span class="dropdown">
+                        <a href="" data-toggle="dropdown" style="position:relative;overflow: hidden;display: inline-block;padding-top: 0 !important;" title="<?php _l('design-with-canva')?>" class="mtitle"><img src="<?php echo assetUrl('assets/images/canva.png')?>" style="width:25px;height:25px;border-radius:100px"/></a>
+                        <div class="dropdown-menu">
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('FacebookPost')" class="dropdown-item">Facebook Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('InstagramPost')" class="dropdown-item">Instagram Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('TwitterPost')" class="dropdown-item">Twitter Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('LinkedInBanner')" class="dropdown-item">LinkedIn Post</a>
+                             <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('PinterestGraphic')" class="dropdown-item">Pinterest Graphics</a>
+
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('SocialMedia')" class="dropdown-item">Custom Post</a>
+                       </div>
+                    </span>
+                    <a href="" class="mtitle" style="display: inline-block;position: relative;bottom: 15px" onclick="return openGoogleDrivePicker()" title="<?php _l('import-from-google-drive')?>"><i class="lab la-google-drive"></i></a>
+                    <a href="" class="mtitle" style="display: inline-block;position: relative;bottom: 15px" onclick="return openDropboxPicker()" title="<?php _l('import-from-dropbox')?>"><i class="lab la-dropbox"></i></a>
+                    <a href="javascript:void(0)"  class="mtitle" title="<?php _l('upload-media')?>" style="position:relative;overflow: hidden;display: inline-block">
+                        <form method="post"  data-upload="#upload-progress" action="<?php echo url('files')?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                            <input type="hidden" name="val[upload]" value="1"/>
+                            <input type="hidden" name="val[folder_id]" value="" class="file-folder-id-input"/>
+                            <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                            <i class="las la-cloud-upload-alt"></i>
+                        </form>
+                    </a>
+                    <a href="" class="mtitle" style="display: inline-block;position: relative;bottom: 15px" data-toggle="modal"  data-target="#importImageModal" title="Import image from a link"><i class="las la-link"></i></a>
 
                 </div>
-                <a href="" class="mtitle filter-media-btn" title="<?php _l('filter-media')?>"><i class="las la-sliders-h"></i></a>
-
+               <div class="dropdown filter-media-container">
+                   <a href="" data-toggle="dropdown" class="mtitle filter-media-btn" title="<?php _l('filter-media')?>"><i class="las la-sliders-h"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="" class="dropdown-item active" onclick="return Filemanager.toggleMediaType(this,'all')"><i class="las la-images"></i> <?php _l('all')?></a>
+                        <a href="" class="dropdown-item" onclick="return Filemanager.toggleMediaType(this,'image')"><i class="las la-image"></i> <?php _l('images')?></a>
+                        <a href="" class="dropdown-item" onclick="return Filemanager.toggleMediaType(this,'video')"><i class="las la-video"></i> <?php _l('videos')?></a>
+                    </div>
+               </div>
 
             </div>
             <div class="side-collections-container">
                 <h6  class="clearfix head"><?php _l('collections')?> <a href="" class="float-right" data-toggle="modal" data-target="#addFolderModal"><i class="las la-plus-circle"></i></a> </h6>
                 <div class="collection-list">
+                    <a href="" onclick="return Filemanager.openCollection('')" class="each">
+                        <span class="line"></span>
+                        <i style="color: #7827EA " class="icons color icon-folder-alt"></i>
+                        <span class="text"><?php _l('all-collections')?></span>
+                        <span class="count"><?php echo model('file')->countMedia()?></span>
+                    </a>
                     <?php foreach(model('file')->getFolders() as $folder):?>
                         <?php echo view('files/collection', array('folder' => $folder));?>
                     <?php endforeach?>
                 </div>
                 <a href="" data-toggle="modal" data-target="#addFolderModal" class="foot"><?php _l('new-collection')?></a>
             </div>
-            <div class="scroll-paginate"
+            <div class="scroll-paginate files-container"
                  data-container=".files-grid"
-                 data-url=""
+                 data-url="<?php echo url('files/load')?>"
                  data-offset="0"
             >
-                <div class="files-grid clearfix content-scroller the-content side-medias" data-height="50">
+                <div class="files-grid clearfix content-scroller the-content side-medias files-list" data-height="100">
                     <?php $files = model('file')->getFiles(0); foreach($files as $file):?>
-                        <?php echo view('files/display', array('file' => $file));?>
+                        <?php echo view('files/display', array('file' => $file, 'min' => true));?>
                     <?php endforeach?>
+                    <?php echo view('files/filler')?>
                 </div>
             </div>
         </div>
 
     </div>
     <div class="pane-right">
-        <div id="calendar"  style="width: 100%"></div>
+        <?php if($C->request->input('all')):?>
+            <a href="<?php echo url('publishing')?>" style="min-width: auto;position:absolute;right: 150px;z-index:9;top: 10px" data-ajax="true" class="mtitle shadow-none btn btn-primary btn-sm" title="<?php _l('show-draft-scheduled')?>"><i class="las la-filter"></i></a>
+        <?php else:?>
+            <a href="<?php echo url('publishing?all=1')?>" style="min-width: auto;position:absolute;right: 150px;z-index:9;top: 10px" data-ajax="true" class="mtitle shadow-none btn btn-light btn-sm" title="<?php _l('show-all-posts')?>"><i class="las la-filter"></i></a>
+        <?php endif?>
+        <div id="calendar" data-url="<?php echo url('publishing/calendar/data?all='.$C->request->input('all', 0))?>"  style="width: 100%">
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="calendarPostModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?php _l('post-details')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="party-title-container hide">
+                    <h5></h5>
+                </div>
+                <div class="post-image"></div>
+                <div class="post-caption p-4 pl-0 pr-0" style="padding-left: 0 !important;padding-right:0 !important;"></div>
+                <div class=" badge badge-light" style="font-size:20px">
+                    <strong><?php _l('scheduled-at')?>: </strong> <span class="schedule-date"></span>
+                </div>
+            </div>
+
+            <div class=" p-3" style="border-top: solid 1px #F1F3F4">
+                <div id="normal-post-actions" class="clearfix">
+                    <a href=""  class=" delete-btn btn shadow-none btn-secondary float-left confirm " data-ajax-action="true"><?php _l('delete-post')?></a>
+                    <button onclick="return PostEditor.loadPost(this)" type="button" class="edit-btn btn shadow-none btn-primary float-right edit-button">
+                        <?php _l('edit-post')?>
+                        <span class="info hide"></span>
+                    </button>
+                    <a href="" data-ajax="true"   class="edit-btn btn shadow-none btn-primary float-right party-link">
+                        <?php _l('edit-post')?>
+                    </a>
+                </div>
+                <div class="party-post-actions hide">
+                    <a href="" class="btn btn-block"><?php _l('view-party')?></a>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>

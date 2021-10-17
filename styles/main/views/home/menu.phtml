@@ -1,0 +1,56 @@
+<div class="theme-main-menu sticky-menu theme-menu-six bg-none">
+    <div class="d-flex align-items-center">
+        <div class="logo order-lg-1"><a href="<?php echo url('')?>"><img style="width: 200px" src="<?php echo assetUrl('styles/main/images/timably-logo-single-line.png')?>" alt=""></a></div>
+
+        <div class="right-widget order-lg-3">
+            <ul  class="d-flex align-items-center">
+                <?php if(model('user')->isLoggedIn()):?>
+
+                    <li>
+                        <a href="<?php echo url('home')?>"  class="signup-btn" style="width: auto;padding-left: 20px;padding-right: 20px">Go to APP</a>
+                    </li>
+                <?php else:?>
+                    <li >
+                        <a href="<?php echo url('login')?>" class="signIn-action d-flex align-items-center">
+                            <img src="<?php echo assetUrl('styles/main/images/icon/120.svg')?>" alt="">
+                            <span>login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo url('signup')?>"  class="signup-btn" style="width: auto;padding-left: 20px;padding-right: 20px">Try for Free</a>
+                    </li>
+                <?php endif?>
+            </ul>
+        </div>
+
+        <nav id="mega-menu-holder" class="navbar navbar-expand-lg ml-lg-auto order-lg-2">
+            <div  class="container nav-container">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="flaticon-menu-of-three-lines"></i>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <div class="d-lg-flex justify-content-between align-items-center">
+                        <ul class="navbar-nav main-side-nav font-gordita" id="one-page-nav">
+                            <li class="nav-item">
+                                <a href="<?php echo url()?>#feature" class="nav-link">Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?php echo url()?>#pricing" class="nav-link">Pricing</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="<?php echo url('blogs')?>" class="nav-link">Blogs</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="" class="nav-link dropdown-toggle">More</a>
+                                <div class="dropdown-menu">
+                                    <a href="<?php echo url('home')?>" class="dropdown-item">Help center</a>
+                                    <a href="<?php echo url('contact-us')?>" class="dropdown-item">Contact us</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div> <!-- /.theme-main-menu -->

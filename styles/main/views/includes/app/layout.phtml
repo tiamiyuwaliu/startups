@@ -1,56 +1,110 @@
 <div id="app-container" class="clearfix <?php echo (session_get('open_menu', 0) == 1) ? 'opened-menu' : null?>">
     <div class="menu-pane">
         <div class="icon-menus">
-            <a class="logo" href="<?php echo url('dashboard')?>" data-ajax="true">
+            <a class="logo" href="<?php echo url('publishing')?>" data-ajax="true">
                 <img class="light-logo" src="<?php echo assetUrl(config('site_short_icon','assets/images/short-logo.png'))?>"/>
                 <img class="dark-logo" src="<?php echo assetUrl(config('site_short_icon_light','assets/images/short-logo.png'))?>"/>
             </a>
 
             <div class="menu-list-container">
-                <ul class="dropright" style="display: none">
-                    <li style="display:none"><a class="account-icon" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" href="">
-                            <img src="<?php echo ($C->selectedAccount) ? assetUrl($C->selectedAccount['avatar']) : model('user')->getAvatar()?>"/>
-                        </a>
-                        <div class="dropdown-menu social-accounts-menu" >
-                            <!-- Dropdown menu links -->
-                            <?php foreach(model('social')->getAccounts() as $account):?>
-                                <a data-ajax="true" href="<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>"
-                                   class="dropdown-item <?php echo ($C->selectedAccount['id'] == $account['id']) ? 'active' : null?>" type="button"><img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/> <?php echo $account['username']?></a>
-                            <?php endforeach;?>
+                <ul class="dropright" >
 
-                            <div class="dropdown-divider"></div>
-                            <a href="<?php echo url('accounts')?>" class="dropdown-item" data-ajax="true"><?php _l('manage-accounts')?></a>
-                        </div>
-                    </li>
-                    <li style="display:none"><a href="" data-toggle="modal" data-target="#addAccountModal" title="<?php _l('add-account')?>" class="btn btn-light btn-float shadow-none add-button mtitle-right"><i class="las la-plus"></i></a> </li>
-                    <li><a href="<?php echo url('posts')?>" data-ajax="true" title="<?php _l('compose-new-post')?>" class="btn compose-menu btn-primary mtitle-right btn-float shadow-none add-button"><i class="las la-edit"></i></a> </li>
                 </ul>
 
                 <ul class="main">
-                    <li><a href="<?php echo url('publishing')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'publishing') ? 'active':null?>" title="<?php _l('publishing')?>">
+                    <li class="dropright" style="display: none" >
+                        <a href=""   data-toggle="dropdown" title="<?php _l('new')?>" class=" mtitle-right  shadow-none add-button">
+                            <i class="las la-plus shadow-4" style="background:#ff4081;color:#fff"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="" class="dropdown-item" onclick="return Timably.openPane('#new-compose-modal')"><?php _l('new-post')?></a>
+                            <a href="" class="dropdown-item" onclick="return Timably.openPane('#new-party-modal')"><?php _l('start-new-party')?></a>
+
+                            <div class="dropdown-divider"></div>
+                            <a href="" onclick="return Timably.openPane('#new-account-modal')" class="dropdown-item"><?php _l('connect-social-account')?></a>
+                        </div>
+                    </li>
+
+                    <li><a href="<?php echo url('home')?>" data-ajax="true" class=" <?php echo ($C->activeIconMenu == 'home') ? 'active':null?>" title="<?php _l('home')?>">
+                            <i class="las la-home"></i>
+                            <?php _l('home')?>
+                        </a></li>
+                    <li><a href="<?php echo url('publishing')?>" data-ajax="true" class=" <?php echo ($C->activeIconMenu == 'publishing') ? 'active':null?>" title="<?php _l('publishing')?>">
                             <i class="icons icon-paper-plane"></i>
-                            <?php _l('publishing')?>
+                            <?php _l('publish')?>
                         </a></li>
-                    <li><a href="<?php echo url('conversation')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'conversation') ? 'active':null?>" title="<?php _l('conversation')?>">
-                            <i class="icons icon-bubble"></i>
-                            <?php _l('conversation')?>
+                    <li class="dropright">
+                        <a href="<?php echo url('files')?>" data-ajax="true"  class=" <?php echo ($C->activeIconMenu == 'media') ? 'active':null?>" >
+                            <i class="las la-images"></i>
+                            <?php _l('content-studio')?>
+                        </a>
+
+                    </li>
+                    <li class="dropright">
+                        <a data-toggle="dropdown" data-boundary="window" data-offset="-50,0" href   class="<?php echo ($C->activeIconMenu == 'organize') ? 'active':null?>" title="<?php _l('organize-events-task-reminder')?>">
+                            <i class="las la-calendar-check" style="font-size: 30px;position: relative;padding-top: 5px"></i>
+                            <?php _l('organize')?>
+                        </a>
+                        <div class="dropdown-menu sub-menus sub-menus-small" style="">
+                            <ul>
+                                <li>
+                                    <a data-ajax="true" href="<?php echo url('organize/events')?>">
+                                        <i class="las la-images"></i>
+                                        <span><?php _l('events')?></span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a data-ajax="true" href="<?php echo url('organize/tasks')?>">
+                                        <i class="las la-images"></i>
+                                        <span><?php _l('tasks')?></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-ajax="true" href="<?php echo url('organize/reminder')?>">
+                                        <i class="icons icon-folder-alt"></i>
+                                        <span><?php _l('reminder')?></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div style="position:absolute;top: 0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.8);text-align: center;padding: 100px 0 ;font-size:15px;color:grey">
+                                Coming soon
+                            </div>
+                        </div>
+                    </li>
+
+                    <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('library')?>" class="  <?php echo $C->activeIconMenu == 'library' ? 'active':null?>">
+                            <i class="icons icon-grid"></i>
+                            <?php _l('captions')?>
+                        </a> </li>
+
+
+
+
+
+                    <li><a href="<?php echo url('profile/refer')?>" data-ajax="true" class=" <?php echo ($C->activeIconMenu == 'refer') ? 'active':null?>" title="<?php _l('refer-earn')?>">
+                            <i class="las la-hand-holding-usd" style="font-size: 30px;position: relative;padding-top: 5px"></i>
+                            <?php _l('refer-earn')?>
                         </a></li>
-                    <li><a href="<?php echo url('bio')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'bio') ? 'active':null?>" title="<?php _l('linkin-bio')?>">
+
+                    <li><a href="" onclick="return Timably.loadQuickHelp('basic')" class=" <?php echo ($C->activeIconMenu == 'refer') ? 'active':null?>" title="<?php _l('refer-earn')?>">
+                            <i class="las la-school" style="font-size: 30px;position: relative;padding-top: 5px"></i>
+                            <?php _l('Quick <br/>Help')?>
+                        </a></li>
+
+                    <!--<li><a href="<?php echo url('bio')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'bio') ? 'active':null?>" title="<?php _l('linkin-bio')?>">
                             <i class="icons icon-link"></i>
                             <?php _l('linkin-bio')?>
-                        </a></li>
-                     <li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
+                        </a></li>-->
+                     <!--<li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
                              <i class="icons icon-graph"></i>
                              <?php _l('insights')?>
-                         </a></li>
-                    <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('templates')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'captions' ? 'active':null?>">
-                            <i class="icons icon-grid"></i>
-                            <?php _l('templates')?>
-                        </a> </li>
-                    <li><a href="<?php echo url('files')?>" data-ajax="true" title="<?php _l('file-manager')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'files' ? 'active':null?>">
+                         </a></li>-->
+
+                    <!--<li><a href="<?php echo url('files')?>" data-ajax="true" title="<?php _l('file-manager')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'files' ? 'active':null?>">
                             <i class="icons icon-folder-alt"></i>
                             <?php _l('media')?>
-                        </a> </li>
+                        </a> </li>-->
 
                 </ul>
 
@@ -58,65 +112,198 @@
         </div>
 
     </div>
+
     <div class="content-pane">
 
-        <div class="header">
-            <div class="user-accounts clearfix">
-                <?php $account = $C->selectedAccount?>
-                <?php if($account):?>
-                    <a data-ajax="true" title="<?php echo $account['username']?>" href="<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>"
-                       class="mtitle active"  style="position: relative">
-                        <img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/>
-                        <span class="selected-account-mark"><i class="las la-check"></i></span>
-                    </a>
-                <?php endif?>
-                <?php $i= 0;$accounts = model('social')->getAccounts(($account)? $C->selectedAccount['id'] : ''); foreach($accounts as $account):?>
-                    <?php if($i< 6):?>
-                        <a data-ajax="true" title="<?php echo $account['username']?>" href="<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>"
-                           class="mtitle" ><img class="round-img-sm" src="<?php echo assetUrl($account['avatar'])?>"/> </a>
-                    <?php endif?>
-                    <?php $i++; endforeach;?>
-
-                <?php if(count($accounts) < 6):?>
-                    <a href="<?php echo url('accounts')?>" data-ajax="true"  class="add"><i class="icons icon-user-follow"></i></a>
-                <?php else:?>
-                    <a href="" data-toggle="modal" data-target="#switchAccountsModal"  class="add"><i class="las la-angle-double-down"></i></a>
-
-                <?php endif?>
-            </div>
-            <ul>
-                <li class="dropdown">
-                    <?php $languages = model('admin')->getLanguages()?>
-                    <a  data-toggle="dropdown" id="change-language-selector" class=" padding-sm btn dropdown-toggle language-selector shadow-1" href="#" >
-                        <img style="width:20px" src="<?php echo assetUrl('assets/images/flags/'.Translator::instance()->lang().'.png')?>"/>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <?php foreach ($languages as $language):?>
-                            <a href="<?php echo url('change/language', array('id' => $language['id']))?>" class="dropdown-item"> <img style="width: 17px;" class="mr-1" src="<?php echo assetUrl('assets/images/flags/'.$language['id'].'.png')?>"/> <span class="pt-1"><?php echo $language['name']?></span></a>
-                        <?php endforeach;?>
-                    </div>
-                </li>
-                <li class="dropdown">
-                    <a href="" data-toggle="dropdown" class="account-menu"><img src="<?php echo model('user')->getAvatar()?>"/> </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdow-menu-lg">
-                        <a class="dropdown-item" data-ajax="true" href="<?php echo url('profile')?>"><?php _l('my-account')?></a>
-                        <a class="dropdown-item" data-ajax="true" href="<?php echo url('accounts')?>"><?php _l('manage-accounts')?></a>
-                        <?php if(model('user')->isAdmin()):?>
-                            <a class="dropdown-item"  href="<?php echo url('admincp')?>"><?php _l('admin-panel')?></a>
-                        <?php endif?>
-                        <div class="dropdown-divider" ></div>
-                        <a class="dropdown-item"  href="<?php echo url('logout')?>"><?php _l('logout')?></a>
-                    </div>
-                </li>
-            </ul>
-        </div>
+        <?php echo view('includes/app/header')?>
 
         <?php echo $content?>
+        <?php echo view('posts/modal')?>
+        <?php echo view('account/modal')?>
+        <?php echo view('templates/party/modal')?>
+        <div class="photo-editor-container">
+            <div class="editor">
+            </div>
+            <a href="" onclick="return PhotoEditor.close()" class="btn btn-light close-btn"><?php _l('close-editor')?></a>
+        </div>
 
+
+        <div class="quick-help-container">
+            <a href="" class="close-btn" onclick="return Timably.closeHelp()"><i class="las la-times"></i></a>
+            <h2>Quick Help</h2>
+            <hr/>
+            <div class="row">
+                <div class="col-6" style="height: calc(100vh - 100px);overflow: auto">
+
+                    <div class="search">
+                        <input onkeyup="Timably.searchQuickHelp(this)" class="quick-help-search-input" type="text" placeholder="Search quick help ...."/>
+                        <i class="las la-search"></i>
+                    </div>
+
+                    <ul class="quick-help-menu clearfix">
+                        <li>
+                            <a onclick="return Timably.loadQuickHelp('basic')" href="" class="basic-btn active">
+                                <i class="las la-search"></i>
+                                <span>Learn the Basics</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" onclick="return Timably.loadQuickHelp('goals')" class="goals-btn">
+                                <i class="las la-search"></i>
+                                <span>Reach Goals</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <p>New to Timably? Learn the basics in few minutes</p>
+                    <div class="help-lists">
+
+                    </div>
+                </div>
+                <div class="col-4">
+                    <img style="width: 100%;margin-top: 30px" src="<?php echo assetUrl('styles/main/images/content-curation.webp')?>"/>
+
+                    <div class="" style="text-align: center">
+                        <a href="" class="btn  shadow-none"><i class="lab la-facebook"></i> Join our Support Facebook Group</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 
+<div class="modal" tabindex="-1" id="newFacebookAccountModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered "  role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="account-type-selector-container clearfix">
+                    <div class="each">
+                       <a href="<?php echo url('accounts/facebook?auth=1&type=page')?>" class="ajax-action">
+                           <i class="las la-flag"></i>
+                           <span><?php _l('add-facebook')?> <br/> <?php _l('pages')?></span>
+                       </a>
+                    </div>
+
+                    <div class="each">
+                        <a href="<?php echo url('accounts/facebook?auth=1&type=group')?>" class="ajax-action">
+                            <i class="las la-user-friends"></i>
+                            <span><?php _l('add-facebook')?><br/> <?php _l('groups')?></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="text-align: center;padding: 10px">
+                    <a href=""  data-dismiss="modal" aria-label="Close" style="color: grey" ><?php _l('go-back')?></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="newInstagramAccountModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered "  role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p>
+                    The Instagram Official API currently support only Instagram Business accounts that have been connected to a Facebook Page
+                </p>
+
+                <p>You can <a href="">read here</a> to learn how you can convert your Instagram personal accounts to a Business account</p>
+
+                <p>Also you need to connect your Facebook Page to your Instagram Business account <a href="">read more here</a> </p>
+
+                <a href="<?php echo url('accounts/facebook?auth=1&type=instagram')?>" class="btn btn-lg btn-primary btn-block mb-3 ajax-action"><?php _l('continue')?></a>
+                <div style="text-align: center;padding: 10px">
+                    <a href=""  data-dismiss="modal" aria-label="Close" style="color: grey" ><?php _l('go-back')?></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<?php echo view('files/modal')?>
+<div class="modal fade" id="importImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('import-image-via-url')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group floating-label">
+                    <label><?php _l('image-url')?></label>
+                    <input type="text" class="form-control" id="import-image-input" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                <button type="button" onclick="return Filemanager.importImage()" class="btn btn-primary"><?php _l('import')?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal  " tabindex="-1" id="upgradeModal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content p-0">
+            <div class="modal-body">
+                <img src="<?php echo assetUrl('styles/main/images/upgrade.gif')?>"/>
+
+                <div style="text-align: center;margin: 20px 0">
+                    <a href="" class="btn btn-primary disabled"><?php _l('Feature Coming soon ')?></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal  " tabindex="-1" id="becomeModal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content p-0">
+            <div class="modal-body">
+                <img src="<?php echo assetUrl('styles/main/images/upgrade.gif')?>"/>
+
+                <div style="text-align: center;margin: 20px 0">
+                    <a href="" data-toggle="modal" data-target="#choosePlanModal"  class="btn btn-primary"><?php _l('Become a member')?></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal  " tabindex="-1" id="newWelcomeModal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content p-0">
+            <div class="modal-body">
+                <iframe style="width: 100%" height="415" src="https://www.youtube.com/embed/5ISH7kMcEQM?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                <div style="text-align: center;margin: 20px 0">
+                    <h2>
+                        Welcome on board!, <br/>
+                        <span style="font-size:18px !important;font-weight: lighter">
+                            Let me show you a quick video about Timably features, interface to get you started quickly
+                        </span>
+                    </h2>
+                    <a href="" onclick="return Timably.closeWelcome()" class="btn btn-primary">Yes, Thanks I have Watch it</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal  modal-right modal-right" tabindex="-1" id="addTemplatesModal" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content p-0">
@@ -125,127 +312,3 @@
     </div>
 </div>
 
-<div class="modal  modal-right modal-right" tabindex="-1" id="switchAccountsModal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content ">
-            <div class="modal-header pl-0 pr-0">
-                <h5 class="modal-title"><?php _l('choose-account')?></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <?php $accounts = model('social')->getAccounts();?>
-            <div  class="modern-table">
-                <div class="table-body clearfix">
-                    <?php foreach($accounts as $account):?>
-                        <a href="" onclick="return Account.switchAccount('<?php echo getFullUrl()?>?switch=<?php echo $account['username']?>')" class="table-row clearfix" style="display: block">
-                            <div class="each">
-                                <div class="avatar-sm-round" style="background-image: url(<?php echo assetUrl($account['avatar'])?>)"></div>
-                            </div>
-                            <div class="each">
-                                <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
-                                <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
-                            </div>
-                        </a>
-                    <?php endforeach?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade bd-example-modal-lg " id="fileManagerModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><i class="icons icon-folder-alt"></i> <?php _l('choose-media')?></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" >
-                <div id="choose-files-container" data-container="#choose-files-container" data-paginate="true" data-offset="0" data-url="<?php echo url('files/load')?>" class="files-grid clearfix content-scroller modern-scroll" data-height="50">
-
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('close')?></button>
-                <button type="button" class="btn btn-primary color-white" onclick="return Filemanager.add()"><?php _l('add')?></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" tabindex="-1" id="postPreviewModal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="post-preview" >
-                <div class="regular-instagram-post ">
-                    <div class="card-header" style="text-align:center;border-bottom: solid 1px #F5F5F5;">
-                        <img src="<?php echo assetUrl('assets/images/instagram-logo.png')?>"/>
-                    </div>
-                    <div class="instagram-post-header">
-                        <div class="avatar"></div>
-                        <div class="header-info">
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                    <div class="instagram-post-content">
-
-                    </div>
-                    <div class="instagram-post-caption">
-                        <div></div>
-                        <div></div>
-                    </div>
-                </div>
-                <div class="video-instagram-post hide">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal  modal-right" tabindex="-1" id="addFolderModal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <form action="<?php echo url('files')?>" method="post" class="general-form short-form">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><?php _l('create-collection')?></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="val[folder]" value="1"/>
-                    <input type="hidden" name="val[folder_id]" value="0"/>
-                    <div class="form-group floating-label mt-4">
-                        <label><?php _l('collection-title')?></label>
-                        <input type="text" class="form-control" name="val[name]"/>
-                    </div>
-
-                    <div class="form-group mt-5">
-                        <label><?php _l('collection-color')?></label>
-
-                        <div class="btn-group-toggle folder-color-chooser" data-toggle="buttons">
-                            <?php $i=0; foreach(model('file')->getFolderColors() as $color):?>
-                                <label class="btn btn-secondary btn-float <?php echo ($i == 0) ? 'active':null?> btn-sm shadow-none" style="background-color:<?php echo $color?>">
-                                    <input type="radio" name="val[color]" <?php echo ($i == 0) ? 'checked':null?> id="option<?php echo $i?>" autocomplete="off" value="<?php echo $color?>">
-                                </label>
-
-                                <?php $i++; endforeach;?>
-
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
-                    <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>

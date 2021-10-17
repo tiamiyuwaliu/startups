@@ -1,0 +1,61 @@
+<div class="theme-main-menu sticky-menu theme-menu-two">
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="logo"><a href="<?php echo url('')?>"><img style="width: 200px" src="<?php echo assetUrl('styles/main/images/timably-logo-single-line.png')?>" alt=""></a></div>
+
+        <nav id="mega-menu-holder" class="navbar navbar-expand-lg">
+            <div  class="container nav-container">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="flaticon-menu-of-three-lines"></i>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <div class="d-lg-flex justify-content-between align-items-center">
+                        <ul class="navbar-nav">
+                            <li class="nav-item  position-static">
+                                <a class="nav-link " href="<?php echo url()?>">Home</a>
+                            </li>
+                            <li class="nav-item  position-static">
+                                <a class="nav-link " href="<?php echo url()?>#features">Features</a>
+                            </li>
+                            <li class="nav-item  position-static">
+                                <a class="nav-link " href="<?php echo url()?>#pricing">Pricing</a>
+                            </li>
+                            <li class="nav-item  position-static <?php echo ($C->request->segment(0) == 'blogs') ? 'active':null?>">
+                                <a class="nav-link " href="<?php echo url('blogs')?>">Blogs</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="" class="nav-link dropdown-toggle">More</a>
+                                <div class="dropdown-menu">
+                                    <a href="<?php echo url('home')?>" class="dropdown-item">Help center</a>
+                                    <a href="<?php echo url('contact-us')?>" class="dropdown-item">Contact us</a>
+
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul class="right-widget">
+                            <li class="d-sm-flex">
+
+
+                                <ul class="user-login-button d-flex align-items-center justify-content-center">
+                                   <?php if(model('user')->isLoggedIn()):?>
+                                       <li>
+                                           <a href="<?php echo url('home')?>" class="signUp-action">Go to APP</a>
+                                       </li>
+                                    <?php else:?>
+                                       <li>
+                                           <a href="<?php echo url('login')?>" class="signIn-action">Login</a>
+                                       </li>
+                                       <li>
+                                           <a href="<?php echo url('signup')?>" class="signUp-action">Sign Up</a>
+                                       </li>
+                                    <?php endif?>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>

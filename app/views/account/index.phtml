@@ -1,32 +1,23 @@
 <div class="content-top">
-    <div class="left-actions">
-        <h6 class=""><?php _l('instagram-profiles')?>
-            <span class="dropdown ml-3">
-                <a data-toggle="dropdown" href="" class="btn btn-primary btn-float btn-sm"><i class="las la-plus"></i></a>
-                <div class="dropdown-menu account-dropdown">
-                    <div class="account-add-startup" >
-                        <h5 class="text-center p-3"><span class="badge badge-pill  badge-light " style="width:30px;height: 30px;border-radius:100px;"><i class="icons icon-user-follow"></i></span> <?php _l('add-account')?></h5>
-                        <a href="">
-                            <i class="lab la-facebook-f"></i>
-                            <div>
-                                <span class="title"><?php _l('login-with-facebook')?></span>
-                                <span><?php _l('using-instagram-api')?></span>
-                            </div>
-                        </a>
-                        <a href="" onclick="return Account.open()">
-                            <i class="las la-user-circle"></i>
-                            <div>
-                                <span class="title"><?php _l('login-with-credential')?></span>
-                                <span><?php _l('using-username-password')?></span>
-                            </div>
-                        </a>
 
-                        <img style="width: 100%;" src="<?php echo assetUrl('styles/main/images/add-account.png')?>"/>
-                    </div>
-                </div>
-            </span>
-        </h6>
-
+    <div class="nav-tabs-scrollable">
+        <ul class="nav  nav-tabs icon-navs" id="justifiedTab" role="tablist">
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'all')? 'active': null?>" data-ajax="true" href="<?php echo url('accounts')?>"  role="tab"><i style="" class="las la-shapes"></i></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'facebook')? 'active': null?>" data-ajax="true" href="<?php echo url('accounts/facebook')?>"  role="tab"><i style="" class="lab la-facebook-f"></i></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'instagram')? 'active': null?>" data-ajax="true" href="<?php echo url('accounts/instagram')?>" role="tab"><i style=""  class="lab la-instagram"></i></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'twitter')? 'active': null?>" data-ajax="true" href="<?php echo url('accounts/twitter')?>"  role="tab"><i style=""  class="lab la-twitter"></i></a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="home" aria-selected="true" class="nav-link <?php echo ($page == 'linkedin')? 'active': null?>" data-ajax="true" href="<?php echo url('accounts/linkedin')?>"  role="tab"><i style=""  class="lab la-linkedin"></i></a>
+            </li>
+        </ul>
     </div>
     <div class="right-actions">
         <form class="form-inline" style="display: inline-block">
@@ -41,9 +32,8 @@
 
         </div>
         <div class="dropleft" style="display: inline-block">
-            <a href="" data-toggle="dropdown" class="btn btn-light shadow-none"><i class="las la-bars"></i></a>
+            <a href="" data-toggle="dropdown" class="btn btn-primary shadow-none" style="min-width: auto"><i class="las la-bars"></i></a>
             <div class="dropdown-menu-lg dropdown-menu">
-                <a href="" class="dropdown-item" onclick="return Account.multiAction('sync')"><i class="las la-check"></i>  Synchronize</a>
                 <a href="" class="dropdown-item" onclick="return Account.multiAction('delete-action')"><i class="las la-trash-alt"></i> Delete accounts</a>
             </div>
         </div>
@@ -51,117 +41,31 @@
 </div>
 
 
-<div class="content-body content-scroller content-body.with-tabs">
-    <div class="row">
-        <div class="col-md-3 hide">
-            <div class="account-add-startup shadow-1" >
-                <h5 class="text-center p-3"><span class="badge badge-pill  badge-light " style="width:30px;height: 30px;border-radius:100px;"><i class="icons icon-user-follow"></i></span> <?php _l('add-account')?></h5>
-                <a href="">
-                    <i class="lab la-facebook-f"></i>
-                    <div>
-                        <span class="title"><?php _l('login-with-facebook')?></span>
-                        <span><?php _l('using-instagram-api')?></span>
-                    </div>
-                </a>
-                <a href="" onclick="return Account.open()">
-                    <i class="las la-user-circle"></i>
-                    <div>
-                        <span class="title"><?php _l('login-with-credential')?></span>
-                        <span><?php _l('using-username-password')?></span>
-                    </div>
-                </a>
+<div class="content-body content-scroller " style="overflow: auto">
+    <div  id="accounts-container">
+        <?php if($page != 'all'):?>
+            <div class="clearfix">
+                <h4 class="float-left"><?php echo ucwords($page)?> <?php echo ($page == 'facebook') ? 'Pages & Groups' : 'accounts'?> </h4>
+                <div class="float-right">
+                    <?php if($page == 'facebook'):?>
+                        <a href="" data-target="#newFacebookAccountModal" data-toggle="modal"  class="btn btn-light shadow-none mtitle" title="Refresh accounts"  style="min-width: auto"><i class="las la-redo-alt"></i></a>
+                    <?php elseif($page == 'twitter'):?>
 
-                <img style="width: 100%;" src="<?php echo assetUrl('styles/main/images/add-account.png')?>"/>
+                    <?php elseif($page == 'linkedin'):?>
+
+                    <?php else:?>
+
+                    <?php endif?>
+                </div>
             </div>
-        </div>
-        <div class="col-md-12" id="accounts-container">
-            <?php $accounts = model('social')->getAccounts()?>
-            <?php echo view('account/list', array('accounts' => $accounts))?>
-        </div>
+            <hr/>
+        <?php endif?>
+        <?php $accounts = model('social')->getAccounts(null, null, $page)?>
+        <?php echo view('account/list', array('accounts' => $accounts))?>
     </div>
 </div>
 
-<div class="modal  modal-right modal-right-lg" tabindex="-1" id="addAccountModal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <form action="<?php echo url('accounts')?>" method="post" class="general-form short-form">
-            <div class="modal-content">
-                <div class="modal-header">
 
-                </div>
-                <div class="modal-body">
-                    <div class="stepper-horiz">
-                        <div class="stepper active detail-stepper pl-0">
-                            <div class="stepper-icon">
-                                <span>1</span>
-                            </div>
-                            <span class="stepper-text"><?php _l('provide-login-details')?></span>
-                        </div>
-                        <div class="stepper verification-stepper">
-                            <div class="stepper-icon">
-                                <span>2</span>
-                            </div>
-                            <span class="stepper-text"><?php _l('verify-account')?></span>
-                        </div>
-                        <div class="stepper">
-                            <div class="stepper-icon">
-                                <span>3</span>
-                            </div>
-                            <span class="stepper-text"><?php _l('completed')?></span>
-                        </div>
-                    </div>
-                    <div class="row mt-5">
-                        <div class="col-md-7">
-                            <div class="account-add-first-step">
-                                <div class="form-group  floating-label mt-3">
-                                    <label>Instagram <?php echo mb_strtolower(l('username'))?></label>
-                                    <input type="text" class="form-control form-control-lg" name="val[username]"/>
-                                </div>
-
-                                <div class="form-group  floating-label">
-                                    <label>Instagram <?php echo mb_strtolower(l('password'))?></label>
-                                    <input type="password" class="form-control form-control-lg" name="val[password]"/>
-                                </div>
-
-                                <div class="mt-5">
-                                    <button type="submit" class="btn btn-primary shadow-none  btn-lg "><?php _l('continue')?></button>
-                                    <button type="button"  data-dismiss="modal" class="btn shadow-none  btn-lg"><?php _l('cancel')?></button>
-                                </div>
-                            </div>
-                            <div class="account-add-second-step">
-                                <h6><?php _l('verification-needed')?></h6>
-                                <div class="bold p-2 pl-0 verification-text"></div>
-                                <div class="digit-group" data-group-name="digits" >
-                                    <input type="number" id="digit-1" name="val[digit_1]" data-next="digit-2" />
-                                    <input type="number" id="digit-2" name="val[digit_2]" data-next="digit-3" data-previous="digit-1" />
-                                    <input type="number" id="digit-3" name="val[digit_3]" data-next="digit-4" data-previous="digit-2" />
-                                    <span class="splitter">&ndash;</span>
-                                    <input type="number" id="digit-4" name="val[digit_4]" data-next="digit-5" data-previous="digit-3" />
-                                    <input type="number" id="digit-5" name="val[digit_5]" data-next="digit-6" data-previous="digit-4" />
-                                    <input type="number" id="digit-6" name="val[digit_6]" data-previous="digit-5" />
-                                </div>
-
-                                <div class="mt-5">
-                                    <button type="submit" class="btn btn-primary shadow-none  btn-lg "><?php _l('continue')?></button>
-                                    <button type="button" data-dismiss="modal" class="btn shadow-none  btn-lg"><?php _l('cancel')?></button>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-5">
-                            <div class="side-help">
-                                <img src="<?php echo assetUrl('styles/main/images/add-account-2.png')?>" style="width: 60%;margin: 10px auto;display: block"/>
-                                <p><?php _l('why-my-password-note')?>  </p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-            </div>
-        </form>
-    </div>
-</div>
 <div class="modal fade bd-example-modal-sm" id="accountOptionModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered ">
         <div class="modal-content shadow-10">

@@ -7,4 +7,12 @@ class Model {
         $this->db = Database::getInstance();
         $this->C = $controller;
     }
+
+    public function model($model) {
+        return model($model);
+    }
+
+    public function controller() {
+        return getController();
+    }
 }

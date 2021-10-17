@@ -3,15 +3,11 @@
         <img src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
 
         <h5><?php _l('no-accounts-added-yet')?> </h5>
+
+        <a href="" class="btn btn-primary" onclick="return Timably.openPane('#new-account-modal')"><?php _l('connect-account')?></a>
     </div>
 <?php else:?>
     <div class="grid-container clearfix">
-        <div class="each-container" style="display:none">
-            <div class="each ">
-
-            </div>
-        </div>
-
         <?php foreach($accounts as $account):?>
             <?php echo view('account/display', array('account' => $account));?>
         <?php endforeach?>

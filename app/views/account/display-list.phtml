@@ -3,7 +3,7 @@
         <div class="left"></div>
         <div class="right">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" data-id="<?php echo $account['id']?>" class="custom-control-input account-checkbox" id="customCheckInline<?php echo $account['id']?>">
+                <input type="checkbox" onclick="return Account.selectAccount(this, '<?php echo $account['id']?>')" data-id="<?php echo $account['id']?>" class="custom-control-input account-checkbox" id="customCheckInline<?php echo $account['id']?>">
                 <label class="custom-control-label" for="customCheckInline<?php echo $account['id']?>"></label>
             </div>
         </div>
@@ -14,37 +14,26 @@
             <div class="avatar-sm-round" style="background-image: url(<?php echo assetUrl($account['avatar'])?>)"></div>
         </div>
     </div>
-    <div class="each clearfix" style="width:20%">
+    <div class="each clearfix" style="width:35%">
         <div class="left"><?php _l('profile-pro')?></div>
         <div class="right">
             <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
-            <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
         </div>
     </div>
-    <div class="each clearfix" style="width:45%">
-        <div class="left"><?php _l('statistics')?></div>
-        <div class="right ">
-            <div class="clearfix account-list-statistic">
-                <div class="each-stat">
-                    <h6><?php _l('posts')?></h6>
-                    <span class="primary-color"><?php echo $account['posts']?></span>
-                </div>
-                <div class="each-stat">
-                    <h6><?php _l('followers')?></h6>
-                    <span class="info-color"><?php echo $account['followers']?></span>
-                </div>
-                <div class="each-stat">
-                    <h6><?php _l('following')?></h6>
-                    <span class="dark-color"><?php echo $account['following']?></span>
-                </div>
-            </div>
+
+    <div class="each clearfix" style="width:30%">
+        <div class="left"><?php _l('social-type')?></div>
+        <div class="right">
+            <h6 class=" text--wrapping"><?php echo ucwords($account['social_type'])?></h6>
         </div>
     </div>
+
+
     <div class="each clearfix" style="width:15%">
         <div class="left"><?php _l('actions')?></div>
         <div class="right">
             <div class="btn-group shadow-none">
-                <a href="" onclick="return Account.multiAction('sync', '<?php echo $account['id']?>')" class="btn btn-light  shadow-none btn-sm mtitle" title="<?php _l('sync-account')?>"><i class="las la-retweet"></i></a>
+                <a href=""  class="btn btn-light  shadow-none btn-sm mtitle" title="<?php _l('edit-account')?>"><i class="las la-pencil"></i></a>
                 <a href="" onclick="return Account.multiAction('delete-action', '<?php echo $account['id']?>')"  class="btn btn-light  shadow-none btn-sm mtitle" title="<?php _l('delete')?>"><i class="las la-trash-alt"></i></a>
             </div>
         </div>

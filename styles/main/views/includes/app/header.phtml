@@ -1,0 +1,87 @@
+<div class="header">
+    <div class="workspace-link-container dropdown">
+        <a href="" class="workspace-link clearfix mtitle" title="<?php _l('workspace')?>"   data-toggle="dropdown">
+
+            <span class="workspace-icon"><?php echo model('user')->extractLetters($C->workspace['title'])?></span>
+            <span class="workspace-user clearfix">
+            <?php $owner = model('user')->getUser($C->workspace['userid'])?>
+            <span class="user" style="background-image: url(<?php echo model('user')->getAvatar($owner)?>)"></span>
+            <?php $i = 0; foreach(model('workspace')->getMembers($C->workspaceId) as $member):?>
+                <?php if($i < 2):?>
+                    <span class="user" style="background-image: url(<?php echo model('user')->getAvatar($member)?>)"></span>
+                <?php endif?>
+                <?php $i++;endforeach;?>
+
+        </span>
+
+        </a>
+        <a href="" onclick="return Timably.openPane('#new-account-modal')" class="btn btn-light mtitle" title="Connect social profile" style="min-width: auto;border-radius:100px;width:35px;height:35px;position:relative;bottom: 8px;padding:7px 0;font-size:20px"><i class="las la-user-plus"></i></a>
+        <div class="dropdown-menu workspace-dropdown" style="width: 250px">
+
+            <?php foreach(model('workspace')->allWorkspaces() as $workspace):?>
+                <a onclick="return Timably.selectWorkspace(<?php echo $workspace['id']?>)" href="" class="dropdown-item <?php echo ($C->workspaceId == $workspace['id'])? 'selected':null?>" >
+                    <?php echo $workspace['title']?>
+                    <?php if($C->workspaceId == $workspace['id']):?>
+                        <i class="las la-check-circle float-right" style="font-size:20px"></i>
+                    <?php endif?>
+                </a>
+            <?php endforeach;?>
+            <div class="dropdown-divider"></div>
+            <a href="<?php echo url('workspace')?>" data-ajax="true"  class="dropdown-item"><strong><?php _l('manage-workspace')?></strong></a>
+        </div>
+    </div>
+    <div class="header-search-form shadow-1">
+        <input onkeyup="Timably.globalSearch(this)" value="<?php echo $C->request->input('term')?>" type="text" placeholder="<?php _l('search-posts-library')?>"/>
+        <i class="las la-search"></i>
+        <div class="header-search-result shadow-1 ">
+
+        </div>
+    </div>
+    <ul class="clearfix">
+        <li class="dropdown " style="display: none">
+            <?php $languages = model('admin')->getLanguages()?>
+            <a  data-toggle="dropdown" id="change-language-selector" class=" padding-sm btn dropdown-toggle language-selector shadow-none" href="#" >
+                <img style="width:20px" src="<?php echo assetUrl('assets/images/flags/'.Translator::instance()->lang().'.png')?>"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <?php foreach ($languages as $language):?>
+                    <a href="<?php echo url('change/language', array('id' => $language['id']))?>" class="dropdown-item"> <img style="width: 17px;" class="mr-1" src="<?php echo assetUrl('assets/images/flags/'.$language['id'].'.png')?>"/> <span class="pt-1"><?php echo $language['name']?></span></a>
+                <?php endforeach;?>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href=""  onclick="return Timably.loadQuickHelp('basic')" class="dropdown-toggle btn shadow-none">Help</a>
+            <div class="dropdown-menu">
+                <a href="" onclick="return Timably.loadQuickHelp('basic')" class="dropdown-item">Quick Help</a>
+                <a href="<?php echo url('helps')?>" class="dropdown-item ">Visit help center</a>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href="" data-toggle="dropdown" onclick="Timably.showNotification()" class="notification-icon  mtitle" title="Notifications"><i class="las la-bell"></i></a>
+            <div class="dropdown-menu static-dropdown-menu notification-dropdown" style="width:400px">
+
+            </div>
+        </li>
+        <li>
+            <a href="" class="notification-icon beamer-notification-btn hide"><i class="las la-flag"></i></a>
+        </li>
+        <li class="dropdown">
+            <a href="" data-toggle="dropdown" class="account-menu"><img src="<?php echo model('user')->getAvatar()?>"/> </a>
+            <div class="dropdown-menu dropdown-menu-right dropdow-menu-lg">
+                <a class="dropdown-item" data-ajax="true" href="<?php echo url('profile')?>"><?php _l('my-profile')?></a>
+                <a class="dropdown-item" data-ajax="true" href="<?php echo url('accounts')?>"><?php _l('manage-accounts')?></a>
+
+                <?php if(model('user')->hasTried()):?>
+                <a class="dropdown-item" data-ajax="true" href="<?php echo url('profile/billing')?>"><?php _l('billing')?></a>
+                <?php endif?>
+                <a class="dropdown-item" data-ajax="true" href="<?php echo url('profile/refer')?>"><?php _l('refer-earn')?></a>
+
+                <?php if(model('user')->isAdmin()):?>
+                    <a class="dropdown-item"  href="<?php echo url('admincp')?>"><?php _l('admin-panel')?></a>
+                <?php endif?>
+                <div class="dropdown-divider" ></div>
+                <a class="dropdown-item"  href="<?php echo url('logout')?>"><?php _l('logout')?></a>
+            </div>
+        </li>
+    </ul>
+</div>

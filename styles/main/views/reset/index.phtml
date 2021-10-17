@@ -1,24 +1,46 @@
-<div class="pane-pages-container">
-    <div class="container">
-        <div class="content-pane">
+<div class="user-data-page clearfix d-lg-flex">
+    <div class="illustration-wrapper d-flex align-items-center justify-content-between flex-column">
+        <h3 class="font-rubik">Want to save huge  <br>time? <a href="<?php echo url('signup')?>">Sign up for account</a></h3>
+        <div class="illustration-holder">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.svg')?>" alt="" class="illustration">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.1.svg')?>" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.2.svg')?>" alt="" class="shapes shape-two">
+        </div>
+    </div> <!-- /.illustration-wrapper -->
+
+    <div class="form-wrapper">
+        <div class="d-flex justify-content-between">
+            <div class="logo"><a href="<?php echo url()?>"><img src="<?php echo url('styles/main/images/timably-logo.png')?>" alt="" style="width:150px"></a></div>
+            <a href="<?php echo url('login')?>" class="font-rubik go-back-button">Log in</a>
+        </div>
+        <form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
+
             <?php if($expired):?>
                 <div class="alert alert-danger"><?php _l('reset-link-expired')?> <a href="<?php echo url('forgot')?>" data-ajax="true" class="color-black bolder"><?php _l('forgot-password')?></a> </div>
             <?php else:?>
-                <div class="title"><?php _l('reset-password')?></div>
+                <h3>Choose new Password</h3>
+                <div class="row " style="margin-top: 30px !important;">
 
-                <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
-                    <div class="form-group">
-                        <label><?php _l('new-password')?></label>
-                        <input type="password" class="form-control" name="val[password]"/>
-                    </div>
-                    <div class="form-group">
-                        <label><?php _l('confirm-password')?></label>
-                        <input type="password" class="form-control" name="val[confirm]"/>
+                    <div class="col-12">
+
+                        <div class="input-group-meta mb-40 sm-mb-40">
+                            <label><?php _l('new-password')?></label>
+                            <input type="password" class="form-control" name="val[password]"/>
+                        </div>
+                        <div class="input-group-meta mb-40 sm-mb-40">
+                            <label><?php _l('confirm-password')?></label>
+                            <input type="password" class="form-control" name="val[confirm]"/>
+                        </div>
                     </div>
 
-                    <button class="btn  btn-primary"><?php _l('submit')?></button>
-                </form>
+                    <div class="col-12">
+                        <button class="theme-btn-one mt-20 mb-50">Submit</button>
+                    </div>
+                </div>
             <?php endif?>
-        </div>
-    </div>
-</div>
+
+        </form>
+    </div> <!-- /.form-wrapper -->
+</div> <!-- /.user-data-page -->
+
+

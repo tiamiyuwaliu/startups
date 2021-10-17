@@ -1,0 +1,10 @@
+<?php $user = model('user')->getUser($activity['userid'])?>
+<?php if($user):?>
+    <div class="comment ">
+        <div class="avatar" style="background-image: url(<?php echo model('user')->getAvatar($user)?>)"></div>
+        <div class="comment-info">
+            <h6><?php echo $user['full_name']?> <span><?php _l($activity['activity'])?></span> - <span class="time"><?php echo time_elapsed_string('@'.$activity['created'])?></span></h6>
+
+        </div>
+    </div>
+<?php endif?>

@@ -1,0 +1,60 @@
+<div class="content-top">
+
+    <?php echo view('posts/menu')?>
+
+</div>
+<?php $page = $C->request->segment(1, 'drafts')?>
+<div class="pane-container">
+    <div class="pane-head clearfix" style="padding: 1px 20px">
+        <div class="float-left">
+            <?php if($page == 'posts'):?>
+                <a href="<?php echo url('publishing/posts')?>" data-ajax="true" class="btn shadow-none " style="margin-top: 8px"><?php _l('drafts')?></a>
+
+            <?php else:?>
+                <?php $type = $C->request->segment(2, 'scheduled')?>
+                <a href="<?php echo url('publishing/history/scheduled')?>" data-ajax="true" class="btn shadow-none <?php echo ($type == 'scheduled') ? 'btn-light':null?> " style="margin-top: 8px"><?php _l('scheduled')?></a>
+                <a href="<?php echo url('publishing/history/published')?>" data-ajax="true" class="btn shadow-none <?php echo ($type == 'published') ? 'btn-light':null?>" style="margin-top: 8px"><?php _l('published')?></a>
+                <a href="<?php echo url('publishing/history/failed')?>" data-ajax="true" class="btn shadow-none <?php echo ($type == 'failed') ? 'btn-light':null?>" style="margin-top: 8px"><?php _l('failed')?></a>
+
+            <?php endif?>
+
+        </div>
+
+        <div class="float-right">
+            <div class="dropdown " style="margin-top: 10px">
+                <a href="" class="btn  btn-light shadow-none select-button" onclick="return selectAllFiles(this)"><i class="las la-check"></i> <?php _l('mark-all')?></a>
+                <a href="" class="btn  btn-light shadow-none deselect-button hide" onclick="return deselectAllFiles(this)"><i class="las la-check"></i> <?php _l('unmark-all')?></a>
+
+                <button class="btn btn-light dropdown-toggle disabled action-button  shadow-none" type="button" id="selectActionBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <?php _l('bulk-action')?>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" data-message="<?php _l('you-sure-want-delete-post')?>" onclick="return PostEditor.deleteSelected(this)" href="#"><?php _l('delete')?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-scroller" data-height="100">
+        <div class=" the-content"  style="max-width: 70%;margin: 20px auto">
+            <div class="general-form select-form">
+                <input type="hidden" name="val[action]" value="" id="select-action-input"/>
+
+                <?php if(empty($posts->results())):?>
+                    <div class="empty-result">
+                        <img style="max-width:70%;margin: 20px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+                        <h5><?php _l('no-media-added-yet')?> </h5>
+                    </div>
+                <?php else:?>
+                    <?php foreach($posts->results() as $post): ?>
+                        <?php echo view('posts/display', array('post' => $post, 'type' => $type))?>
+                    <?php endforeach;?>
+                <?php endif?>
+            </div>
+
+            <?php echo (!empty($posts->results()))  ? $posts->links() : '';?>
+        </div>
+
+    </div>
+
+</div>

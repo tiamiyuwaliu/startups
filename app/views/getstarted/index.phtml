@@ -1,0 +1,69 @@
+<script>  fbq('track', 'CompleteRegistration');</script>
+<div class="user-data-page clearfix d-lg-flex">
+    <div class="illustration-wrapper d-flex align-items-center justify-content-between flex-column">
+        <p></p>
+        <div class="illustration-holder">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.svg')?>" alt="" class="illustration">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.1.svg')?>" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.2.svg')?>" alt="" class="shapes shape-two">
+        </div>
+    </div> <!-- /.illustration-wrapper -->
+
+    <div class="form-wrapper">
+        <div class="d-flex justify-content-between">
+            <div class="logo"><a href="<?php echo url()?>"><img src="<?php echo url('styles/main/images/timably-logo.png')?>" alt="" style="width:150px"></a></div>
+        </div>
+        <form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
+            <h3 style="padding-left: 10px">Welcome <span style="font-weight: lighter;color:grey"><?php echo model('user')->authUser['full_name']?>!</span></h3>
+            <p class="header-info pt-10 pb-30"></p>
+
+            <div class="row" style="padding-left: 10px">
+                <div class="col-12">
+                    <div class="input-group-meta mb-40 sm-mb-40">
+                        <label style="font-size: 20px">Company Name</label>
+                        <input required name="val[name]" value="<?php echo model('user')->authUser['full_name']?>" type="text" placeholder="Betty biz">
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label style="font-size: 20px">What best describe you?</label>
+
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio1" checked name="val[describe]" value="WAHM/SAHM" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadio1">WAHM/SAHM</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio2" name="val[describe]" value="Part Time Sales" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadio2">Part Time Sales</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio3" name="val[describe]" value="9 to 5 with a Side Hustle" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadio3">9 to 5 with a Side Hustle</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio4" name="val[describe]" value="Other" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadio4">Other</label>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <label style="font-size: 20px">Which Products do deal with?</label>
+                    <select multiple class="input-tags" name="val[products][]">
+                        <?php
+                            $products = explode(PHP_EOL, file_get_contents(path('products.txt')));
+                        ?>
+                        <?php foreach($products as $product):?>
+                            <option value="<?php echo $product?>"><?php echo $product?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary shadow-none">Continue</button>
+                </div>
+
+            </div>
+
+        </form>
+    </div> <!-- /.form-wrapper -->
+</div> <!-- /.user-data-page -->

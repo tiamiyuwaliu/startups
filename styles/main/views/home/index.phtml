@@ -1,4 +1,613 @@
-<?php echo view('home/header', array('active' => 'home'))?>
-<a data-ajax="true" href="<?php echo url('login')?>">Login</a>
-<a data-ajax="true" href="<?php echo url('signup')?>">Signup here</a>
-<?php echo view('home/footer')?>
+<div class="main-page-wrapper p0 font-gordita">
+    <!-- ===================================================
+        Loading Transition
+    ==================================================== -->
+
+    <!--
+    =============================================
+        Theme Main Menu
+    ==============================================
+    -->
+    <?php echo view('home/menu')?>
+
+
+    <!--
+    =============================================
+        Theme Hero Banner
+    ==============================================
+    -->
+    <div class="hero-banner-nine lg-container">
+        <img src="<?php echo assetUrl('styles/main/')?>images/shape/190.svg" alt="" class="shapes bg-shape">
+        <div class="container">
+            <div class="illustration-container">
+                <div class="" style="width: 100%;height:450px;background:#fff;overflow: hidden;border-top-left-radius:15px;border-bottom-left-radius: 15px">
+                    <iframe style="width: 100%;height:100%" src="https://www.youtube.com/embed/KQ0wTHWhbuA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1 class="hero-heading">Simplified <span>Scheduling <img src="<?php echo assetUrl('styles/main/')?>images/shape/189.svg" alt=""></span> app for all.</h1>
+                    <p class="hero-sub-heading" style="padding: 36px 0 58px 0px;padding-right: 40px">The easiest way to schedule your Facebook parties to your various groups with Twitter , Instagram and LinkedIn auto posting.</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="partner-slider-two mt-130 md-mt-100">
+            <div class="container">
+                <p>Simplified scheduling for popular <span>Social networking</span> platforms</p>
+                <div class="partnerSliderTwo">
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/facebook.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/instagram.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/twitter.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/linkedin.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/facebook.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/instagram.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/twitter.png" alt=""></div>
+                    </div>
+                    <div class="item">
+                        <div class="img-meta d-flex align-items-center"><img style="width:150px" src="<?php echo assetUrl('styles/main/')?>images/linkedin.png" alt=""></div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /.partner-slider-two -->
+    </div> <!-- /.hero-banner-nine -->
+
+
+
+    <!--
+    =============================================
+        Fancy Feature Twenty Two
+    ==============================================
+    -->
+    <div class="fancy-feature-twentyTwo mt-200 md-mt-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-md-8 m-auto" data-aos="fade-up" data-aos-duration="1200">
+                    <div class="title-style-eight text-center mb-40 md-mb-10">
+                        <h2>Let’s the fun  <span>begin <img src="<?php echo assetUrl('styles/main/')?>images/shape/191.svg" alt=""></span></h2>
+                        <p>We make life easier for you
+                            Automate your Facebook parties by scheduling your posts ahead of time, and leave the dirty work for us to do</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="1200">
+                    <div class="block-style-twentyTwo">
+                        <div class="icon d-flex align-items-center justify-content-center" style="background:#FF4A8B;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/121.svg" alt=""></div>
+                        <h4>Create party & Template</h4>
+                        <p>Create parties & templates with our awesome tools</p>
+                    </div> <!-- /.block-style-twentyTwo -->
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
+                    <div class="block-style-twentyTwo">
+                        <div class="icon d-flex align-items-center justify-content-center" style="background:#6D49FF;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/122.svg" alt=""></div>
+                        <h4>Schedule</h4>
+                        <p>Select your Facebook groups and Schedule your party templates</p>
+                    </div> <!-- /.block-style-twentyTwo -->
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+                    <div class="block-style-twentyTwo">
+                        <div class="icon d-flex align-items-center justify-content-center" style="background:#FFB951;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/123.svg" alt=""></div>
+                        <h4>Do More..</h4>
+                        <p>You can schedule posts to your Facebook Pages,Instagram, Twitter, Linkedin e.t.c</p>
+                    </div> <!-- /.block-style-twentyTwo -->
+                </div>
+            </div>
+        </div>
+    </div> <!-- /.fancy-feature-twentyTwo -->
+    <div class="fancy-feature-fifteen mt-120 md-mt-80" id="product">
+        <div class="bg-wrapper">
+            <div class="container">
+                <div class="sldier-wrapper">
+                    <div id="screenSlider" class="carousel slide" data-ride="carousel" data-interval="200000">
+                        <div class="row">
+                            <div class="col-lg-8 m-auto">
+                                <ol class="carousel-indicators justify-content-between">
+                                    <li data-target="#screenSlider" data-slide-to="0" class="active">
+                                        <div class="d-flex align-items-center">
+                                            <img src="<?php echo assetUrl('styles/main/')?>images/icon/90.svg" alt="">
+                                            <p>Calendar</p>
+                                        </div>
+                                    </li>
+                                    <li data-target="#screenSlider" data-slide-to="1" class="">
+                                        <div class="d-flex align-items-center">
+                                            <img src="<?php echo assetUrl('styles/main/')?>images/icon/91.svg" alt="">
+                                            <p>Library</p>
+                                        </div>
+                                    </li>
+                                    <li data-target="#screenSlider" data-slide-to="2" class="">
+                                        <div class="d-flex align-items-center">
+                                            <img src="<?php echo assetUrl('styles/main/')?>images/icon/92.svg" alt="">
+                                            <p>Parties</p>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="carousel-inner mt-60 sm-mt-40">
+                            <div class="carousel-item active">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/calendar.png" alt="" class="m-auto">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/library.png" alt="" class="m-auto">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/parties.png" alt="" class="m-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.sldier-wrapper -->
+            </div>
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/168.svg" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/169.svg" alt="" class="shapes shape-two">
+        </div> <!-- /.bg-wrapper -->
+    </div>
+
+    <div class="fancy-feature-one pb-150 md-pb-80">
+        <div class="row mt-3">
+            <div class="col-xl-7 col-md-8 m-auto" data-aos="fade-up" data-aos-duration="1200">
+                <div class="title-style-eight text-center  md-mb-10">
+                    <h2>Run your  <span>parties <img src="<?php echo assetUrl('styles/main/')?>images/shape/191.svg" alt=""></span> <br/>in 4 steps</h2>
+                    </div>
+            </div>
+        </div>
+        <div class="block-style-one">
+            <div class="container">
+                <div class="d-lg-flex align-items-center justify-content-between inner-container">
+                    <div class="block-meta-data text-center">
+                        <div class="line-dot-container">
+                            <div class="icon-box">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/icon/01.svg" alt="">
+                            </div> <!-- /.icon-box -->
+                            <p>Create Template</p>
+                        </div>
+                        <div class="hover-content"><span>Create a party templates from your library section</span></div>
+                    </div> <!-- /.block-meta-data -->
+
+                    <div class="block-meta-data text-center">
+                        <div class="line-dot-container">
+                            <div class="icon-box">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/icon/02.svg" alt="">
+                            </div> <!-- /.icon-box -->
+                            <p>Add Media & Text Posts</p>
+                        </div>
+                        <div class="hover-content"><span>You add posts to your party template, you can add single media post, or multiple media posts or only text post</span></div>
+                    </div> <!-- /.block-meta-data -->
+
+                    <div class="block-meta-data text-center">
+                        <div class="line-dot-container">
+                            <div class="icon-box">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/icon/03.svg" alt="">
+                            </div> <!-- /.icon-box -->
+                            <p>Publish your party</p>
+                        </div>
+                        <div class="hover-content text-center"><span>Go to publishing, click the plus button and start a party , select from your party and wow party created</span></div>
+                    </div> <!-- /.block-meta-data -->
+
+                    <div class="block-meta-data text-center">
+                        <div class="line-dot-container">
+                            <div class="icon-box">
+                                <img src="<?php echo assetUrl('styles/main/')?>images/icon/04.svg" alt="">
+                            </div> <!-- /.icon-box -->
+                            <p>See Results</p>
+                        </div>
+                        <div class="hover-content text-right"><span>Monitor your party posts and see the published posts, pending e.t.c</span></div>
+                    </div> <!-- /.block-meta-data -->
+                </div>
+            </div> <!-- /.container -->
+        </div> <!-- /.block-style-one -->
+    </div>
+
+    <div class="fancy-text-block-six ">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 aos-init aos-animate" data-aos="fade-right" data-aos-duration="1200">
+                    <div class="title-style-three mb-35">
+                        <p>GET STARTED IN MINUTES</p>
+                        <h2>
+                            <span>3 Reasons why we are  <img src="<?php echo assetUrl('styles/main/')?>images/shape/line-shape-3.svg" alt=""></span>
+                            different.
+                        </h2>
+                    </div>
+
+                    <!-- Accordion Style Two -->
+                    <div id="accordion" class="accordion-style-two pr-5">
+                        <div class="card shadow-none">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link">
+                                       We created tools for your Facebook Parties
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseOne" class="collapse show">
+                                <div class="card-body">
+                                    <p>  We have create every needed tools to make your Facebook party easier. You can create templates, share templates with friends and re-use it unlimited times</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow-none" >
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link">
+                                        We support other social network platform
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse">
+                                <div class="card-body">
+                                    <p>Not only Facebook parties you can do with Timably , you can create automations for your Instagram, LinkedIn profile and pages, and Twitter</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow-none">
+                            <div class="card-header" id="headingThree">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link">
+                                        We give you powerful Photo Editing studio
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseThree" class="collapse">
+                                <div class="card-body">
+                                    <p>Unlike other scheduler which only give you Canva or Crello , we give you more with our Photo Editing studio so you can stop paying Canva or Crello monthly if you choose to</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-meta-container aos-init" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="100">
+            <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/post-editor.png" alt="">
+            <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/create-party.png" alt="">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/22.svg" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/23.svg" alt="" class="shapes shape-two">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/24.svg" alt="" class="shapes shape-three">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/25.svg" alt="" class="shapes shape-four">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/26.svg" alt="" class="shapes shape-five">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/27.svg" alt="" class="shapes shape-six">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/28.svg" alt="" class="shapes shape-seven">
+        </div>
+    </div>
+    <!--
+    =============================================
+        Fancy Feature Twenty Three
+    ==============================================
+    -->
+    <div class="fancy-feature-twentyThree mt-170 md-mt-100" id="feature">
+        <div class="container">
+            <div class="title-style-nine text-center pb-180 md-pb-100" data-aos="fade-up" data-aos-duration="1200">
+                <h6>Our Features</h6>
+                <h2>Can you  <span>imagine? <img src="<?php echo assetUrl('styles/main/')?>images/shape/192.svg" alt=""></span></h2>
+                <p>You were able to bunch posts or create a party template one at a time and easily schedule them in a minute</p>
+            </div>
+            <div class="block-style-twentyThree">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 order-lg-last ml-auto" data-aos="fade-left" data-aos-duration="1200">
+                        <div class="screen-container ml-auto">
+                            <div class="oval-shape" style="background:#69FF9C;"></div>
+                            <div class="oval-shape" style="background:#FFF170;"></div>
+                            <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/calendar.png" alt="" class="shapes shape-one">
+                        </div> <!-- /.screen-container -->
+                    </div>
+                    <div class="col-lg-5 order-lg-first" data-aos="fade-right" data-aos-duration="1200">
+                        <div class="text-wrapper">
+                            <h6>Make your schedule easily</h6>
+                            <h3 class="title">Make your schedule Online easily.</h3>
+                            <p>Make your schedule easily with our awesome calenda</p>
+                        </div> <!-- /.text-wrapper -->
+                    </div>
+                </div>
+            </div> <!-- /.block-style-twentyThree -->
+
+            <div class="block-style-twentyThree">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="screen-container mr-auto" data-aos="fade-right" data-aos-duration="1200">
+                            <div class="oval-shape" style="background:#FFDE69;"></div>
+                            <div class="oval-shape" style="background:#FF77D9;"></div>
+                            <img src="<?php echo assetUrl('styles/main/')?>images/screenshots/post-editor.png" alt="" class="shapes shape-two">
+                        </div> <!-- /.screen-container -->
+                    </div>
+                    <div class="col-lg-5 ml-auto" data-aos="fade-left" data-aos-duration="1200">
+                        <div class="text-wrapper">
+                            <h6>Save</h6>
+                            <h3 class="title"> Save posts as draft, queue your posts e.t.c</h3>
+                            <p> We got you covered , you can save your posts , send it to queue , choose a post time or schedule instantly </p>
+                        </div> <!-- /.text-wrapper -->
+                    </div>
+                </div>
+            </div> <!-- /.block-style-twentyThree -->
+
+
+        </div>
+    </div> <!-- /.fancy-feature-twentyThree -->
+
+
+
+    <!--
+    =============================================
+        Fancy Feature Twenty Four
+    ==============================================
+    -->
+    <div class="fancy-feature-twentyFour pt-90 md-pt-60" id="service">
+        <div class="container">
+            <div class="title-style-nine text-center">
+                <h6>More Included</h6>
+                <h2>More things we have  <span>for you <img src="<?php echo assetUrl('styles/main/')?>images/shape/194.svg" alt=""></span></h2>
+            </div>
+        </div>
+        <div class="bg-wrapper mt-100 md-mt-80">
+            <a href="#feedback" class="click-scroll-button scroll-target d-flex justify-content-center"><img src="<?php echo assetUrl('styles/main/')?>images/shape/200.svg" alt=""></a>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 d-flex mb-35" data-aos="fade-up" data-aos-duration="1200">
+                        <div class="block-style-twentyFour">
+                            <div class="d-flex align-items-start">
+                                <div class="icon d-flex align-items-center justify-content-center" style="background: #3FE193;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/124.svg" alt=""></div>
+                                <div class="text">
+                                    <h4>Workspace</h4>
+                                    <p>Are you an agent or you have multiple brands, you can arrange your brands into workspace</p>
+                                </div>
+                            </div>
+                        </div> <!-- /.block-style-twentyFour -->
+                    </div>
+                    <div class="col-lg-6 d-flex mb-35" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
+                        <div class="block-style-twentyFour">
+                            <div class="d-flex align-items-start">
+                                <div class="icon d-flex align-items-center justify-content-center" style="background: #FF4F86;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/125.svg" alt=""></div>
+                                <div class="text">
+                                    <h4>Powerful Drag & Drap</h4>
+                                    <p>You can save unlimited graphics for your business with ability to drag and drop in any collections(folders)</p>
+                                </div>
+                            </div>
+                        </div> <!-- /.block-style-twentyFour -->
+                    </div>
+                    <div class="col-lg-6 d-flex mb-35" data-aos="fade-up" data-aos-duration="1200">
+                        <div class="block-style-twentyFour">
+                            <div class="d-flex align-items-start">
+                                <div class="icon d-flex align-items-center justify-content-center" style="background: #FFCF39;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/126.svg" alt=""></div>
+                                <div class="text">
+                                    <h4>Unlimited social accounts</h4>
+                                    <p>We don’t limit you on how many social network you can manage , you can also arrange them into workspace </p>
+                                </div>
+                            </div>
+                        </div> <!-- /.block-style-twentyFour -->
+                    </div>
+                    <div class="col-lg-6 d-flex mb-35" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
+                        <div class="block-style-twentyFour">
+                            <div class="d-flex align-items-start">
+                                <div class="icon d-flex align-items-center justify-content-center" style="background: #6D64FF;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/127.svg" alt=""></div>
+                                <div class="text">
+                                    <h4>Team Collaboration</h4>
+                                    <p>We provide you with tools for your team with post approval , internal comments e.t.c </p>
+                                </div>
+                            </div>
+                        </div> <!-- /.block-style-twentyFour -->
+                    </div>
+                    <div class="col-lg-6 d-flex mb-35" data-aos="fade-up" data-aos-duration="1200">
+                        <div class="block-style-twentyFour">
+                            <div class="d-flex align-items-start">
+                                <div class="icon d-flex align-items-center justify-content-center" style="background: #E752FF;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/128.svg" alt=""></div>
+                                <div class="text">
+                                    <h4>Captions & Hashtags</h4>
+                                    <p>Do you re-use post descriptions or you have hashtags you always use in your posts, you can save them and re-use them in your posts with one click</p>
+                                </div>
+                            </div>
+                        </div> <!-- /.block-style-twentyFour -->
+                    </div>
+                    <div class="col-lg-6 d-flex mb-35" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
+                        <div class="block-style-twentyFour">
+                            <div class="d-flex align-items-start">
+                                <div class="icon d-flex align-items-center justify-content-center" style="background: #29EEFB;"><img src="<?php echo assetUrl('styles/main/')?>images/icon/129.svg" alt=""></div>
+                                <div class="text">
+                                    <h4>Refer & Earn</h4>
+                                    <p>You can be our ambassador, when you refer your friends you earn upto 50% commission </p>
+                                </div>
+                            </div>
+                        </div> <!-- /.block-style-twentyFour -->
+                    </div>
+
+                </div>
+            </div>
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/195.svg" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/196.svg" alt="" class="shapes shape-two">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/197.svg" alt="" class="shapes shape-three">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/198.svg" alt="" class="shapes shape-four">
+            <img src="<?php echo assetUrl('styles/main/')?>images/shape/199.svg" alt="" class="shapes shape-five">
+        </div> <!-- /.bg-wrapper -->
+    </div>
+
+
+
+
+
+
+    <div class="pricing-section-four mt-200 md-mt-100" id="pricing">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10  m-auto">
+                    <div class="title-style-six text-center">
+                        <h2>Simple pricing model <span>Unlimited</span></h2>
+                    </div> <!-- /.title-style-six -->
+                </div>
+            </div>
+
+            <!-- Nav tabs -->
+            <ul style="box-shadow: none" class="nav nav-tabs justify-content-center pricing-nav-three">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#month">Monthly</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#year">Yearly</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="pricing-table-area-four">
+            <div class="tab-content">
+                <div class="tab-pane active" id="month">
+                    <div class="row justify-content-center">
+
+                        <div class="col-lg-4 col-sm-6 aos-init" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
+                            <div class="pr-table-wrapper active most-popular">
+                                <div class="pack-name">Professional</div>
+                                <div class="pack-details">For everyone</div>
+                                <div class="top-banner d-md-flex" style="background:#E2F2FD;">
+                                    <div class="price"><sup>$</sup>8.99</div>
+                                    <div>
+                                        <span>For monthly</span>
+                                        <em>with single user</em>
+                                    </div>
+                                </div> <!-- /.top-banner -->
+                                <ul class="pr-feature">
+                                    <li>Unlimited social accounts</li>
+                                    <li>Unlimited Posts</li>
+                                    <li>Unlimited Facebook parties & templates</li>
+                                    <li>Template Sharing</li>
+                                    <li>Unlimited upload of photos & Videos</li>
+
+
+                                </ul>
+                                <a href="<?php echo url('signup')?>"  class="trial-button">Getstarted</a>
+                                <div class="trial-text">No credit card required, cancel any time</div>
+                            </div> <!-- /.pr-table-wrapper -->
+                        </div>
+                        <div class="hide col-lg-4 col-sm-6 aos-init" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+                            <div class="pr-table-wrapper">
+                                <div class="pack-name">Team</div>
+                                <div class="pack-details">For team & Agents</div>
+                                <div class="top-banner d-md-flex" style="background:#FFEBEB;">
+                                    <div class="price"><sup>$</sup>29</div>
+                                    <div>
+                                        <span>For monthly</span>
+                                        <em>with unlimited users</em>
+                                    </div>
+                                </div> <!-- /.top-banner -->
+                                <ul class="pr-feature">
+                                    <li>Unlimited Workspace</li>
+                                    <li>Unlimited Users</li>
+                                    <li>Unlimited social accounts</li>
+                                    <li>Unlimited Posts</li>
+                                    <li>Unlimited Facebook parties & templates</li>
+                                    <li>Template Sharing</li>
+                                    <li>Unlimited upload of photos & Videos</li>
+                                </ul>
+                                <a href="<?php echo url('signup')?>"  class="trial-button">Getstarted</a>
+                                <div class="trial-text">No credit card required, cancel any time</div>
+                            </div> <!-- /.pr-table-wrapper -->
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="year">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
+                            <div class="pr-table-wrapper active most-popular">
+                                <div class="pack-name">Professional</div>
+                                <div class="pack-details">For everyone</div>
+                                <div class="top-banner d-md-flex" style="background:#E2F2FD;">
+                                    <div class="price"><sup>$</sup>99.99</div>
+                                    <div>
+                                        <span>For yearly</span>
+                                        <em>With single user</em>
+                                    </div>
+                                </div> <!-- /.top-banner -->
+                                <ul class="pr-feature">
+                                    <li>Unlimited social accounts</li>
+                                    <li>Unlimited Posts</li>
+                                    <li>Unlimited Facebook parties & templates</li>
+                                    <li>Template Sharing</li>
+                                    <li>Unlimited upload of photos & Videos</li>
+                                </ul>
+                                <a href="<?php echo url('signup')?>"  class="trial-button">Getstarted</a>
+                                <div class="trial-text">No credit card required, cancel any time</div>
+                            </div> <!-- /.pr-table-wrapper -->
+                        </div>
+                        <div class="hide col-lg-4 col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+                            <div class="pr-table-wrapper">
+                                <div class="pack-name">Team</div>
+                                <div class="pack-details">For team & Agents</div>
+                                <div class="top-banner d-md-flex" style="background:#FFEBEB;">
+                                    <div class="price"><sup>$</sup>319</div>
+                                    <div>
+                                        <span>For yearly</span>
+                                        <em>with unlimited users</em>
+                                    </div>
+                                </div> <!-- /.top-banner -->
+                                <ul class="pr-feature">
+                                    <li>Unlimited Workspace</li>
+                                    <li>Unlimited Users</li>
+                                    <li>Unlimited social accounts</li>
+                                    <li>Unlimited Posts</li>
+                                    <li>Unlimited Facebook parties & templates</li>
+                                    <li>Template Sharing</li>
+                                    <li>Unlimited upload of photos & Videos</li>
+                                </ul>
+                                <a href="<?php echo url('signup')?>"  class="trial-button">Getstarted</a>
+                                <div class="trial-text">No credit card required, cancel any time</div>
+                            </div> <!-- /.pr-table-wrapper -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /.pricing-table-area-four -->
+    </div>
+
+
+
+    <!--
+    =====================================================
+        Fancy Short Banner Ten
+    =====================================================
+    -->
+    <div class="fancy-short-banner-ten mt-170 md-mt-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 col-lg-11 m-auto" data-aos="fade-up" data-aos-duration="1200">
+                    <div class="text-center">
+                        <h2> Try Timably today</h2>
+                        <p>Get your free 10 days trial today.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
+                <div class="dropdown download-btn">
+                    <a href="<?php echo url('signup')?>" class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Signup for 10 days free trial
+                    </a>
+
+                </div>
+                <div class="info-text">No Credit Card Required. Cancel Anytime</div>
+            </div>
+        </div> <!-- /.container -->
+        <img src="<?php echo assetUrl('styles/main/')?>images/shape/210.svg" alt="" class="shapes shape-one">
+        <img src="<?php echo assetUrl('styles/main/')?>images/shape/211.svg" alt="" class="shapes shape-two">
+    </div> <!-- /.fancy-short-banner-ten -->
+
+
+
+    <!--
+    =====================================================
+        Footer Style Eight
+    =====================================================
+    -->
+    <?php echo view('home/footer')?>
+
+
+</div>

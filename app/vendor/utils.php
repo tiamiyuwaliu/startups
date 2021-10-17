@@ -410,12 +410,12 @@ if(!function_exists('sanitizeText')) {
         $string = html_purifier_purify($string);
 
         $string = trim($string);
-        //$string = htmlspecialchars($string, ENT_QUOTES);
+        $string = htmlspecialchars($string, ENT_QUOTES);
 
         $string = str_replace('&amp;#', '&#', $string);
         $string = str_replace('&amp;', '&', $string);
-        //$string = str_replace('<script>', '', $string);
-        //$string = str_replace('</script>', '', $string);
+        $string = str_replace('<script>', '', $string);
+        $string = str_replace('</script>', '', $string);
         if($limit) {
             $string = substr($string, 0, $limit);
         }
@@ -1266,14 +1266,22 @@ function isVideo($source) {
     return in_array($ext, array('mp4'));
 }
 
-function getFileViaCurl($url, $file){
-    $ch = curl_init($url);
-    $fp = fopen(path($file), 'wb');
-    curl_setopt($ch, CURLOPT_FILE, $fp);
+function  getFileViaCurl($url, $file){
+    $output_filename = path($file);
+    $host = $url; // <-- Source image url (FIX THIS)
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $host);
+    curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, false);
+    curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_exec($ch);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // <-- don't forget this
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // <-- and this
+    $result = curl_exec($ch);
     curl_close($ch);
+    $fp = fopen($output_filename, 'wb');
+    fwrite($fp, $result);
     fclose($fp);
 }
 
@@ -1394,6 +1402,37 @@ function doWaterMark($image, $saveFile) {
         return $image;
     }
 }
+
+function greetingWord(){
+    $hour = date("G");
+
+    if($hour > 0 && $hour < 24){
+        if($hour >= 3 && $hour < 12)
+        {
+            return  l('good-morning');
+        }else if($hour >= 12 && $hour < 17){
+            return l('good-afternoon');
+        }else{
+            return l('good-evening');
+        }
+    }
+
+}
+function generateNoltToken($user) {
+    $payload = [
+        // The ID that you use in your app for this user
+        'id' => $user['id'],
+        // The user's email address that
+        // Nolt should use for notifications
+        'email' => $user['email'],
+        // The display name for this user
+        'name' => $user['full_name'],
+        // Optional: The URL to the user's avatar picture
+        'imageUrl' => model('user')->getAvatar($user)
+    ];
+
+    return \Firebase\JWT\JWT::encode($payload, 'timablySSOKEY', 'HS256');
+}
 class Spintax
 {
     public function process( $text )
@@ -1414,6 +1453,15 @@ class Spintax
     }
 }
 
+function getJPGImageFile($name) {
+    $target = getWatermarkTmpFile($name);
+    autoLoadVendor();
+    $img = new \JBZoo\Image\Image($name);
+    $img->setQuality(100);
+    $img->saveAs($target, 100);
+
+    return $target;
+}
 function getWatermarkTmpFile($name) {
     $dir = 'uploads/watermarked/'.model('user')->authId.'/';
     $file = $dir.md5($name.time()).'.jpg';
@@ -1423,6 +1471,35 @@ function getWatermarkTmpFile($name) {
     $fileOpen = @fopen(path($file), 'x+');
     @fclose($fileOpen);
     return $file;
+}
+
+function time_elapsed_string($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
 function output_content($content) {

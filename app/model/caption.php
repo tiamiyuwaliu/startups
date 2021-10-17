@@ -1,8 +1,8 @@
 <?php
 class CaptionModel extends Model {
     public function getCaptions($term = "") {
-        $sql = "SELECT * FROM captions WHERE userid=?";
-        $param = array(model('user')->authOwnerId);
+        $sql = "SELECT * FROM captions WHERE userid=? AND workspace_id=?";
+        $param = array(model('user')->authOwnerId, $this->controller()->workspaceId);
 
 
         if ($term ) {
@@ -19,8 +19,8 @@ class CaptionModel extends Model {
 
 
     public function getAllCaptions() {
-        $sql = "SELECT * FROM captions WHERE userid=?";
-        $param = array(model('user')->authOwnerId);
+        $sql = "SELECT * FROM captions WHERE userid=?  AND workspace_id=?";
+        $param = array(model('user')->authOwnerId, $this->controller()->workspaceId);
 
 
         $query = $this->db->query($sql, $param);
@@ -40,8 +40,8 @@ class CaptionModel extends Model {
          */
         extract(array_merge($ext, $val));
 
-        $this->db->query("INSERT INTO captions (userid,title,caption,created)VALUES(?,?,?,?)",
-            model('user')->authOwnerId,$title,$content,time());
+        $this->db->query("INSERT INTO captions (userid,title,caption,workspace_id,action_userid,created)VALUES(?,?,?,?,?,?)",
+            model('user')->authOwnerId,$title,$content,$this->controller()->workspaceId, $this->model('user')->authId,time());
     }
 
 
@@ -68,5 +68,20 @@ class CaptionModel extends Model {
     public function find($id) {
         $query = $this->db->query("SELECT * FROM captions WHERE id=?", $id);
         return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function countSearch($term) {
+        $sql = "SELECT * FROM captions WHERE userid=?  AND workspace_id=?";
+        $param = array(model('user')->authOwnerId, $this->controller()->workspaceId);
+
+
+        if ($term ) {
+            $term = '%'.$term.'%';
+            $sql .= " AND (title LIKE ? OR caption LIKE ?) ";
+            $param[] = $term;
+            $param[] = $term;
+        }
+        $query = $this->db->query($sql, $param);
+        return $query->rowCount();
     }
 }

@@ -1,50 +1,26 @@
 <div class="each-container each-account-<?php echo $account['id']?>">
     <div class="each each-account ">
-        <div class="custom-control custom-checkbox">
-            <input type="checkbox" data-id="<?php echo $account['id']?>" class="custom-control-input account-checkbox" id="customCheck<?php echo $account['id']?>">
+        <div class="custom-control custom-checkbox show-hover">
+            <input type="checkbox" onclick="return Account.selectAccount(this, '<?php echo $account['id']?>')" data-id="<?php echo $account['id']?>" class="custom-control-input account-checkbox" id="customCheck<?php echo $account['id']?>">
             <label class="custom-control-label" for="customCheck<?php echo $account['id']?>"></label>
         </div>
-        <div class="dropleft">
-            <a href="" data-toggle="dropdown"><i class="las la-ellipsis-v"></i></a>
-            <div class="dropdown-menu">
-                <a data-ajax="true" href="<?Php echo url('publishing', array('switch' => $account['username']))?>"  class="dropdown-item   "><i class="las la-check"></i> <?php _l('select-account')?></a>
-                <a  href="" onclick="return Account.multiAction('sync', '<?php echo $account['id']?>')"  class="dropdown-item   "><i class="las la-retweet"></i> <?php _l('sync-account')?></a>
+        <i class="social-icon show-hover <?php echo $account['social_type']?>-color  lab la-<?php echo ($account['social_type'] == 'facebook') ? 'facebook-f': $account['social_type']?>"></i>
+        <div class="dropleft show-hover">
+            <a class="confirm" data-ajax-action="true" href="<?php echo url('accounts', array('action' => 'delete', 'id' => $account['id']))?>" data-message="<?php _l('confirm-delete-account')?>"><i class="las la-trash-alt"></i></a>
 
-                <a href="<?php echo url('accounts', array('action' => 'delete', 'id' => $account['id']))?>" data-ajax-action="true" class="  dropdown-item confirm "  data-message="<?php _l('confirm-delete-account')?>"><i class="las la-trash-alt"></i> <?php _l('delete')?></a>
-
+        </div>
+        <div class="media-container">
+            <div class="account-media" style="background-image: url(<?php echo assetUrl($account['avatar'])?>)">
+                <?php if($account['status']):?>
+                    <div class="mb-3"><span class="badge badge-pill badge-light "><?php _l('active')?></span></div>
+                <?php else:?>
+                    <div class="mb-3"><span class="badge badge-pill badge-danger"><?php _l('disabled')?></span></div>
+                <?php endif?>
             </div>
         </div>
-        <div class="account-media" style="background-image: url(<?php echo assetUrl($account['avatar'])?>)">
-            <?php if($account['status']):?>
-                <div class="mb-3"><span class="badge badge-pill badge-warning "><?php _l('active')?></span></div>
-            <?php else:?>
-                <div class="mb-3"><span class="badge badge-pill badge-danger"><?php _l('disabled')?></span></div>
-            <?php endif?>
-        </div>
         <div class="info">
-            <h6 class="bold text--wrapping"><?php echo $account['username']?></h6>
-            <p class="text-muted m-0 p-0 text--wrapping"><?php echo $account['full_name']?></p>
-        </div>
-
-        <div class="each-footer clearfix">
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <?php _l('posts')?>
-                    <span class="badge badge-primary badge-pill"><?php echo $account['posts']?></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <?php _l('followers')?>
-                    <span class="badge badge-info badge-pill"><?php echo $account['followers']?></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <?php _l('following')?>
-                    <span class="badge badge-dark badge-pill"><?php echo $account['following']?></span>
-                </li>
-                <li class="list-group-item disabled d-flex justify-content-between align-items-center">
-                    <small><?php _l('last-sync')?></small>
-                    <span class="badge badge-light badge-pill" style="font-size:12px"><?php echo ($account['last_sync'])? date('F d, Y H:i A'): l('nil')?></span>
-                </li>
-            </ul>
+            <h6 class="bold truncate"><?php echo $account['username']?></h6>
+            <?php echo ucwords($account['social_account_type'])?>
         </div>
     </div>
 </div>

@@ -1,0 +1,17 @@
+<?php $user = model('user')->getUser($comment['userid'])?>
+<?php if($user):?>
+    <div class="comment comment-<?php echo $comment['id']?>">
+        <div class="avatar" style="background-image: url(<?php echo model('user')->getAvatar($user)?>)"></div>
+        <div class="comment-info">
+            <h6><?php echo $user['full_name']?> - <span class="time"><?php echo time_elapsed_string('@'.$comment['created'])?></span></h6>
+            <p><?php echo $comment['comment']?></p>
+            <div class="comment-actions">
+                <?php if(model('user')->authId == $comment['userid']):?>
+                    <a href="<?php echo url('publishing/posts?action=delete-comment&id='.$comment['id'])?>" class="confirm" data-ajax-action="true"><i class="las la-trash-alt"></i></a>
+                <?php endif?>
+                <a href="<?php echo url('publishing/posts?action=mark-resolved&id='.$comment['id'])?>" class="mtitle comment-mark-<?php echo $comment['id']?> confirm <?php echo ($comment['resolved']) ? 'active': null?>"  data-ajax-action="true" title="<?php echo ($comment['resolved']) ? l('resolved') : l('mark-resolved')?>"><i class="las la-check-circle"></i></a>
+
+            </div>
+        </div>
+    </div>
+<?php endif?>

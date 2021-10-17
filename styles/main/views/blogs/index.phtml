@@ -1,0 +1,82 @@
+<div class="main-page-wrapper  font-gordita">
+    <!-- ===================================================
+        Loading Transition
+    ==================================================== -->
+
+    <!--
+    =============================================
+        Theme Main Menu
+    ==============================================
+    -->
+    <?php echo view('home/menu-page')?>
+
+    <div class="fancy-hero-two">
+        <div class="bg-wrapper">
+            <div class="container">
+                <div class="page-title">Blog</div>
+                <div class="row">
+                    <div class="col-xl-8 col-lg-10 m-auto">
+                        <h1 class="heading md-p0">New & Trending news</h1>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /.bg-wrapper -->
+    </div>
+
+    <div class="blog-page-white-bg blog-v3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="feature-blog-three">
+                        <?php foreach($blogs->results() as $blog):?>
+                            <div class="post-meta">
+                                <img src="<?php echo assetUrl($blog['banner'])?>" alt="" class="image-meta">
+                                <div class="post">
+                                    <div class="date"><?php echo date('d m. Y', $blog['created_at'])?></div>
+                                    <h3><a href="<?php echo url('blog/'.$blog['slug'])?>" class="title"><?php echo $blog['title']?></a></h3>
+                                    <p><?php echo $blog['description']?></p>
+                                    <a href="<?php echo url('blog/'.$blog['slug'])?>" class="read-more">
+                                        <span>Continue Reading</span>
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-sidebar-one">
+                        <div class="sidebar-search-form mb-85">
+                            <form action="#">
+                                <input type="text" placeholder="Search">
+                                <button><img src="<?php echo assetUrl('styles/main/images/icon/51.svg')?>" alt=""></button>
+                            </form>
+                        </div>
+                        <iframe src="https://www.facebook.com/plugins/group.php?href=https%3A%2F%2Fweb.facebook.com%2Fgroups%2F957454708351773&width=340&show_metadata=true&appId=558941382144086&height=340"  height="340" style="border:none;overflow:hidden;width:100%" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                        <div class="sidebar-recent-news mb-85">
+                            <h4 class="sidebar-title">Recent News</h4>
+                            <ul class="hide">
+                                <li><a href="blog-details-v1.html">
+                                        <span class="title">10 days quick challange for boost visitors.</span>
+                                        <span class="date">23 July, 2018</span>
+                                    </a></li>
+                                <li><a href="blog-details-v1.html">
+                                        <span class="title">10 days quick challange for boost visitors.</span>
+                                        <span class="date">23 July, 2018</span>
+                                    </a></li>
+                                <li><a href="blog-details-v1.html">
+                                        <span class="title">10 days quick challange for boost visitors.</span>
+                                        <span class="date">23 July, 2018</span>
+                                    </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php echo view('home/footer')?>
+
+</div>

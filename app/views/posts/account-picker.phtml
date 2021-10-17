@@ -1,0 +1,83 @@
+<?php
+
+    $selectedAccounts = $C->selectedAccount;
+   // print_r($selectedAccounts);
+    $reload = (isset($reload)) ? $reload : 1;
+    $type = (isset($type)) ? $type : 'all';
+    $accountType = (isset($accountType)) ? $accountType : '';
+    $term = (isset($term)) ? $term : '';
+    $postEditor = (isset($postEditor)) ? true : false;
+    $uniqueKey = (!isset($uniqueKey)) ? 'everywhere' : $uniqueKey;
+?>
+<div class="dropdown-account-picker dropdown">
+    <a href="" class="account-picker-trigger"  data-toggle="dropdown" data-display="static">
+        <i class="las la-check-circle"></i>
+        <span class="text truncate">
+            <?php if(empty($selectedAccounts) or isset($noPreload)):?>
+                <?php _l('choose-accounts')?>
+            <?php else:?>
+                <?php
+                    $firstAccount = model('social')->findAccount($selectedAccounts[0]);
+                ?>
+                <img src="<?php echo assetUrl($firstAccount['avatar'])?>" class="picker-img"/>
+                <?php if(count($selectedAccounts)> 1):?>
+                    <span class="picker-count">+<?php echo count($selectedAccounts) - 1 ?></span>
+                <?php endif?>
+                <?php echo $firstAccount['username']?>
+            <?php endif?>
+        </span>
+
+        <span class="arrow"><i class="las la-angle-down"></i></span>
+    </a>
+    <div class="dropdown-menu static-dropdown-menu shadow-none shadow-1" >
+        <div class="dropdown-header" >
+            <a onclick="return PostEditor.toggleSelectAll(this, <?php echo $reload?>, '.<?php echo $container?>')" class="custom-control custom-checkbox">
+                <input  type="checkbox" class="custom-control-input account-select-all-input" id="customCheckall<?php echo $container?>">
+                <label class="custom-control-label" for="customCheckall<?php echo $container?>"><?php _l('select-all')?></label>
+            </a>
+        </div>
+        <div class="dropdown-divider"></div>
+        <?php $accounts = model('social')->getAccounts(null, $term, $type, $accountType);?>
+        <div class="account-selector-list clearfix ">
+            <?php  foreach($accounts as $account):?>
+                <?php
+                    $isGroup = ($account['social_type'] == 'facebook' and $account['social_account_type'] == 'group') ? true : false;
+                    $groupPages = model('social')->getGroupPages($account['id']);
+                ?>
+                <a href="" onclick="return PostEditor.addSelectAccount(this, <?php echo $reload?>,'.<?php echo $container?>')" data-id="<?php echo $account['id']?>" class="each  each-account-<?php echo $account['id']?>"  data-name="<?php echo $account['username']?>" data-avatar="<?php echo assetUrl($account['avatar'])?>">
+                    <div class="custom-control custom-checkbox mt-3">
+                        <input data-avatar="<?php echo assetUrl($account['avatar'])?>" <?php echo (in_array($account['id'], $selectedAccounts)) ? 'checked': null?> data-name="<?php echo $account['username']?>" data-id="<?php echo $account['id']?>" name="val[accounts][]" value="<?php echo $account['id']?>"  onchange="return PostEditor.addSelectAccount(this)"  type="checkbox" class="custom-control-input each-account-input" id="customCheck<?php echo $container?><?php echo $account['id']?>">
+                        <label class="custom-control-label" for="customCheck<?php echo $container?><?php echo $account['id']?>"></label>
+                    </div>
+                    <div class="media">
+                        <img class="mr-3 mt-2" style="width: 25px;height:25px;border-radius:100px;" src="<?php echo assetUrl($account['avatar'])?>" alt="Generic placeholder image">
+                        <div class="media-body pt-1">
+                            <h6 class=" text--wrapping mt-2"><?php echo $account['username']?></h6>
+                            <?php if($postEditor and $isGroup and $groupPages):?>
+                                <span style="position:absolute;right: 5px;top:7px;color:grey"><i class="las la-angle-down"></i></span>
+                            <?php endif?>
+                        </div>
+                    </div>
+                </a>
+                <?php if($postEditor and $isGroup and $groupPages):?>
+
+                    <div class="clearfix groups-page-container" style="display: <?php echo (in_array($account['id'], $selectedAccounts)) ? 'block': 'none'?>">
+                        <div style="width:100%;float:left;border: solid 1px #F4F5FA;padding: 5px 15px;background: #F4F5FA;border-left:none;border-right:none    ">
+                            <h6>Post as:</h6>
+                            <div class="custom-control custom-radio">
+                                <input checked type="radio" value="0" id="customRadioPage<?php echo $container?><?php echo $account['id']?>" name="val[group][<?php echo $account['id']?>]" class="custom-control-input">
+                                <label  class="custom-control-label" style="font-size: 12px" for="customRadioPage<?php echo $container?><?php echo $account['id']?>"><span style="position:relative;bottom:5px">Me</span></label>
+                            </div>
+                            <?php  $i = 0; foreach($groupPages as $page):?>
+                                <div class="custom-control custom-radio">
+                                    <input  type="radio" value="<?php echo $page['id']?>" id="customRadioPage<?php echo $container?><?php echo $page['id']?>" name="val[group][<?php echo $account['id']?>]" class="custom-control-input">
+                                    <label  class="custom-control-label" style="font-size: 12px" for="customRadioPage<?php echo $container?><?php echo $page['id']?>"><span style="position:relative;bottom:5px"><?php echo $page['name']?></span></label>
+                                </div>
+                                <?php $i++;endforeach;?>
+                        </div>
+                    </div>
+                <?php endif?>
+            <?php endforeach?>
+        </div>
+    </div>
+</div>

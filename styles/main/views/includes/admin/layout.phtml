@@ -36,17 +36,16 @@
 
             <h6><?php _l('manage')?></h6>
             <ul>
-                <li><a href="<?php echo url('admincp/languages')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'languages' ? 'active' : null?>"><i class="las la-language" ></i> <span><?php _l('languages')?></span></a> </li>
-                <li><a href="<?php echo url('admincp/modules')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'modules' ? 'active' : null?>"><i class="las la-puzzle-piece"></i> <span><?php _l('modules')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/graphics')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'graphics' ? 'active' : null?>"><i class="las la-images" ></i> <span><?php _l('graphics')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/helps')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'helps' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('Helps')?></span></a> </li>
+
             </ul>
 
             <h6><?php _l('configuration')?></h6>
             <ul>
                 <li><a href="<?php echo url('admincp/settings')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'settings' ? 'active' : null?>"><i class="las la-cog"></i> <span><?php _l('settings')?></span></a> </li>
-                <li><a href="<?php echo url('admincp/media')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'media' ? 'active' : null?>"><i class="las la-image"></i> <span><?php _l('media')?></span></a> </li>
-
                 <li><a href="<?php echo url('admincp/email/setup')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-setup' ? 'active' : null?>"><i class="las la-envelope"></i> <span><?php _l('email-setup')?></span></a> </li>
-                <li><a href="<?php echo url('admincp/email/templates')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-templates' ? 'active' : null?>"><i class="las la-envelope-open-text"></i> <span><?php _l('email-templates')?></span></a> </li>
+                <li class="hide"><a href="<?php echo url('admincp/email/templates')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-templates' ? 'active' : null?>"><i class="las la-envelope-open-text"></i> <span><?php _l('email-templates')?></span></a> </li>
             </ul>
 
             <h6><?php _l('others')?></h6>

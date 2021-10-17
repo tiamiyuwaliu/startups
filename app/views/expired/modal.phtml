@@ -1,0 +1,128 @@
+<div class="modal  " tabindex="-1" id="choosePlanModal" role="dialog">
+    <?php
+    $user = model('user')->authUser;
+    $User = (!$user) ? array('package' => '') : $user;
+    ?>
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content p-0">
+            <div class="modal-body">
+                <h2 class="" style="text-align: center">Choose Plan</h2>
+                <div class="" style="width: 20%;margin: 20px auto;margin-top: 10px">
+                    <div class="btn-group btn-group-toggle shadow-none" data-toggle="buttons">
+                        <label class="btn btn-light active">
+                            <input onchange="Timably.choosePlan(this)" type="radio" value="1" name="val[type]" id="option1" autocomplete="off" checked> Monthly
+                        </label>
+                        <label class="btn btn-light ">
+                            <input onchange="Timably.choosePlan(this)" type="radio" value="2" name="val[type]" id="option2" autocomplete="off"> Yerly
+                        </label>
+
+                    </div>
+                </div>
+
+                <div class="plans row "  id="monthly-plans">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="each active">
+                            <h3>Professional</h3>
+                            <div class="price">
+                                $8.99<span>/Month</span>
+                            </div>
+
+                            <h6>Features</h6>
+                            <ul>
+                                <li>Unlimited social profiles</li>
+                                <li>Unlimited Scheduling</li>
+                                <li>Unlimited Parties</li>
+                                <li>Photo Editor</li>
+                            </ul>
+
+                            <?php if($user['package'] == 'professional'):?>
+                                <button class="btn btn-light btn-block disabled" disabled>Current Plan</button>
+                            <?php else:?>
+                                <button data-email="<?php echo $user['email']?>" data-passthrough="monthly-<?php echo $user['id']?>-professional" class="btn btn-primary btn-block paddle_button" data-product="737068">Choose Plan</button>
+                            <?php endif?>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 hide">
+                        <div class="each">
+                            <h3>Team</h3>
+                            <div class="price">
+                                $29<span>/Month</span>
+                            </div>
+
+                            <h6>Features</h6>
+                            <p style="color: #8AE67C;font-weight: bold">All features from professional with:</p>
+                            <ul>
+                                <li>Unlimited workspace</li>
+                                <li>Unlimited users</li>
+                                <li>Post Approval</li>
+                                <li>Internal comments</li>
+
+                            </ul>
+
+                            <?php if($user['package'] == 'team'):?>
+                                <button class="btn btn-light btn-block disabled" disabled>Current Plan</button>
+                            <?php else:?>
+                                <button data-email="<?php echo $user['email']?>" data-passthrough="monthly-<?php echo $user['id']?>-team" class="btn btn-primary btn-block paddle_button" data-product="737071">Choose Plan</button>
+                            <?php endif?>
+                        </div>
+                    </div>
+                </div>
+                <div class="plans row " style="display: none" id="yearly-plans">
+                    <div class="col-md-12">
+                        <p style="color:#8AE67C;font-size:18px;text-align: center">Save money!! You get one month free for yearly</p>
+                    </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="each active">
+                            <h3>Professional</h3>
+                            <div class="price">
+                                $99.99<span>/Year</span>
+                            </div>
+
+                            <h6>Features</h6>
+                            <ul>
+                                <li>Unlimited social profiles</li>
+                                <li>Unlimited Scheduling</li>
+                                <li>Unlimited Parties</li>
+                                <li>Photo Editor</li>
+                            </ul>
+
+                            <?php if($user['package'] == 'professional'):?>
+                                <button class="btn btn-light btn-block disabled" disabled>Current Plan</button>
+                            <?php else:?>
+                                <button data-email="<?php echo $user['email']?>" data-passthrough="yearly-<?php echo $user['id']?>-professional" class="btn btn-primary btn-block paddle_button" data-product="737069">Choose Plan</button>
+                            <?php endif?>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 hide">
+                        <div class="each">
+                            <h3>Team</h3>
+                            <div class="price">
+                                $319<span>/Year</span>
+                            </div>
+
+                            <h6>Features</h6>
+                            <p style="color: #8AE67C;font-weight: bold">All features from professional with:</p>
+                            <ul>
+                                <li>Unlimited workspace</li>
+                                <li>Unlimited users</li>
+                                <li>Post Approval</li>
+                                <li>Internal comments</li>
+
+                            </ul>
+
+                            <?php if($user['package'] == 'team'):?>
+                                <button class="btn btn-light btn-block disabled" disabled>Current Plan</button>
+                            <?php else:?>
+                                <button data-email="<?php echo $user['email']?>" data-passthrough="yearly-<?php echo $user['id']?>-team" class="btn btn-primary btn-block paddle_button" data-product="737072">Choose Plan</button>
+                            <?php endif?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -43,7 +43,9 @@ class Controller {
     public $useEditor = false;
     public $fullLoader = true;
 
-    public $selectedAccount = null;
+    public $selectedAccount = array();
+    public $workspaceId = null;
+    public $workspace = null;
     public function __construct($request)
     {
         $this->request = $request;
@@ -61,12 +63,7 @@ class Controller {
         $headerContent .= '<meta property="og:description" content="'.config('site-description', '').'"/>';
         $this->addHeaderContent($headerContent);
 
-        if ($this->model('user')->isLoggedIn()) {
-            $user = $this->model('user')->authUser;
-            if($user['timezone']) date_default_timezone_set($user['timezone']);
 
-
-        }
 
         Hook::getInstance()->fire('controller.loaded', null, array($this));
 
@@ -269,19 +266,70 @@ class Controller {
     public function after(){}
 
     public function before() {
-        $this->selectedAccount = $this->model('social')->firstAccount();
-        if ($switchAccount = $this->request->input('switch')) {
-            $account = $this->model('social')->findAccount($switchAccount);
-            if ($account)  {
-                $this->selectedAccount = $account;
-                session_put('selected-account', $switchAccount);
 
+        if ($selectedAccount = session_get('selected-account') ) {
+            $this->selectedAccount = perfectUnserialize($selectedAccount);
+        }
+
+        //if (empty($this->selectedAccount)) $this->selectedAccount[] = $this->model('social')->firstAccountId();
+        if ($switchAccount = $this->request->input('account')) {
+            if ($switchAccount == 'clear') {
+                $this->selectedAccount  = array();
+            } else {
+                $this->selectedAccount  = explode(',', $switchAccount);
+
+            }
+
+
+        }
+        session_put('selected-account', perfectSerialize($this->selectedAccount));
+
+        if ($workspaceStored = session_get('selected-workspace')) {
+            $this->workspaceId = perfectUnserialize($workspaceStored);
+        }
+
+        if ($workspace = $this->request->input('workspace')) {
+            $workspace = $this->model('workspace')->getWorkspaceData($workspace);
+            if ($workspace) $this->workspaceId = $workspace;
+        }
+        if ($this->workspaceId) {
+            session_put('selected-workspace', perfectSerialize($this->workspaceId));
+            $this->workspace = $this->model('workspace')->find($this->workspaceId);
+        } else {
+            if ($this->model('user')->isLoggedIn()) {
+                $workspaces = $this->model('workspace')->getMyWorkspace();
+                if ($workspaces) {
+                    $this->workspace = $workspaces[0];
+                    $this->workspaceId = $this->workspace['id'];
+                } else {
+                    $workspaces = $this->model('workspace')->getAssignedWorkspace();
+                    if ($workspaces) {
+                        $this->workspace = $workspaces[0];
+                        $this->workspaceId = $this->workspace['id'];
+                    }
+                }
             }
         }
 
-        if ($selectedAccount = session_get('selected-account') ) {
-            $account = $this->model('social')->findAccount($selectedAccount);
-            if ($account) $this->selectedAccount = $account;
+        //set users owner base on the workspace
+        if ($this->workspace) {
+            $this->model('user')->authOwnerId = $this->workspace['userid'];
+            $this->model('user')->authOwner = $this->model('user')->getUser($this->workspace['userid']);
+        }
+
+        if ($this->model('user')->isLoggedIn()) {
+            $user = $this->model('user')->authOwner;
+            if($user['timezone']) date_default_timezone_set($user['timezone']);
+            if (!$user['get_started'] and $this->request->segment(0) != 'getstarted'){
+                return $this->request->redirect(url('getstarted'));
+            }
+
+
+            if ($user['expire_date'] and $user['expire_date']<time()) {
+                if ($this->request->segment(0) != 'expired') {
+                    return $this->request->redirect(url('expired'));
+                }
+            }
         }
     }
 

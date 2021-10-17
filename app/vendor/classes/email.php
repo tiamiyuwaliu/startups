@@ -72,6 +72,7 @@ class Email {
         try{
             $this->mailer->setFrom($fromEmail, $fromName);
         } catch(\Exception $e){}
+        return $this;
     }
 
     public function addCC($address, $name = null) {
@@ -97,6 +98,11 @@ class Email {
         $this->mailer->Subject = $subject;
         $this->queueSubject = $subject;
         return $this;
+    }
+
+    public function template($template, $param = array()) {
+        $content = file_get_contents(path('email-templates/'.$template.'.html'));
+        return $this->setMessage($content, $param);
     }
 
     public function setMessage($message, $param = array())

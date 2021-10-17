@@ -1,0 +1,36 @@
+<?php foreach($helps->results() as $help):?>
+    <div class="each">
+        <div class="img" style="background-image:url(<?php echo assetUrl($help['banner'])?>)"></div>
+        <div class="info">
+            <h4><a data-backdrop="false" data-toggle="modal" data-target="#viewHelpModal<?php echo $help['id']?>" href=""><?php echo $help['title']?></a> </h4>
+            <p><?php echo $help['description']?></p>
+            <span data-backdrop="false" data-toggle="modal" data-target="#viewHelpModal<?php echo $help['id']?>" class="badge badge-dark">Learn more</span>
+        </div>
+    </div>
+
+    <div class="modal" data-backdrop="false" tabindex="-1" id="viewHelpModal<?php echo $help['id']?>" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo $help['title']?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php if($help['video_link']):?>
+                        <iframe style="width:100%" height="470" src="<?php echo $help['video_link']?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <?php else:?>
+                        <div class="help-banner" style="background-image:url(<?php echo assetUrl($help['banner'])?>)"></div>
+                    <?php endif?>
+                    <p>
+                        <?php echo nl2br($help['content'])?>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    Thanks for reading!!
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endforeach;?>

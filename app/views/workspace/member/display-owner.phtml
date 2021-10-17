@@ -1,0 +1,21 @@
+<div class="table-row clearfix ">
+    <div class="each clearfix" style="width: 70%">
+        <div class="left"><?php _l('info')?></div>
+        <?php $user = model('user')->authUser?>
+        <div class="right">
+            <div class="media " >
+                <img style="width: 40px" class="mr-3" src="<?php echo model('user')->getAvatar($user)?>" alt="Generic placeholder image">
+                <div class="media-body">
+                    <h5 class="mt-0"><?php echo $user['full_name']?> <span style="font-size:12px" class="badge badge-info"><?php _l('team')?></span></h5>
+                    <?php echo $user['email']?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="each clearfix" style="width: 30%">
+        <div class="left"><?php _l('action')?></div>
+        <div class="right">
+            <div class="badge badge-light mt-3"><?php _l('company-owner')?></div>
+        </div>
+    </div>
+</div>

@@ -38,13 +38,7 @@ class Request {
         $this->config['base_url'] = getRoot();
         $this->config['cookie_path'] = getBase();
 
-
-
         $this->requestUrl = getFullUrl();
-        if ($config['installed'] == false) {
-            $this->redirect($this->config['base_url'].'install/');
-            exit;
-        }
         $request = $this;
         //load classes
         include_once (path('app/vendor/classes/database.php'));
@@ -97,6 +91,7 @@ class Request {
 
         include_once(path("app/routes.php"));
         $this->ipInfo = ipinfo();
+
 
         $this->run();
     }
@@ -213,7 +208,7 @@ class Request {
     {
         //if (!isset($_POST[$name]) and !isset($_GET[$name])) return $default;
         //for all admin lets escape be off
-        //if (segment(0) == 'admincp') $escape = false;
+        if ($this->segment(0) == 'admincp') $escape = false;
         if ($name == "val" and get_request_method() != "POST") return false;
         $index = "";
         if (preg_match("#\.#", $name)) list($name, $index) = explode(".", $name);

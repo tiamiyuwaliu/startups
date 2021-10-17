@@ -1,0 +1,167 @@
+<div class="each-container" >
+    <div class="each " style="cursor: pointer" >
+        <div class="media" onclick="return Timably.selectWorkspace(<?php echo $workspace['id']?>)">
+            <div class="media-image">
+
+            </div>
+            <div class="media-body">
+                <h4 class="media-title"><?php echo $workspace['title']?></h4>
+                <div class="info">
+                    <span><?php echo model('workspace')->countAccounts($workspace['id'])?></span> <?php _l('social-accounts')?>
+                     | <span style="color:grey"><strong><?php echo model('workspace')->countUsers($workspace['id']) + 1?></strong> <?php _l('users')?></span>
+                </div>
+            </div>
+        </div>
+        <div class="foot clearfix">
+            <div class="float-left">
+                <?php $user = model('user')->getUser($workspace['userid'])?>
+                <div class="user-avatar mtitle" title="<?php echo $user['full_name']?> <?php _l('workspace')?>" style="background-image:url(<?php echo model('user')->getAvatar($user)?>)"></div>
+            </div>
+            <div class="float-right">
+                <?php if($workspace['userid'] == model('user')->authId):?>
+                    <a href="" data-toggle="modal" data-target="#workspaceModal<?php echo $workspace['id']?>"><i class="las la-pen"></i></a>
+                <?php endif?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="workspaceModal<?php echo $workspace['id']?>" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-headr pt-3">
+                <div class="nav-tabs-scrollable">
+                    <ul class="nav  nav-tabs justify-content-center" id="justifiedTab" role="tablist">
+                        <li class="nav-item">
+                            <a aria-controls="home" aria-selected="true" class="nav-link active"   id="settings-tab-<?php echo $workspace['id']?>" data-toggle="tab" href="#settings-<?php echo $workspace['id']?>" role="tab"><?php _l('settings')?></a>
+                        </li>
+                        <li class="nav-item">
+                            <a aria-controls="home" aria-selected="true" class="nav-link "   id="users-tab-<?php echo $workspace['id']?>" data-toggle="tab" href="#users-<?php echo $workspace['id']?>" role="tab"><?php _l('users')?></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="settings-<?php echo $workspace['id']?>" role="tabpanel" aria-labelledby="home-tab">
+                    <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                        <input type="hidden" name="val[action]" value="save-workspace"/>
+                        <input type="hidden" name="val[id]" value="<?php echo $workspace['id']?>"/>
+                        <div class="modal-body padding-lg" style="min-height: 450px">
+                            <div class="form-group">
+                                <label><?php _l('workspace-name')?></label>
+                                <input type="text" class="form-control" value="<?php echo $workspace['title']?>" name="val[title]"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _l('workspace-timezone')?></label>
+                                <select class="form-control" name="val[timezone]">
+                                    <?php foreach(getTimezones() as $timezone => $title):?>
+                                        <option <?php echo ($timezone == $workspace['timezone']) ? 'selected':null?> value="<?php echo $timezone?>"><?php echo $title?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+
+
+                            <div class="custom-control custom-checkbox mtitle"  >
+                                <input <?php echo (!model('user')->canDoTeam()) ? 'disabled ': null?> <?php echo ($workspace['approval']) ? 'checked':null?> name="val[approval]" value="1" type="checkbox" class="custom-control-input mtitle" id="customCheck<?php echo $workspace['id']?>">
+                                <label class="custom-control-label mtitle" title="<?php echo (!model('user')->canDoTeam()) ? 'Feature only available for Business plan':null?>" for="customCheck<?php echo $workspace['id']?>"><?php _l('enable-post-approval')?></label>
+                            </div>
+
+
+                            <div class="card shadow-none mt-5">
+                                <div class="card-body p-0">
+                                    <h6 class="card-title"><?php _l('remove-workspace')?></h6>
+                                    <p class="card-text"><?php _l('remove-workspace-note')?></p>
+                                    <?php if(model('workspace')->countWorkspace() > 1):?>
+                                        <a href="#" class="btn shadow-1"><?php _l('remove-this-workspace')?></a>
+                                    <?php else:?>
+                                        <div class="alert alert-warning"><?php _l('workspace-cannot-be-deleted')?></div>
+                                    <?php endif?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('close')?></button>
+                            <button type="submit" class="btn btn-primary"><?php _l('save')?></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="users-<?php echo $workspace['id']?>" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="modal-body" style="min-height: 450px">
+
+                            <div class="" style="position:relative;">
+
+                                <form action="" method="post" class="general-form">
+                                    <div class="clearfix">
+                                        <h6 class="float-left"><?php _l('manage-users')?></h6>
+                                        <button type="submit" class="btn  btn-sm float-right"><?php _l('add-new-user')?></button>
+                                    </div>
+                                    <input type="hidden" name="val[action]" value="invite-user"/>
+                                    <input type="hidden" name="val[id]" value="<?php echo $workspace['id']?>"/>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input name="val[email]" type="text" class="form-control input" placeholder="<?php _l('email-address')?>"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <input name="val[name]" type="text" class="form-control input" placeholder="<?php _l('full-name')?>"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <label><?php _l('permission')?></label>
+                                            <select name="val[permission]" class="form-control">
+                                                <option value="1"><?php _l('contributor')?></option>
+                                                <option value="2"><?php _l('approver')?></option>
+                                                <option value="3"><?php _l('writer')?></option>
+                                                <option value="4"><?php _l('client')?></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label><?php _l('user-type')?></label>
+                                            <select class="form-control" name="val[type]">
+                                                <option value="1"><?php _l('team')?></option>
+                                                <option value="2"><?php _l('external')?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                                <?php if(!model('user')->canDoTeam()):?>
+                                    <div class="" style="width: 100%;height: 100%;background: rgba(255,255,255,0.9);position: absolute;top: 0;text-align: center;padding: 20px 0">
+                                        <i style="font-size: 50px;display: block;margin-bottom: 10px" class="las la-lock"></i>
+                                        <span style="color: grey">You need to be on business plan to add more users</span>
+                                    </div>
+                                <?php endif?>
+                            </div>
+
+                        <div class="modern-table mt-3">
+                            <div class="table-body workspace-users-list-<?php echo $workspace['id']?>">
+                                <?php echo view('workspace/member/display-owner')?>
+                                <?php foreach(model('workspace')->getMembers($workspace['id']) as $user):?>
+                                    <?php echo view('workspace/member/display', array('user' => $user))?>
+                                <?php endforeach;?>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="timetable-<?php echo $workspace['id']?>" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="modal-body">
+                        <p>timetable.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="approvals-<?php echo $workspace['id']?>" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="modal-body">
+                        <p>Approvals.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

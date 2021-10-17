@@ -1,149 +1,170 @@
-<div class="content-top">
-    <h3><?php _l('file-manager')?></h3>
+<?php echo view('files/menu')?>
 
-</div>
-
-<div class="content-body">
-    <div class="row">
-        <div class="col-md-10">
-            <div class="clearfix mb-3">
+<div class="pane-container">
+    <div class="pane-left" >
+        <div class="pane-head clearfix p-3 pt-2">
+            <h5 class="float-left"><?php _l('collections')?></h5>
+            <a href="" class="float-right mtitle" data-toggle="modal" data-target="#addFolderModal" title="<?php _l('add-new-collection')?>" style="font-size: 25px"><i class="las la-plus"></i></a>
+        </div>
+        <div class="side-collections-container mt-3" style="display: block">
+            <div class="collection-list">
+                <a href="<?php echo url('files')?>" data-ajax="true" class="each">
+                    <span class="line"></span>
+                    <i style="color: #7827EA " class="icons color icon-folder-alt"></i>
+                    <span class="text"><?php _l('all-media')?></span>
+                    <span class="count"><?php echo model('file')->countMedia()?></span>
+                </a>
+                <a href="<?php echo url('files/design')?>" data-ajax="true" class="each">
+                    <span class="line"></span>
+                    <i style="color: #7827EA " class="icons color icon-folder-alt"></i>
+                    <span class="text"><?php _l('my-designs')?></span>
+                    <span class="count"><?php echo model('file')->countDesigns()?></span>
+                </a>
+                <?php foreach(model('file')->getFolders() as $folder):?>
+                    <?php echo view('files/collection', array('folder' => $folder, 'page' => true));?>
+                <?php endforeach?>
+            </div>
+            <a href="" data-toggle="modal" data-target="#addFolderModal" class="foot"><?php _l('new-collection')?></a>
+        </div>
+    </div>
+    <div class="pane-right">
+            <div class="pane-head">
                 <div class="float-left">
-                    <div class="" >
-                        <button class="btn btn-sm btn-secondary active" data-toggle="modal" data-target="#addFolderModal"><i class="las la-folder-plus"></i> <?php _l('create-folder')?></button>
-                        <?php if($C->request->segment(1)):$folder = model('file')->find($C->request->segment(1))?>
-                            <a data-ajax-action="true" href="<?php echo url('files', array('action' => 'delete-folder','id' => $folder['id']))?>" class="confirm btn btn-sm btn-light mtitle shadow-1" style="min-width: 20px;" title="<?php _l('delete-folder')?>"><i class="las la-trash-alt"></i></a>
-                            <button data-target="#editFolderModal" data-toggle="modal" class="btn btn-sm btn-light mtitle shadow-1" style="min-width: 20px;" title="<?php _l('edit-folder')?>"><i class="las la-pencil-alt"></i></button>
+                    <select onchange="return filterMediaList(this)" class="form-control">
+                        <option <?php echo ($C->request->input('type') == 'all') ? 'selected': null?> value="all"><?php _l('all-media')?></option>
+                        <option <?php echo ($C->request->input('type') == 'image') ? 'selected': null?> value="image"><?php _l('image')?></option>
+                        <option <?php echo ($C->request->input('type') == 'video') ? 'selected': null?> value="video"><?php _l('video')?></option>
+                    </select>
+                </div>
+                <div class="float-right dropdown">
+                    <a href="" class="btn  btn-light shadow-none select-button" onclick="return selectAllFiles(this)"><i class="las la-check"></i> <?php _l('mark-all')?></a>
+                    <a href="" class="btn  btn-light shadow-none deselect-button hide" onclick="return deselectAllFiles(this)"><i class="las la-check"></i> <?php _l('unmark-all')?></a>
 
-                            <div class="modal  modal-right" tabindex="-1" id="editFolderModal" role="dialog">
-                                <div class="modal-dialog" role="document">
-                                    <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title"><?php _l('edit-folder')?></h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input type="hidden" name="val[editfolder]" value="1"/>
-                                                <input type="hidden" name="val[folder_id]" value="<?php echo $folder['id']?>"/>
-                                                <div class="form-group  mt-4 has-data">
-                                                    <label><?php _l('folder-title')?></label>
-                                                    <input type="text" class="form-control" value="<?php echo $folder['file_name']?>" name="val[name]"/>
-                                                </div>
+                    <a href="" class="btn btn-light shadow-none disabled action-button" onclick="return Filemanager.copy()"   style="padding:11px !important;min-width: auto"><?php _l('copy')?></a>
+                    <a href="" class="btn btn-light shadow-none disabled action-button"  onclick="return Filemanager.move()"   style="padding:11px !important;min-width: auto"><?php _l('move')?></a>
+                    <a href="" class="btn btn-light shadow-none disabled action-button"  onclick="return Filemanager.delete()" style="padding:11px !important;min-width: auto"><i class="las la-trash-alt"></i></a>
 
-                                                <div class="form-group mt-5">
-                                                    <label><?php _l('folder-color')?></label>
-
-                                                    <div class="btn-group-toggle folder-color-chooser" data-toggle="buttons">
-                                                        <?php $i=0; foreach(model('file')->getFolderColors() as $color):?>
-                                                            <label class="btn btn-secondary btn-float <?php echo ($color == $folder['folder_color']) ? 'active':null?> btn-sm shadow-none" style="background-color:<?php echo $color?>">
-                                                                <input type="radio" name="val[color]" <?php echo ($color == $folder['folder_color']) ? 'checked':null?> id="option<?php echo $i?>" autocomplete="off" value="<?php echo $color?>">
-                                                            </label>
-
-                                                            <?php $i++; endforeach;?>
-
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
-                                                <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                    <span class="dropdown">
+                        <?php if($C->request->segment(1) and $C->request->segment(1) != 'design'):$folder = model('file')->find($C->request->segment(1))?>
+                            <a href="" data-toggle="dropdown" class="btn btn-light shadow-none" style="padding:11px !important;min-width: auto"><i class="las la-pencil-alt"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="width: 250px">
+                                <a href="" data-target="#editFolderModal" data-toggle="modal" class="dropdown-item"><?php _l('edit-collection')?></a>
+                                <a href="<?php echo url('files', array('action' => 'delete-folder','id' => $folder['id']))?>" class="dropdown-item"><?php _l('delete-collection')?></a>
                             </div>
                         <?php endif?>
-                    </div>
-                </div>
-                <div class="float-right">
-                    <div class="btn-group btn-group-toggle mr-4" >
-                        <button onclick="return submitFilesForm()" class="btn btn-sm btn-light file-delete-button" disabled="disabled"><i class="las la-trash-alt"></i></button>
-                        <button class="btn btn-sm btn-light select-button" onclick="return selectAllFiles(this)"><i class="las la-check-double"></i> <?php _l('select-all')?></button>
-                        <button class="btn btn-sm btn-light hide deselect-button" onclick="return deselectAllFiles(this)"><i class="las la-check-double"></i> <?php _l('deselect-all')?></button>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="files-container scroll-paginate"
-                 data-container="files-grid"
-                 data-url="<?php echo getFullUrl()?>"
-                 data-offset="0"
-            >
-                <div class="files-grid clearfix content-scroller modern-scroll" data-height="50">
-                   <form id="files-form" action="" method="post" class="general-form">
-                       <input type="hidden" name="val[action]" value="delete"/>
-                       <?php if($C->request->segment(1)): ?>
-                           <div class="each-container">
-                               <a data-ajax="true" href="<?php echo ($folder['folder_id']) ? url('files/'.$folder['folder_id']) : url('files')?>" class="each each-back shadow-1">
-                                   <i class="las la-arrow-left"></i>
-                               </a>
-                           </div>
-                       <?php endif?>
-                       <?php foreach(model('file')->getFolders($C->request->segment(1)) as $folder):?>
-                           <?php echo view('files/folder', array('folder' => $folder));?>
-                       <?php endforeach?>
-                       <?php foreach($files as $file):?>
-                           <?php echo view('files/display', array('file' => $file));?>
-                       <?php endforeach?>
-                   </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <h4><i class="las la-filter"></i> <?php _l('filter-media')?></h4>
-
-            <div class="form-group">
-                <select onchange="return filterMediaList(this)" class="form-control">
-                    <option <?php echo ($C->request->input('type') == 'all') ? 'selected': null?> value="all"><?php _l('all-media')?></option>
-                    <option <?php echo ($C->request->input('type') == 'image') ? 'selected': null?> value="image"><?php _l('image')?></option>
-                    <option <?php echo ($C->request->input('type') == 'video') ? 'selected': null?> value="video"><?php _l('video')?></option>
-                </select>
-            </div>
-
-            <div class="card mt-4 mb-4">
-                <div class="card-body">
-                    <h6 ><?php _l('usage')?></h6>
-
-                    <div class="progress mb-2" style="height: 20px;">
-                        <div class="progress-bar progress-purple"  role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="clearfix">
-                        <div class="float-right">
-                            <strong>24MB / 100GB</strong>
+                    </span>
+                    <span class="dropdown">
+                        <a href="" data-toggle="dropdown" class="btn btn-primary disabled action-button  shadow-none" style="padding:11px !important;min-width: auto"><i class="las la-ellipsis-v"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right" style="width: 250px">
+                            <a href="" onclick="return Filemanager.startParty()"  class="dropdown-item"><?php _l('start-a-party')?></a>
+                            <a href="" onclick="return Filemanager.scheduleMultiPhoto()" class="dropdown-item"><?php _l('schedule-mult-photo')?></a>
+                            <a href="" onclick="return Filemanager.createTemplate()" class="dropdown-item"><?php _l('create-template')?></a>
                         </div>
-                    </div>
+                    </span>
                 </div>
             </div>
-            <div class="side-help">
-                <h4 class="bold"><?php _l('how-to-use-file-manager')?></h4>
-                <p>
-                    <?php _l('how-to-use-file-manager-note')?>
-                </p>
+
+        <div class="files-container scroll-paginate content-scroller "
+             data-container="files-grid"
+             data-url="<?php echo getFullUrl()?>"
+             data-offset="0"
+             data-height="115"
+             style="padding: 10px 10px;"
+        >
+            <div class="the-content   "  >
+                <input type="hidden" class="possible-folder-id" value="<?php echo ($C->request->segment(1) != 'design') ? $C->request->segment(1): ''?>"/>
+                <form id="files-form" action="" method="post" class="general-form ">
+                    <input type="hidden" id="form-action-input" name="val[action]" value=""/>
+                    <input type="hidden" id="form-action-ids-input" name="val[ids]"/>
+                    <div class="files-list files-grid <?php echo ($C->request->segment(1)) ? 'sortable-item': null?>">
+                        <?php if(empty($files)):?>
+                            <div class="empty-result">
+                                <img style="max-width:70%;margin: 50px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+                                <h5><?php _l('no-media-added-yet')?> </h5>
+                            </div>
+                        <?php else:?>
+                            <?php foreach($files as $file):?>
+                                <?php echo view('files/display', array('file' => $file));?>
+                            <?php endforeach?>
+                        <?php endif?>
+                        <?php echo view('files/filler')?>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
 </div>
+<?php if($C->request->segment(1)):?>
+    <div class="modal  modal-right" tabindex="-1" id="editFolderModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?php _l('edit-collection')?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="val[editfolder]" value="1"/>
+                        <input type="hidden" name="val[folder_id]" value="<?php echo $folder['id']?>"/>
+                        <div class="form-group  mt-4 has-data">
+                            <label><?php _l('folder-title')?></label>
+                            <input type="text" class="form-control" value="<?php echo $folder['file_name']?>" name="val[name]"/>
+                        </div>
 
-<div class="floating-button dropdown  btn-float-dropdown">
-    <button data-toggle="dropdown"  class="btn btn-float btn-primary shadow-24" type="button"><i style="font-size:20px" class="las la-cloud-upload-alt"></i></button>
-    <div class="dropdown-menu">
-        <button title="Upload from computer" class="btn btn-float btn-light btn-sm float-btn-text mtitle-left" type="button" style="position:relative;overflow: hidden">
-            <i class="las la-desktop"></i>
-            <form method="post"  data-upload="#upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
-                <input type="hidden" name="val[upload]" value="1"/>
-                <input type="hidden" name="val[folder_id]" value="<?php echo $C->request->segment(1, 0)?>" class="file-folder-id-input"/>
-                <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
-                <i class="la la-plus"></i> <?php _l('upload')?>
+                        <div class="form-group mt-5">
+                            <label><?php _l('folder-color')?></label>
+
+                            <div class="btn-group-toggle folder-color-chooser" data-toggle="buttons">
+                                <?php $i=0; foreach(model('file')->getFolderColors() as $color):?>
+                                    <label class="btn btn-secondary btn-float <?php echo ($color == $folder['folder_color']) ? 'active':null?> btn-sm shadow-none" style="background-color:<?php echo $color?>">
+                                        <input type="radio" name="val[color]" <?php echo ($color == $folder['folder_color']) ? 'checked':null?> id="option<?php echo $i?>" autocomplete="off" value="<?php echo $color?>">
+                                    </label>
+
+                                    <?php $i++; endforeach;?>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                        <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                    </div>
+                </div>
             </form>
-        </button>
-        <button title="Upload from Dropbox" class="btn btn-float btn-light btn-sm float-btn-text mtitle-left" type="button"><i class="lab la-dropbox"></i></button>
-        <button title="Upload from GoogleDrive" class="btn btn-float btn-light btn-sm float-btn-text mtitle-left" type="button"><i class="lab la-google-drive"></i></button>
+        </div>
+    </div>
+<?php endif?>
 
+<div class="modal fade" id="moveToModal" tabindex="-1" role="dialog"  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('copy-to-collection')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?php echo url('files')?>" method="post" class="general-form">
+                <input type="hidden" name="val[action]" value="move"/>
+                <input type="hidden" name="val[id]" value="" id="move-id-input"/>
+                <div class="modal-body">
+                    <select class="form-control" name="val[folder_id]">
+                        <?php foreach(model('file')->getFolders() as $folder):?>
+                            <option value="<?php echo $folder['id']?>"><?php echo $folder['file_name']?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary"><?php _l('move')?></button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-

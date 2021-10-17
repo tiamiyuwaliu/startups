@@ -1,0 +1,46 @@
+<div class="user-data-page clearfix d-lg-flex">
+    <div class="illustration-wrapper d-flex align-items-center justify-content-between flex-column">
+        <h3 class="font-rubik"></h3>
+        <div class="illustration-holder">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.svg')?>" alt="" class="illustration">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.1.svg')?>" alt="" class="shapes shape-one">
+            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.2.svg')?>" alt="" class="shapes shape-two">
+        </div>
+    </div> <!-- /.illustration-wrapper -->
+
+    <div class="form-wrapper">
+        <div class="d-flex justify-content-between">
+            <div class="logo"><a href="<?php echo url()?>"><img src="<?php echo url('styles/main/images/timably-logo.png')?>" alt="" style="width:150px"></a></div>
+
+        </div>
+        <form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
+            <h2>Subscription expired</h2>
+            <div class="alert alert-warning mt-5">The current workspace subscription has expired , and it seems we are having problem to renew payment</div>
+            <?php if(model('user')->authOwnerId == model('user')->authId):?>
+                <button type="button" data-toggle="modal" data-target="#choosePlanModal" class="btn btn-primary btn-block">Make Payment</button>
+            <?php else:?>
+                <p style="text-align: center">Contact the owner of this workspace <strong>[<?php echo $C->workspace['title']?>]</strong> </p>
+            <?php endif?>
+
+            <div class="" style="margin-top: 30px">
+                <h4>Switch workspace</h4>
+                <div class="workspace-dropdown">
+                    <?php foreach(model('workspace')->allWorkspaces() as $workspace):$owner = model('user')->getUser($workspace['userid']);?>
+                        <a onclick="return Timably.selectWorkspace(<?php echo $workspace['id']?>, true)" href="" class="dropdown-item <?php echo ($C->workspaceId == $workspace['id'])? 'selected':null?>" >
+                            <?php echo $workspace['title']?>
+                            <?php if($owner['expire_date'] > time() or !$owner['expire_date']):?>
+                                <span class="badge badge-success">Active</span>
+                            <?php else:?>
+                                <span class="badge badge-danger">Expired</span>
+                            <?php endif?>
+                            <?php if($C->workspaceId == $workspace['id']):?>
+                                <i class="las la-check-circle float-right" style="font-size:20px"></i>
+                            <?php endif?>
+                        </a>
+                    <?php endforeach;?>
+                </div>
+            </div>
+        </form>
+
+    </div> <!-- /.form-wrapper -->
+</div> <!-- /.user-data-page -->

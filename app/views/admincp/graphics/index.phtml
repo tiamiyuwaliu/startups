@@ -1,0 +1,196 @@
+<div class="content-top">
+    <div class="clearfix">
+        <div class="float-left">
+            <h3><?php _l('graphics')?> </h3>
+            <p class="text-muted sub-title">Manage graphics , categories from here</p>
+            <?php if($category):$categoryDetails  = model('admin')->getGraphicCategory($category)?>
+                <a data-ajax="true" href="<?php echo url('admincp/graphics')?>">Graphics Categories</a>
+                -> <a data-ajax="true" href="<?php echo url('admincp/graphics?category='.$categoryDetails['id'])?>"><?php echo $categoryDetails['title']?></a>
+                <?php if($subCategory):$subCategoryDetails = model('admin')->getGraphicCategory($subCategory)?>
+                    -> <?php echo $subCategoryDetails['title']?>
+
+                <?php endif?>
+            <?php endif?>
+        </div>
+        <div class="float-right">
+            <?php if(!$subCategory):?>
+                <a href="" data-toggle="modal" data-target="#addCategoryModal" class="btn btn-primary"><?php echo ($category) ? 'Add Sub-Category': 'Add New Category'?></a>
+            <?php endif?>
+            <?php if($category):?>
+                <a href="" data-toggle="modal" data-target="#uploadGraphicModal" class="btn btn-primary">Upload Graphics</a>
+            <?php endif?>
+        </div>
+    </div>
+</div>
+
+<div class="content-body">
+    <?php $categories = model('admin')->getGraphicCategories($category)?>
+    <?php if($subCategory):?>
+        <?php echo view('admincp/graphics/list-graphics', array('category' => $category, 'subCategory' => $subCategory))?>
+    <?php else:?>
+        <div id="categories" class="">
+
+            <div class="modern-table">
+                <div class="table-head clearfix">
+
+                    <div class="each" style="width: 70%;">
+                        <?php _l('title')?>
+                    </div>
+                    <div class="each" style="width: 10%;">
+                        <?php _l('uploads')?>
+                    </div>
+                    <div class="each" style="width: 20%;">
+                        <?php _l('action')?>
+                    </div>
+                </div>
+
+                <div class="table-body" >
+
+                    <?php foreach($categories as $cat):?>
+                        <div class="table-row clearfix shadow-0">
+                            <div class="each clearfix" style="width: 70%;">
+                                <div class="left">
+                                    <?php _l('title')?>
+                                </div>
+                                <div class="right">
+                                    <?php if($category):?>
+                                        <a href="<?php echo url('admincp/graphics?category='.$category.'&sub='.$cat['id'])?>" data-ajax="true"><?php echo $cat['title']?></a>
+                                    <?php else:?>
+                                        <a href="<?php echo url('admincp/graphics?category='.$cat['id'].'&sub='.$subCategory)?>" data-ajax="true"><?php echo $cat['title']?></a>
+                                    <?php endif?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 10%;">
+                                <div class="left">
+                                    <?php _l('uploads')?>
+                                </div>
+                                <div class="right">
+                                    <?php if($category):?>
+                                        <span class="badge-dark badge"><?php echo model('admin')->countCategoryGraphics($cat['id'])?></span>
+                                    <?php else:?>
+                                        <span class="badge-secondary badge"><?php echo model('admin')->countAllCategoryGraphics($cat['id'])?></span>
+                                    <?php endif?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 20%;">
+                                <div class="left">
+                                    <?php _l('action')?>
+                                </div>
+                                <div class="right">
+                                    <?php if($category):?>
+                                        <a class="btn btn-light" href="<?php echo url('admincp/graphics?category='.$category.'&sub='.$cat['id'])?>" data-ajax="true"><i class="las la-eye"></i></a>
+                                    <?php else:?>
+                                        <a class="btn btn-light" href="<?php echo url('admincp/graphics?category='.$cat['id'].'&sub='.$subCategory)?>" data-ajax="true"><i class="las la-eye"></i></a>
+                                    <?php endif?>
+                                    <a href="<?php echo url('admincp/graphics?action=delete-category&id='.$cat['id'])?>" class="btn btn-danger confirm" data-ajax-action="true" style="min-width: auto" ><i class="las la-trash-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach;?>
+
+                </div>
+
+            </div>
+
+        </div>
+    <?php endif?>
+</div>
+<?php if(!$subCategory):?>
+    <div class="modal  modal-right" tabindex="-1" id="addCategoryModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[action]" value="add-category"/>
+                <input type="hidden" name="val[cat_id]" value="<?php echo $category?>"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="val[create]" value="1"/>
+                        <div class="form-group floating-label">
+                            <label><?php _l('title')?></label>
+                            <input type="text" class="form-control" name="val[title]"/>
+                        </div>
+
+                        <div class="form-group floating-label">
+                            <label><?php _l('Color')?></label>
+                            <input type="text" class="form-control" name="val[color]"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                        <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif?>
+
+<?php if($category):?>
+    <div class="modal  modal-right" tabindex="-1" id="uploadGraphicModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[action]" value="upload-graphics"/>
+                <input type="hidden" name="val[cat]" value="<?php echo $category?>"/>
+                <div class="modal-content" style="padding: 0">
+                    <div class="modal-header" style="padding: 50px">
+                        <h5 class="modal-title">Upload Graphics</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="padding: 0">
+                        <div class="content-scroller" style="overflow: auto;overflow-x: hidden;padding: 10px 50px" data-height="120">
+                            <div class="form-group">
+                                <label>Graphic Category</label>
+                                <select required class="form-control" name="val[category]">
+                                    <option>Choose category</option>
+                                    <?php foreach ($categories as $c):?>
+                                        <option <?php echo ($c['id'] == $subCategory) ? 'selected':null?> value="<?php echo $c['id']?>"><?php echo $c['title']?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <div class="form-group floating-label">
+                                <label><?php _l('title')?></label>
+                                <input type="text" required class="form-control" name="val[title]"/>
+                            </div>
+                            <div class="form-group ">
+                                <label><?php _l('Studio HTML')?></label>
+                                <input type="file" class="form-control" name="file"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Graphic File (PNG,JPG)</label>
+                                <input type="file" class="form-control" name="img"/>
+                            </div>
+                            <div class="form-group hide">
+                                <label><?php _l('description')?></label>
+                                <textarea class="form-control" name="val[description]"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label><?php _l('Colours')?> (Separate by comma (,))</label>
+                                <input type="text" class="form-control" name="val[colors]"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Styles</label>
+                                <select name="val[styles][]" multiple  class="input-tags">
+                                    <?php foreach(model('admin')->getGraphicStyles() as $style):?>
+                                        <option value="<?php echo $style?>"><?php echo ucwords($style)?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                        <button type="submit" class="btn btn-primary" style="color: #ffffff;"><?php _l('submit')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif?>

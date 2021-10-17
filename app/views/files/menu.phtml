@@ -1,0 +1,53 @@
+<div class="content-top">
+
+    <?php $page = $C->request->segment(0, 'files')?>
+    <div class="nav-tabs-scrollable">
+        <ul class="nav  nav-tabs " id="justifiedTab" role="tablist">
+            <li class="nav-item">
+                <a  class="nav-link <?php echo ($page == 'files')? 'active': null?>" data-ajax="true" href="<?php echo url('files')?>"  ><?php _l('my-library')?></a>
+            </li>
+            <li class="nav-item">
+                <a  class="nav-link <?php echo ($page == 'graphics')? 'active': null?>" data-ajax="true" href="<?php echo url('graphics')?>"  >Content Library</a>
+            </li>
+        </ul>
+    </div>    <div class="right-actions file-upload-btn-container filemananger-page">
+        <span class="dropdown">
+            <a href="" data-toggle="dropdown" class="btn btn-light mtitle dropdown-toggle" style="padding-top:6px;height:30px;color:#000" >
+            <?php _l('create')?></a>
+            <div class="dropdown-menu dropdown-menu-lg" style="width: 300px">
+                <a class="dropdown-item" data-toggle="modal" data-target="#newDesignModal" href="#"><i class="las la-pen-alt"></i> <?php _l('create-new-design')?></a>
+                <a class="dropdown-item disabled mtitle" title="Coming soon" href="#"><i class="las la-image"></i> <?php _l('meme-generator')?></a>
+                <a class="dropdown-item disabled mtitle" title="Coming soon" href="#"><i class="las la-film"></i> <?php _l('gif-creator')?></a>
+                <a class="dropdown-item disabled mtitle" title="Coming soon" href="#"><i class="las la-chart-bar"></i> <?php _l('chart-creator')?></a>
+                <a class="dropdown-item disabled mtitle" title="Coming soon" href="#"><i class="las la-photo-video"></i> <?php _l('demotivational-maker')?></a>
+            </div>
+        </span>
+        <?php if(true):?>
+            <a href="" style="" title="<?php _l('upload-from-computer')?>" class="btn btn-primary mtitle">
+
+                <form method="post"  data-upload="#upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                    <input type="hidden" name="val[upload]" value="1"/>
+                    <input type="hidden" name="val[folder_id]" value="<?php echo $C->request->segment(1, 0)?>" class="file-folder-id-input"/>
+                    <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                    <i class="las la-cloud-upload-alt"></i> <?php _l('upload')?>
+                </form>
+            </a>
+            <a href="" data-toggle="modal"  data-target="#importImageModal" title="<?php _l('upload-from-link')?>" class="mtitle"><i class="las la-link"></i></a>
+            <a href="" onclick="return openGoogleDrivePicker()" title="<?php _l('import-from-google-drive')?>" class="mtitle"><i class="lab la-google-drive"></i></a>
+            <a href="" onclick="return openDropboxPicker()" title="<?php _l('import-from-dropbox')?>" class="mtitle"><i class="lab la-dropbox"></i></a>
+            <span class="dropdown">
+                <a href="" data-toggle="dropdown" title="<?php _l('design-with-canva')?>" class="mtitle"><img src="<?php echo assetUrl('assets/images/canva.png')?>" style="width:15px;height:15px;border-radius:100px"/></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                   <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('FacebookPost')" class="dropdown-item">Facebook Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('InstagramPost')" class="dropdown-item">Instagram Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('TwitterPost')" class="dropdown-item">Twitter Post</a>
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('LinkedInBanner')" class="dropdown-item">LinkedIn Post</a>
+                             <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('PinterestGraphic')" class="dropdown-item">Pinterest Graphics</a>
+
+                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('SocialMedia')" class="dropdown-item">Custom Post</a>
+                       </div>
+            </span>
+        <?php endif?>
+
+    </div>
+</div>

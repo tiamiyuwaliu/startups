@@ -5,7 +5,7 @@ return array(
      */
     'db_host' => 'localhost',
     'db_username' => 'root',
-    'db_name' => 'gramway',
+    'db_name' => 'timably',
     'db_password' => '',
     'c' => '',
 
@@ -49,6 +49,11 @@ return array(
     /** Default email templates end */
     'max-image-size' => '10000000',
     'image-file-types' => 'jpg,png,gif,jpeg',
-    'theme' => 'main'
+    'theme' => 'main',
 
+    'facebook-app-id' => '',
+    'facebook-app-secret' => '',
+
+    'linkedin-client-id' => '77iw5vjkzce0l3',
+    'linkedin-client-secret' => 'OfNuDPkeJapCCav0',
 );

@@ -1,0 +1,158 @@
+<div class="content-top">
+    <?php echo view('posts/menu')?>
+</div>
+
+<?php
+    $canEdit = model('party')->canEdit($party);
+?>
+<div class="pane-container">
+    <div class="pane-head clearfix">
+        <div class="float-left">
+            <h5 style="margin: 15px 25px"><strong><?php _l('template')?></strong>: <?php echo $party['title']?></h5>
+        </div>
+        <div class="float-right dropdown pt-2 pr-4">
+            <?php if($canEdit):?>
+                <a href="" class="btn btn-light shadow-none" data-toggle="dropdown"><i class="las la-plus"></i> <?php _l('add-post')?></a>
+                <div class="dropdown-menu">
+                    <a href="" class="dropdown-item" onclick="return PartyTemplate.addMedia(0)"><?php _l('add-single-media')?></a>
+                    <a href="" class="dropdown-item" onclick="return PartyTemplate.addMedia(1)"><?php _l('add-multi-media')?></a>
+                    <a href="" class="dropdown-item" onclick="return PartyTemplate.openAddText()"><?php _l('add-text')?></a>
+
+                </div>
+            <?php endif?>
+            <a href="" class="btn btn-light shadow-none" data-toggle="modal" data-target="#shareModal"><i class="las la-share"></i> <?php _l('share-template')?></a>
+            <span class="dropdown">
+                <a href="" class="btn btn-light shadow-none" data-toggle="dropdown" style="min-width: auto"><i class="las la-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="" class="dropdown-item" data-title="<?php echo $party['title']?>" onclick="return PartyTemplate.openNewTemplate(this, '<?php echo $party['id']?>')">Copy/Duplicate  template</a>
+                    <?php if($canEdit):?>
+                        <a  style="min-width: auto" href="<?php echo getFullUrl()?>?action=delete-party" class="dropdown-item confirm " data-ajax-action="true" ><?php _l('delete-template')?> </a>
+                    <?php endif?>
+                </div>
+            </span>
+
+        </div>
+    </div>
+    <div class="content-scroller" data-height="130">
+        <div class="party-posts-list">
+            <?php if($posts):?>
+                <div class="alert alert-info">
+                    <strong>Please Note:</strong> The post are arrange in the order of the day number, you can also drag and re-arrange but make sure the days are in order. Thanks
+                </div>
+            <?php endif?>
+            <?php foreach($posts as $post):?>
+                <?php echo view('templates/party/display-template-post', array('post' => $post, 'canEdit' => $canEdit))?>
+            <?php endforeach;?>
+        </div>
+        <?php if(!$posts):?>
+            <div class="empty-result">
+                <img style="max-width:70%;margin: 0px 0;margin-bottom: 30px " src="<?php echo assetUrl('styles/main/images/empty.png')?>"/>
+
+                <h5><?php _l('no-template-posts-added-yet')?> </h5>
+                <a href=""  class="btn btn-sm btn-primary shadow-none" onclick="return PartyTemplate.addMedia(0)" ><?php _l('add-first-post')?></a>
+            </div>
+        <?php endif?>
+    </div>
+</div>
+
+<div class="modal" id="addTextModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?php _l('add-text')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="position:relative;">
+                    <textarea  class="form-control emoji-text" placeholder="<?php _l('editor-placeholder')?>"  id="add-text-modal" name="val[content]"></textarea>
+                    <a href="" class="mtitle" title="<?php _l('choose-saved-captions')?>" data-type="captions" data-editor="#add-text-modal" onclick="return loadTemplates(this)" style="position:absolute;right: 5px;top: 30px;font-size:20px;color:grey"><i class="icons icon-layers"></i></a>
+                    <a href="" class="mtitle" title="<?php _l('choose-saved-hashtags')?>" data-type="hashtag" data-editor="#add-text-modal" onclick="return loadTemplates(this)" style="position:absolute;right: 5px;top: 60px;font-size:20px;color:grey"><i class="las la-hashtag"></i></a>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                <button type="button" class="btn btn-primary" onclick="return PartyTemplate.addText()"><?php _l('add')?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="shareModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-head">
+                <div class="nav-tabs-scrollable">
+                    <ul class="nav  nav-tabs justify-content-center" id="justifiedTab" role="tablist">
+                        <li class="nav-item">
+                            <a aria-controls="home" aria-selected="true" class="nav-link active"   id="share-tab" data-toggle="tab" href="#shares" role="tab"><?php _l('share')?></a>
+                        </li>
+                        <li class="nav-item">
+                            <a aria-controls="home" aria-selected="true" class="nav-link "   id="users-tab" data-toggle="tab" href="#users" role="tab"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="shares" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="share-link-container clearfix">
+                        <div class="float-left share-link">
+                            https://timably.com/share/<?php echo $party['unique_key']?>
+                        </div>
+                        <div class="float-right">
+                            <a href="" onclick="return Parties.copyLink()" class="mtitle" title="<?php _l('copy-share-link')?>"><i class="las la-copy"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="shared-users-container">
+
+                        <?php if($party['userid'] == model('user')->authId):?>
+                            <div class="head clearfix">
+                                <div class="float-left">
+                                    <h5><?php _l('users')?></h5>
+                                </div>
+                                <div class="float-right">
+                                    <select class="form-control" onchange="Parties.userListChanged(this)">
+                                        <option value="all"><?php _l('all')?></option>
+                                        <option value="1"><?php _l('admins')?></option>
+                                        <option value="0"><?php _l('read-only')?></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="shared-user-lists ">
+                                <?php $owner = model('user')->getUser($party['userid'])?>
+                                <div class="each admins">
+                                    <div class="avatar" style="background-image:url(<?php echo model('user')->getAvatar($owner)?>)"></div>
+                                    <div class="info clearfix">
+                                        <div class="float-left">
+                                            <h6><?php echo $owner['full_name']?></h6>
+
+                                        </div>
+                                        <div class="float-right">
+                                            <div><span class="badge badge-dark"><?php _l('owner')?></span></div>
+                                            <?php _l('joined')?>: <?php echo time_elapsed_string('@'.$party['created_at'])?>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                    <?php foreach(model('party')->getSharedUsers($party['id']) as $user):?>
+                                        <div class="each-shared-user-<?php echo $user['shared_id']?>">
+                                            <?php echo view('templates/party/display-user', array('user' => $user))?>
+                                        </div>
+                                    <?php endforeach?>
+
+                            </div>
+                        <?php endif?>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

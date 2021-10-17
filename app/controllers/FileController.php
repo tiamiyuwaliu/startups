@@ -3,37 +3,15 @@ class FileController extends Controller {
 
     public function index() {
         $this->setTitle(l('file-manager'));
-        $this->setActiveIconMenu('files');
+        $this->setActiveIconMenu('media');
 
         if ($val = $this->request->input('val')) {
             if (isset($val['upload'])) {
                 if ($files = $this->request->inputFile('file')) {
 
                     $uploadedFiles = array();
-
+                    $uploadedViews = array();
                     foreach($files as $file) {
-                        if (!$this->model('user')->canUpload()) {
-                            return json_encode(array(
-                                'type' => 'error',
-                                'message' => l('file-upload-usage-limit')
-                            ));
-                        }
-                        if (isImage($file)) {
-                            if (!$this->model('user')->hasPermission('photo')){
-                                return json_encode(array(
-                                    'type' => 'error',
-                                    'message' => l('you-are-not-allow-photo')
-                                ));
-                            }
-                        } else {
-                            if (!$this->model('user')->hasPermission('video')){
-                                return json_encode(array(
-                                    'type' => 'error',
-                                    'message' => l('you-are-not-allow-video')
-                                ));
-                            }
-                        }
-
                         $upload = new Uploader($file, (isImage($file)) ? 'image' : 'video');
                         (isImage($file)) ? $upload->setPath("files/images/".model('user')->authOwnerId.'/'.time().'/') : $upload->setPath('files/videos/'.model('user')->authOwnerId.'/');
                         if ($upload->passed()) {
@@ -53,6 +31,7 @@ class FileController extends Controller {
 
                             $id = $this->model('file')->save($val);
                             $file = model('file')->find($id);
+                            $uploadedViews[] = $file;
                             $file = array(
                                 'id' => $file['id'],
                                 'file_name' => $file['file_name'],
@@ -78,8 +57,14 @@ class FileController extends Controller {
                             'message'=> l('upload-successful'),
                         ));
                     } else {
+                        $content = '';
+                        foreach($uploadedViews as $file) {
+                            $content .= $this->view('files/display', array('file' => $file));
+                        }
                         return json_encode(array(
-                            'type' => 'reload',
+                            'type' => 'function',
+                            'value' => 'Filemanager.fileUploaded',
+                            'content' => $content,
                             'message'=> l('upload-successful'),
                         ));
                     }
@@ -88,14 +73,39 @@ class FileController extends Controller {
 
             }
             if (isset($val['action'])) {
-                if(isset($val['files']) and !empty($val['files'])) {
-                    foreach($val['files'] as $id) {
-                        $this->model('file')->delete($id);
-                    }
-                    return json_encode(array(
-                        'type' => 'reload',
-                        'message' => l('files-deleted-successfully'),
-                    ));
+                switch($val['action']) {
+                    case 'delete':
+                        foreach(explode(',', $val['ids']) as $id) {
+                             $this->model('file')->delete($id);
+                        }
+                        return json_encode(array(
+                            'type' => 'function',
+                            'value' => 'Filemanager.fileDeleted',
+                            'message' => l('files-deleted-successfully'),
+                        ));
+                        break;
+                    case 'copy':
+
+                        $this->model('file')->copy($val['id'], $val['folder_id'], $val['source']);
+                        return json_encode(array(
+                            'type' => 'url',
+                            'value' => url('files/'.$val['folder_id']),
+                            'message' => l('media-files-copied')
+                        ));
+                        break;
+                    case 'move':
+
+                        $this->model('file')->move($val['id'], $val['folder_id']);
+                        return json_encode(array(
+                            'type' => 'url',
+                            'value' => url('files/'.$val['folder_id']),
+                            'message' => l('media-files-copied')
+                        ));
+                        break;
+                    case 'sort':
+                        $files = $val['files'];
+                        $this->model('file')->reOrder($files);
+                        break;
                 }
 
             }
@@ -151,11 +161,52 @@ class FileController extends Controller {
                     $id = $this->request->input('file');
                     $folder = $this->request->input('folder');
                     $this->model('file')->move($id, $folder);
-                    return json_encode(array(
-                        'type' => 'function',
-                        'message' => l('file-moved-successfully'),
+                    return model('file')->countMedia($folder);
+                    break;
+                case 'description':
+                    $id = $this->request->input('id');
+                    $text = $this->request->input('text');
+                    $this->model('file')->saveDescription($id, $text);
+                    return l('description-saved');
+                    break;
+                case 'import-image':
+                    $fileLink = $this->request->input('link');
+                    if ($canva = $this->request->input('canva')) $fileLink = $_POST['link'];
+                    $folder = $this->request->input('folderId');
+                    //$fileLink = urldecode($fileLink);
+                    //exit($fileLink);
+                    $ext = $this->getFileExtension($fileLink);
+                    $ext = ($ext) ? $ext : 'png';
 
-                    ));
+                    $dir = "uploads/files/file/".model('user')->authOwnerId.'/';
+                    if (!is_dir(path($dir))) mkdir(path($dir), 0777, true);
+                    $file = $dir.md5($fileLink).'.'.$ext;
+                    getFileViaCurl($fileLink, $file);
+                    //exit($fileLink);
+                    $val = array();
+                    if (isImage($file)) {
+
+                        $upload = new Uploader(path($file), 'image', false, true);
+                        $upload->setPath("files/images/".model('user')->authOwnerId.'/'.time().'/');
+                        $result = $upload->resize()->result();
+                        $val['file_name'] = str_replace('%w', 920, $result);
+                        $val['resize_image'] = str_replace('%w', 200, $result);
+                        $val['file_size'] = 0;
+                        $val['file_type'] = 'image';
+                        $val['folder_id'] = $folder;
+                        $id = $this->model('file')->save($val);
+                        return json_encode(array(
+                            'status' => 1,
+                            'message'=> l('upload-successful'),
+                            'content' => view('files/display', array('file' => model('file')->find($id)))
+                        ));
+                    }  else {
+                        return json_encode(array(
+                            'status' => 0,
+                            'message'=> l('no-image-found-import'),
+
+                        ));
+                    }
                     break;
             }
         }
@@ -185,20 +236,10 @@ class FileController extends Controller {
             $ext = get_file_extension($fileName);
             $fileName = md5($fileName.time()).'.'.$ext;
             $val = array();
-            if (!$this->model('user')->canUpload()) {
-                return json_encode(array(
-                    'type' => 'error',
-                    'message' => l('file-upload-usage-limit')
-                ));
-            }
+
 
             if (isImage($fileName)) {
-                if (!$this->model('user')->hasPermission('photo')){
-                    return json_encode(array(
-                        'type' => 'error',
-                        'message' => l('you-are-not-allow-photo')
-                    ));
-                }
+
                 $tempFileDir = 'uploads/files/images/'.model('user')->authOwnerId.'/';
                 if (!is_dir(path($tempFileDir))) {
                     @mkdir(path($tempFileDir), 0777, true);
@@ -216,12 +257,7 @@ class FileController extends Controller {
 
 
             } else {
-                if (!$this->model('user')->hasPermission('video')){
-                    return json_encode(array(
-                        'type' => 'error',
-                        'message' => l('you-are-not-allow-video')
-                    ));
-                }
+
                 //for videos mp4
                 $tempFileDir = 'uploads/files/videos/'.model('user')->authOwnerId.'/';
                 if (!is_dir(path($tempFileDir))) {
@@ -241,7 +277,7 @@ class FileController extends Controller {
             return json_encode(array(
                 'status' => 1,
                 'message'=> l('upload-successful'),
-                'content' => view('files/display', array('file' => model('filemanager')->find($id)))
+                'content' => view('files/display', array('file' => model('file')->find($id)))
             ));
         }
 
@@ -253,13 +289,6 @@ class FileController extends Controller {
                 return json_encode(array('status' => '0', 'message' => l('selected-file-not-supported')));
             }
 
-            if (!$this->model('user')->canUpload()) {
-                return json_encode(array(
-                    'type' => 'error',
-                    'message' => l('file-upload-usage-limit')
-                ));
-            }
-
             $ext = get_file_extension($fileName);
 
             $dir = "uploads/files/file/".model('user')->authOwnerId.'/';
@@ -268,12 +297,7 @@ class FileController extends Controller {
             getFileViaCurl($fileLink, $file);
             $val = array();
             if (isImage($fileName)) {
-                if (!$this->model('user')->hasPermission('photo')){
-                    return json_encode(array(
-                        'type' => 'error',
-                        'message' => l('you-are-not-allow-photo')
-                    ));
-                }
+
                 $upload = new Uploader(path($file), 'image', false, true);
                 $upload->setPath("files/images/".model('user')->authOwnerId.'/'.time().'/');
                 $result = $upload->resize()->result();
@@ -284,13 +308,6 @@ class FileController extends Controller {
                 $val['folder_id'] = $this->request->input('folder_id');
 
             } else {
-                //for videos mp4
-                if (!$this->model('user')->hasPermission('video')){
-                    return json_encode(array(
-                        'type' => 'error',
-                        'message' => l('you-are-not-allow-video')
-                    ));
-                }
                 $val['file_type'] = 'video';
                 $val['file_name'] = $file;
                 $val['file_size'] = $fileSize;
@@ -310,7 +327,7 @@ class FileController extends Controller {
 
         $offset = $this->request->input('offset', 0);
 
-        $files = $this->model('file')->getFiles($offset, $this->request->segment(1), $this->request->input('type', 'all'));
+        $files = $this->model('file')->getFiles($offset, $this->request->segment(1), $this->request->input('type', 'all'), 40, $this->request->input('term'));
         if ($paginate = $this->request->input('paginate')) {
             $content = '';
             foreach($files as $file) {
@@ -324,10 +341,59 @@ class FileController extends Controller {
         return $this->render($this->view('files/index', array('files' => $files)), true);
     }
 
+    public function getFileExtension($file) {
+        if (preg_match('#png#i', $file)) return 'png';
+        if (preg_match('#jpg#i', $file)) return 'jpg';
+        if (preg_match('#gif#i', $file)) return 'gif';
+        if (preg_match('#jpeg#i', $file)) return 'jpeg';
+
+        return null;
+    }
+    public function graphics() {
+        $this->setActiveIconMenu('media');
+        $this->setTitle(l('graphics-template'));
+
+        return $this->render($this->view('files/graphics/index'), true);
+    }
+
+    public function saveGraphics() {
+        header('Content-Type: application/json');
+        $json = file_get_contents('php://input');
+
+
+
+// Converts it into a PHP object
+        $data = json_decode($json, true);
+        $fileLink = $data['public_png_url'];
+
+        $ext = 'png';
+        $user = $this->model('user')->getUser($data['user_uid']);
+        if (!$user) return false;
+
+        $this->model('user')->loginWithObject($user);
+        $this->workspaceId = $data['custom_field_1'];
+        $dir = "uploads/files/file/".model('user')->authOwnerId.'/';
+        if (!is_dir(path($dir))) mkdir(path($dir), 0777, true);
+        $file = $dir.md5($fileLink).'.'.$ext;
+        getFileViaCurl($fileLink, $file);
+
+        $val = array();
+        $upload = new Uploader(path($file), 'image', false, true);
+        $upload->setPath("files/images/".model('user')->authOwnerId.'/'.time().'/');
+        $result = $upload->resize()->result();
+        $val['file_name'] = str_replace('%w', 920, $result);
+        $val['resize_image'] = str_replace('%w', 200, $result);
+        $val['file_size'] = 0;
+        $val['file_type'] = 'image';
+        $val['via_design'] = 1;
+        $id = $this->model('file')->save($val);
+        Database::getInstance()->query("UPDATE files SET via_design=? WHERE id=?", 1, $id);
+    }
+
     public function load() {
         $offset = $this->request->input('offset', 0);
-
-        $files = $this->model('file')->getFiles($offset, $this->request->segment(2), $this->request->input('type', 'all'));
+        $folderId = ($this->request->segment(2)) ? $this->request->segment(2) : $this->request->input('id');
+        $files = $this->model('file')->getFiles($offset, $folderId, $this->request->input('type', 'all'));
         if ($paginate = $this->request->input('paginate')) {
             $content = '';
             foreach($files as $file) {
@@ -339,5 +405,13 @@ class FileController extends Controller {
             ));
         }
         return $this->view('files/load', array('files' => $files));
+    }
+
+
+
+    public function open() {
+        $id = $this->request->input('id');
+        $files = $this->model('file')->getFiles(0, $id);
+        return $this->view('files/open', array('files' => $files));
     }
 }

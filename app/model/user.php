@@ -65,6 +65,7 @@ class UserModel extends Model {
     }
 
     function processLogin() {
+
         $loginId = "";
         $password = "";
         if (isset($_COOKIE['loginid']) and isset($_COOKIE['user_token'])) {
@@ -79,12 +80,11 @@ class UserModel extends Model {
         if (!$loginId) return false;
         $query = $this->db->query("SELECT * FROM users WHERE id = ?", $loginId);
         $result = $query->fetch(\PDO::FETCH_ASSOC);
-
         if (!hash_check($result['password'], $password)) return false;
         //@TODO - Other processes for specific auth types
         $this->authId = $result['id'];
         $this->authUser = $result;
-        $this->authOwnerId = ($result['is_team']) ? $result['is_team'] : $this->authId;
+        $this->authOwnerId = $this->authId;
         $this->getOwner();
 
         $this->saveData($result['id'], $result['password'], $this->authOwnerId);
@@ -106,7 +106,7 @@ class UserModel extends Model {
         }
          $this->authId = $result['id'];
         $this->authUser = $result;
-        $this->authOwnerId = ($result['is_team']) ? $result['is_team'] : $this->authId;
+        $this->authOwnerId =  $this->authId;
         $this->getOwner();
         $this->saveData($result['id'], $result['password']);
         return true;
@@ -115,7 +115,7 @@ class UserModel extends Model {
     function loginWithObject($result) {
         $this->authId = $result['id'];
         $this->authUser = $result;
-        $this->authOwnerId = ($result['is_team']) ? $result['is_team'] : $this->authId;
+        $this->authOwnerId =  $this->authId;
         $this->getOwner();
         $this->saveData($result['id'], $result['password']);
     }
@@ -166,27 +166,16 @@ class UserModel extends Model {
         if ($isAdmin) $active = 1;
         $query = $this->db->query("INSERT INTO users (password,email,full_name,created,changed,status,timezone) VALUES(?,?,?,?,?,?,?)", $password,$email,$full_name,time(),time(), $active, $timezone);
         $userid = $this->db->lastInsertId();
-
-
-
         if ($isAdmin) {
             Hook::getInstance()->fire('admin.add.user', null, array($userid, $val));
         }
+        $expireTime = time() + 864000;
+        $this->db->query("UPDATE users SET expire_date=?,package=? WHERE id=?", $expireTime,'trial', $userid);
 
-
-
-        if (!$noActivate) {
-            if ($active == 0) {
-                $this->sendActivationLink($userid, $email, $full_name);
-            } else {
-                $this->sendWelcomeMail($email, $full_name);
-            }
-            Hook::getInstance()->fire('user.signup.success', null, array($userid, $val));
-
-        } else {
+        try{
             $this->sendWelcomeMail($email, $full_name);
-            $this->db->query("UPDATE users SET status=? WHERE id=?", 1, $userid);
-        }
+        } catch (Exception $e){}
+        $this->db->query("UPDATE users SET status=? WHERE id=?", 1, $userid);
         return $userid;
     }
 
@@ -234,19 +223,24 @@ class UserModel extends Model {
         $code = mEncrypt(''.time().'');
         $link = url('reset/'.$code);
         $this->db->query("UPDATE users SET recovery_code=? WHERE id=?", $code, $userid);
+        $email = Email::getInstance();
+        $email->setAddress($email, $full_name);
+        $email->setSubject("Timably - Reset your password!");
+        $email->template("reset-password", array(
+            'link' => $link
+        ));
+        return $email->send();
 
-        return Email::getInstance()->setAddress($email, $full_name)
-            ->setSubject(config('reset-subject'), array('full_name' => $full_name))
-            ->setMessage(config('reset-content'), array( 'full_name' => $full_name, 'reset_link' => $link))
-            ->send();
     }
 
-    public function sendWelcomeMail($email, $full_name) {
-        if (!config('enable-welcome-mail',false)) return false;
-        return Email::getInstance()->setAddress($email, $full_name)
-            ->setSubject(config('welcome-subject'), array('full_name' => $full_name))
-            ->setMessage(config('welcome-content'), array( 'full_name' => $full_name))
-            ->send();
+    public function sendWelcomeMail($emailA, $full_name) {
+        $email = Email::getInstance();
+        $email->setAddress($emailA, $full_name);
+        $email->setSubject("Timably - Welcome on board!");
+        $email->template("welcome-email", array(
+            'full_name' => $full_name
+        ));
+        return $email->send();
     }
 
     public function updatePassword($password, $userid) {
@@ -315,13 +309,17 @@ class UserModel extends Model {
 
     public function getNameLetters($user = null) {
         $user = ($user) ? $user : $this->authUser;
-        $explode = explode(' ', $user['full_name']);
+        return $this->extractLetters($user['full_name']);
+    }
+
+    public function extractLetters($words) {
+        $explode = explode(' ', $words);
         if (count($explode) > 1) {
             list($first, $second) = $explode;
         } else {
-            $first = $user['full_name'];
+            $first = $words;
         }
-            $letters = mb_substr($first, 0, 1);
+        $letters = mb_substr($first, 0, 1);
         if (isset($second)) $letters .= mb_substr($second, 0, 1);
         return mb_strtoupper($letters);
     }
@@ -375,159 +373,20 @@ class UserModel extends Model {
 
     }
 
-    public function getPermissions() {
-        $permissions =  perfectUnserialize($this->authOwner['permission']);
-        return (empty($permissions)) ? array() : $permissions;
+    public function canDoTeam() {
+        $result = false;
+        if ($this->model('workspace')->isAMember()) return true;
+        //if (!$this->hasTried()) return false;
+        if ($this->authOwner['package'] == 'team' or (!$this->authOwner['package'] )) $result = 1;
+        return $result;
     }
 
+    public function hasTried() {
+        $result = false;
+        return $this->model('workspace')->countWorkspace();
 
-
-    public function hasPermission($key, $default = null) {
-        $permissions = $this->getPermissions();
-        if (empty($permissions)) {
-            if ($default ) return $default;
-            return true;
-        }
-        if (isset($permissions[$key])) return $permissions[$key];
-        return ($default) ? $default : false;
     }
 
-    public function permission($key, $default = null) {
-        $permissions = $this->getPermissions();
-        if (empty($permissions)) {
-            if ($default ) return $default;
-            return true;
-        }
-        if (isset($permissions[$key])) return $permissions[$key];
-        return ($default) ? $default : false;
-    }
-
-
-    public function getTotalSize() {
-        $size = $this->hasPermission('storage');
-        return (!$size) ? 'unlimited' : $size;
-    }
-
-    public function getUsedSize() {
-        $query = $this->db->query("SELECT SUM(file_size) as size FROM files WHERE userid=?", $this->authOwnerId);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-        return  ($result) ? round($result['size'] / 1000) : 0;
-    }
-
-    public function getAllowSize() {
-        if(!$this->isLoggedin()) return 0;
-        $permissions = $this->getPermissions();
-        $size = (isset($permissions['file_size'])) ? $permissions['file_size']: null;
-        if (!$size) return 1000;
-        return $size;
-    }
-
-    public function canUpload() {
-        $used = $this->getUsedSize();
-        $total = $this->getTotalSize();
-        if ($total == 'unlimited') return true;
-        if ($used < $total) return true;
-        return false;
-    }
-
-    public function saveTeam($val, $id = null) {
-        $ext = array(
-            'name' => '',
-            'email' => '',
-            'permission' => array()
-        );
-        /**
-         * @var $name
-         * @var $email
-         * @var $permission
-         */
-        extract(array_merge($ext, $val));
-
-        $permission = perfectSerialize($permission);
-        if ($id) {
-            $this->db->query("UPDATE user_team SET permissions=? WHERE id=?", $permission, $id);
-        } else {
-            if ($this->teamExists($email)) return false;
-
-            $this->db->query("INSERT INTO user_team (name,email,ownerid,permissions)VALUES(?,?,?,?)",
-                $name,$email,$this->authOwnerId,$permission);
-            $this->sendInviteCode($this->db->lastInsertId());
-            return true;
-        }
-    }
-
-    public function findTeam($id) {
-        $query = $this->db->query("SELECT * FROM user_team WHERE id=?", $id);
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function findTeamByCode($code) {
-        $query = $this->db->query("SELECT * FROM user_team WHERE invite_code=?", $code);
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function sendInviteCode($id) {
-        $team = $this->findTeam($id);
-        $name = $team['name'];
-        $email = $team['email'];
-        //send invite code
-        $code = generateHash($name.$email.time());
-
-        $link = url('activate/invite/'.$code);
-
-        $this->db->query("UPDATE user_team SET invite_code=? WHERE id=?", $code, $id);
-        return Email::getInstance()->setAddress($email, $name)
-            ->setSubject(l('invite-member-subject', array('name' => $this->authOwner['full_name'], 'site' => config('site-title', 'SmartPost'))))
-            ->setMessage(l('invite-member-message',array( 'name' => $name, 'link' => $link)))
-            ->send();
-    }
-
-    public function deleteTeam($id) {
-        return $this->db->query("DELETE FROM user_team WHERE id=? AND ownerid=?", $id, $this->authOwnerId);
-    }
-
-    public function teamExists($email) {
-        $query = $this->db->query("SELECT * FROM user_team WHERE ownerid=? AND email=?", $this->authOwnerId, $email);
-        return $query->rowCOunt();
-    }
-
-    public function getTeamMembers() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE ownerid=?", $this->authOwnerId);
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function setOwnerId($id, $userid) {
-        $this->db->query("UPDATE users SET is_team=? WHERE id=?", $id, $userid);
-        return $this->db->query("UPDATE user_team SET last_active_time=? WHERE ownerid=? AND userid=?", time(), $id, $userid);
-    }
-
-    public function activateTeamMember($team, $user) {
-        $this->setOwnerId($team['ownerid'], $user['id']);
-        return $this->db->query("UPDATE user_team SET status=?,last_active_time=?,userid=? WHERE id=?", 1,time(),$user['id'], $team['id']);
-    }
-
-    public function isOriginalOwner() {
-        return ($this->authId == $this->authOwnerId);
-    }
-
-    public function findTheTeam() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE userid=? AND ownerid=?", $this->authId, $this->authOwnerId);
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-    public function teamCanUse($p) {
-        $team = ($this->team) ? $this->team : $this->findTheTeam();
-        $permission = perfectUnserialize($team['permissions']);
-        return $permission[$p];
-    }
-
-    public function countTeamMember() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE ownerid=?", $this->authOwnerId);
-        return $query->rowCount();
-    }
-    public function isTeamMEmber() {
-        $query = $this->db->query("SELECT * FROM user_team WHERE userid=?", $this->authId);
-        return $query->rowCount();
-    }
 
     public function getSwitchAccounts() {
         $ids = array($this->authId);
@@ -538,5 +397,87 @@ class UserModel extends Model {
         $ids = implode(',', $ids);
         $query = $this->db->query("SELECT * FROM users WHERE id IN ($ids)");
         return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findReferral($userid = null) {
+        $userid = ($userid) ? $userid : $this->authId;
+        $query = $this->db->query("SELECT * FROM referral WHERE userid=?", $userid);
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    public function enableReferral() {
+        if (!$this->findReferral()) {
+            $code = uniqueKey(20,20);
+            $this->db->query("INSERT INTO referral(userid,referral_code)VALUES(?,?)", $this->authId, $code);
+        }
+    }
+
+    public function getTotalReferrals() {
+        $query = $this->db->query("SELECT * FROM referral_users WHERE userid=?", $this->authId);
+        return $query->rowCount();
+    }
+
+    public function getReferrals() {
+        $query = $this->db->query("SELECT * FROM referral_users WHERE userid=? ORDER BY id DESC", $this->authId);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getReferralIds() {
+        $query = $this->db->query("SELECT * FROM referral_users WHERE userid=? ORDER BY id DESC LIMIT 50", $this->authId);
+        $ids = array(0);
+        while($fetch = $query->fetch(PDO::FETCH_ASSOC)) {
+            $ids[] = $fetch['f_userid'];
+        }
+        return $ids;
+    }
+
+    public function countActiveReferrals() {
+        $ids = $this->getReferralIds();
+        $ids = implode(',', $ids);
+        $time = time();
+        $query = $this->db->query("SELECT * FROM users WHERE package!=? AND expire_date>$time AND id IN ($ids)", 'trial');
+        return $query->rowCount();
+    }
+
+    public function getMyPayouts() {
+        $query = $this->db->query("SELECT * FROM referral_payments WHERE userid=? ORDER BY id DESC", $this->authId);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addPayout($val) {
+        $ext = array(
+            'email' => '',
+            'amount' => ''
+        );
+        /**
+         * @var $email
+         * @var $amount
+         */
+        extract(array_merge($ext, $val));
+        $referral = $this->findReferral();
+        if ($amount < 20 ) return false;
+        if ($amount > $referral['balance']) return false;
+        $this->db->query("INSERT INTO referral_payments (userid,amount,created)VALUES(?,?,?)", $this->authId, $amount, time());
+        $newBalance = $referral['balance'] - $amount;
+        $this->db->query("UPDATE referral SET paypal_email=?,balance=? WHERE userid=? ", $email, $newBalance, $this->authId);
+        return true;
+    }
+
+    public function findReferralByCode($code) {
+        $query = $this->db->query("SELECT * FROM referral WHERE referral_code=?", $code);
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function processReferral($userid, $amount) {
+        $query = $this->db->query("SELECT * referral_users WHERE f_userid=?", $userid);
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            $referralUser = $this->model('user')->getUser($result['userid']);
+            $referral = $this->findReferral($referralUser['id']);
+            $percent = ($result['status']) ? $referralUser['referral_bonus'] : $referralUser['referral_rbonus'];
+            $gain = ($amount * $percent) / 100;
+            $balance = $referral['balance'] + $gain;
+            $this->db->query("UPDATE referral_users SET last_payment=? WHERE id=?", time(), $result['id']);
+            $this->db->query("UPDATE referral SET balance=? WHERE id=?", $balance, $referral['id']);
+        }
     }
 }

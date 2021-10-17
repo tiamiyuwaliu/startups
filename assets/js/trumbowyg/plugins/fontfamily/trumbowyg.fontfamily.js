@@ -13,26 +13,32 @@
             da: {
                 fontFamily: 'Skrifttype'
             },
+            de: {
+                fontFamily: 'Schriftart'
+            },
+            et: {
+                fontFamily: 'Font'
+            },
             fr: {
                 fontFamily: 'Police'
             },
-            de: {
-                fontFamily: 'Schriftart'
+            hu: {
+                fontFamily: 'Betűtípus'
+            },
+            ko: {
+                fontFamily: '글꼴'
             },
             nl: {
                 fontFamily: 'Lettertype'
             },
-            tr: {
-                fontFamily: 'Yazı Tipi'
-            },
-            zh_tw: {
-                fontFamily: '字體',
-            },
             pt_br: {
                 fontFamily: 'Fonte',
             },
-            ko: {
-                fontFamily: '글꼴'
+            tr: {
+                fontFamily: 'Yazı tipi'
+            },
+            zh_tw: {
+                fontFamily: '字體',
             },
         }
     });

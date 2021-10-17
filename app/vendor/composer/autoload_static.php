@@ -72,6 +72,7 @@ class ComposerStaticInitc6bef047a351004aa9c797fe245828bf
         ),
         'J' => 
         array (
+            'JoyPixels\\' => 10,
             'JBZoo\\Utils\\' => 12,
             'JBZoo\\Image\\' => 12,
             'JBZoo\\Data\\' => 11,
@@ -93,6 +94,7 @@ class ComposerStaticInitc6bef047a351004aa9c797fe245828bf
         ),
         'F' => 
         array (
+            'Firebase\\JWT\\' => 13,
             'Fbns\\Client\\' => 12,
         ),
         'E' => 
@@ -213,6 +215,10 @@ class ComposerStaticInitc6bef047a351004aa9c797fe245828bf
         array (
             0 => __DIR__ . '/..' . '/lazyjsonmapper/lazyjsonmapper/src',
         ),
+        'JoyPixels\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/joypixels/emoji-toolkit/lib/php/src',
+        ),
         'JBZoo\\Utils\\' => 
         array (
             0 => __DIR__ . '/..' . '/jbzoo/utils/src',
@@ -262,6 +268,10 @@ class ComposerStaticInitc6bef047a351004aa9c797fe245828bf
         array (
             0 => __DIR__ . '/..' . '/corneltek/getoptionkit/src',
         ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
         'Fbns\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/valga/fbns-react/src',
@@ -307,6 +317,7 @@ class ComposerStaticInitc6bef047a351004aa9c797fe245828bf
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'Omnipay\\Omnipay' => __DIR__ . '/..' . '/omnipay/common/src/Omnipay.php',
     );

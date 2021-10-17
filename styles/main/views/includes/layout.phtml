@@ -56,22 +56,27 @@
 </head>
 
 <body>
-    <div id="cover-loader"><img src="<?php echo assetUrl('styles/main/images/loader.gif')?>"/> </div>
-    <div id="top-loading"></div>
-    <div id="page-container">
-        <?php echo $content?>
-    </div>
-    <div id="backtotop"><a href="#"></a></div>
+<div id="cover-loader"><img src="<?php echo assetUrl('styles/main/images/loader.gif')?>"/> </div>
+<div id="top-loading"></div>
+<div id="page-container">
+    <?php echo $content?>
 
-    <?php if(config('enable-gdpr', true)):?>
-        <div class="gdpr-container" data-aos="fade-right" data-aos-duration="1000">
-            <div><?php _l('gdpr-text')?></div>
-            <div class="buttons mt-2">
-                <a href="" onclick="return acceptCookie()" class="btn btn-primary"><?php _l('got-it')?></a>
-            </div>
+
+</div>
+<?php if(model('user')->isLoggedIn() and  $pageType != 'frontend'):?>
+    <a href="" class="feedback-btn">Give FeedBack</a>
+<?php endif?>
+<div id="backtotop"><a href="#"></a></div>
+
+<?php if(config('enable-gdpr', true)):?>
+    <div class="gdpr-container" data-aos="fade-right" data-aos-duration="1000">
+        <div><?php _l('gdpr-text')?></div>
+        <div class="buttons mt-2">
+            <a href="" onclick="return acceptCookie()" class="btn btn-primary"><?php _l('got-it')?></a>
         </div>
-    <?php endif?>
-
+    </div>
+<?php endif?>
+<?php echo view('expired/modal')?>
 </body>
 
 <script>
@@ -80,6 +85,8 @@
     var isLoggedIn = <?php echo $C->model('user')->isLoggedIn() ? 'true' : 'false'?>;
     var strings = {
         are_your_sure: "<?php _l("are-you-sure")?>",
+        yes: "<?php _l('yes')?>",
+        cancel: "<?php _l('cancel')?>",
         ok : "<?php _l("ok")?>",
         close : "<?php _l("close")?>",
         notImageError : "<?php echo l("not-image-error")." : ". config("image-file-types", "jpg,png,gif,jpeg")?>",
@@ -87,7 +94,7 @@
         processing : "<?php _l("processing")?>",
         select_all : "<?php _l('select-all')?>",
         deselect : "<?php _l('deselect')?>",
-        allowFileSizeError: "<?php _l('allow-upload-file-size-error')?> <?php echo model('user')->getAllowSize()?>MB",
+        allowFileSizeError: "<?php _l('allow-upload-file-size-error')?> 20MB",
         notImageVideoError: "<?php _l('not-image-video-file-error')?>",
         challenge_required: "<?php _l('challenge_required')?>",
         verification_required: "<?php _l('verification-required')?>",
@@ -104,77 +111,140 @@
         need_edit_file_video: '<?php _l('need_edit_file_video')?>',
         select_account_actions: '<?php _l('you-need-select-account')?>',
         accounts_deleted: '<?php _l('accounts-deleted-success')?>',
-        accounts_synced: '<?php _l('account_synced')?>'
+        accounts_synced: '<?php _l('account_synced')?>',
+        accounts_limit_reach: '<?php  _l('account-limit-reached')?>',
+        accounts_connected_already: '<?php _l('account-connected-already')?>',
+        choose_accounts: '<?php _l('choose-accounts')?>',
+        sorting_error: "<?php _l('sorting-error')?>",
+        add_text_content: "<?php _l('add-text-content-error')?>",
+        confirm: "<?php _l('confirm')?>",
+        pick_time: " <?php _l('pick-time')?>",
+        label_title: "<?php _l('label-title')?>",
+        label_add_error: "<?php _l('label_add_error')?>",
+        share_link_copied: "<?php _l('share_link_copied')?>"
+
         <?php Hook::getInstance()->fire("js.translation")?>
     };
     var supportImagesType = "<?php echo config("image-file-types", "jpg,png,gif,jpeg")?>";
     var supportVideoType = "<?php echo (config('ffmpeg-path', '') == '') ? 'mp4' : 'mp4'?>";
-    var allowPhotoSize = <?php echo model('user')->getAllowSize() * 1024 * 1000?>;
-    var allowFileSize = <?php echo model('user')->getAllowSize() * 1024 * 1000?>;
+    var allowPhotoSize = <?php echo 20 * 1024 * 1000?>;
+    var allowFileSize = <?php echo 20 * 1024 * 1000?>;
     var lastTime = <?php echo time()?>;
     var siteTitle = "<?php echo config("site-title")?>";
     var logo = "<?php echo assetUrl(config('site_short_icon', 'assets/images/short-logo.png'))?>";
     var loaderImage = "<?php echo assetUrl('styles/main/images/loader.gif')?>";
     var stripeKey = "<?php echo config("stripe-publishable-key", "")?>";
     var enableWelcomeStemps = 0;
-    <?php if($pageType != 'frontend' and config('google-api-key', '') !=''):?>
-        var googleDriveDeveloperKey = "<?php echo config('google-api-key', '')?>";
-        var googleDriveClientId = "<?php echo config('google-drive-client-id', '')?>";
-        var scope = ['https://www.googleapis.com/auth/drive.file'];
-        var pickerApiLoaded = false;
+    var userId = '<?php echo model('user')->authOwnerId?>';
+    var workspaceId = '<?php echo $C->workspaceId?>';
+    var jwtAuth = '';
+    <?php if(model('user')->isLoggedIn()): autoLoadVendor();?>
+    jwtAuth = '<?php echo generateNoltToken(model('user')->authUser)?>';
+    <?php endif?>
+    <?php if($pageType != 'frontend'):?>
+    var googleDriveDeveloperKey = "AIzaSyDMcM0oLJYcAURKF2V41mA_MGuXfGy-sT8";
+    var googleDriveClientId = "648589569312-vgthib7pb7t0qm7kv18ctl47k38onc9u.apps.googleusercontent.com";
+    var scope = ['https://www.googleapis.com/auth/drive.file'];
+    var pickerApiLoaded = false;
     <?php endif?>
 
     <?php if($pageType != 'frontend'):?>
-        // The Client ID obtained from the Google Developers Console. Replace with your own Client ID.
+    // The Client ID obtained from the Google Developers Console. Replace with your own Client ID.
 
-        var dateFormat = '<?php echo getAdminDateFormat(true)?>';
-        var dateFormatId = '<?php echo getSelectedDateFormat()?>';
-        var oauthToken;
+    var dateFormat = '<?php echo getAdminDateFormat(true)?>';
+    var dateFormatId = '<?php echo getSelectedDateFormat()?>';
+    var oauthToken;
 
 
     <?php endif?>
 </script>
 <script src="<?php echo assetUrl('assets/js/plugin.js')?>?time=<?php echo fileatime(path('assets/js/plugin.js'))?>"></script>
 <script src="<?php echo assetUrl('assets/js/trumbowyg/trumbowyg.min.js')?>"></script>
-
+<script src='https://cdn.tiny.cloud/1/4eudkp3t7ii81ucoc27v26luifagzk4swtmvwbx9mu5qvk4k/tinymce/5/tinymce.min.js' referrerpolicy="origin">
+</script>
 <script src="<?php echo assetUrl('styles/main/js/main.js')?>?time=<?php echo fileatime(path('styles/main/js/main.js'))?>"></script>
 <?php Hook::getInstance()->fire("footer.after.js")?>
+<?php if($pageType == 'frontend'):?>
+    <script src="<?php echo assetUrl('styles/main/js/frontend.js')?>"></script>
+
+<?php endif?>
 <?php if($pageType != 'frontend'):?>
     <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
-    <?php if(config('dropbox-api-key')):?>
-    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="<?php echo config('dropbox-api-key')?>"></script>
-    <?php endif?>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="jpb4ltq4ft2xnvi"></script>
 
-    <?php if(config('onedrive-client-id')):?>
-        <script>
-            var onedriveKey = "<?php echo config('onedrive-client-id')?>"
-        </script>
-        <script type="text/javascript" src="https://js.live.net/v7.0/OneDrive.js"></script>
-    <?php endif?>
-    <?php if(config('beamer-id', '')):?>
-        <script>
-            var beamer_config = {
-                product_id : "<?php echo config('beamer-id', '')?>",
-                button_position: 'top-right'
+
+    <script>
+        var beamer_config = {
+            product_id : "womQbWun36859",
+            button_position: 'top-right',
+            selector: '.beamer-notification-btn'
+        };
+    </script>
+    <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js" defer="defer"></script>
+    <script type="text/javascript">
+        (function (document, url) {
+            var script = document.createElement('script');
+            script.src = url;
+            script.onload = function () {
+                // API initialization
+                if (window.Canva && window.Canva.DesignButton) {
+
+                    window.Canva.DesignButton.initialize({
+                        apiKey: 'x9ZrDIhW73OSWzJXttEWdMVS',
+                    }).then(function (api) {
+                        window.canvaAPI = api;
+                        //console.log(window.canvaAPI)
+                    })
+
+                }
             };
-        </script>
-        <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
-    <?php endif?>
+            document.body.appendChild(script);
+        })(document, 'https://sdk.canva.com/designbutton/v2/api.js');
+    </script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+    <script type="text/javascript">
+        Paddle.Setup({
+            vendor: 135918,
+            eventCallback: function(data) {
+                // The data.event will specify the event type
+                if (data.event === "Checkout.Complete") {
+                    pageLoader(true);
+                    notify("Please wait while we validate your payment", 'success');
+                    setTimeout(function() {
+                        pageLoaded();
+                        notify("Thanks for making payment", 'success');
+                        window.location.href = buildLink('profile/billing');
+                    }, 30000)
+                }
+                else if (data.event === "Checkout.Close") {
+                    //console.log(data.eventData); // Data specifics on the event
+                }
+            }
+        });
+    </script>
+
 <?php else:?>
     <script src="<?php echo assetUrl('styles/main/js/animate.js')?>"></script>
-    <?php if(config('enable-captcha', false)):?>
-        <script>
-            var  onloadCallback = function() {
-                window.captchIsLoaded = true
-            }
-        </script>
-        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-                async defer>
-        </script>
-    <?php endif?>
+    <script>
+        var  onloadCallback = function() {
+            window.captchIsLoaded = true
+        }
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+            async defer>
+    </script>
 
 <?php endif?>
 
+<?php if($message = $C->request->input('message')):?>
+    <script>
+        $(function() {
+            notify('<?php _l($message)?>', '<?php echo $C->request->input('type')?>');
+        })
+    </script>
+<?php endif?>
 <?php echo str_replace('&#39;', "'", config('embed-code', ''))?>
 </body>
 </html>

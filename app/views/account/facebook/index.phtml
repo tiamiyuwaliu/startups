@@ -1,0 +1,131 @@
+<div class="content-top">
+    <div class="left-actions" >
+        <h5 class="pt-2">
+            <?php if($type == 'instagram'):?>
+                <?php _l('choose-instagram-profile')?>
+            <?php else:?>
+                <?php echo ($type == 'page') ? l('choose-facebook-pages') : l('choose-facebook-groups')?>
+            <?php endif?>
+        </h5>
+
+    </div>
+
+    <div class="right-actions pt-2">
+        <a href="<?php echo url('accounts')?>" data-ajax="true" class="btn  shadow-none "><?php _l('go-back')?></a>
+        <a href="<?php echo url('accounts')?>" data-ajax="true" class="btn btn-primary  shadow-none "><?php _l('done')?></a>
+
+    </div>
+</div>
+<div class="content-body  content-body-with-tabs">
+    <div class="row">
+        <div class="col-8">
+            <?php if($type == 'group'):?>
+                <div class="alert alert-info">
+                    <h6><strong>Some of your Facebook groups are fade out?</strong></h6>
+                    You need to install <strong>Timably App</strong> into the group , you can do so by clicking on this group and it will take you to the settings page to add our app.
+                    <a href="<?php echo url('accounts/facebook?auth=1&type=group')?>" class="btn btn-primary ajax-action">Click to refresh list</a>
+                </div>
+            <?php else:?>
+                <div class="alert alert-info">
+                    <h6><strong><?php _l('some-facebook-page-title')?></strong></h6>
+                    <?php _l('some-facebook-page-note')?>
+                    <a href=""><?php _l('learn-more')?></a>
+                </div>
+            <?php endif?>
+            <div  class="content-scroller" data-height="170">
+                <div class="account-choose-container clearfix">
+                    <?php if($type == 'page'):?>
+                        <?php if(isset($pages['data']) and is_array($pages['data'])):?>
+
+                            <?php foreach($pages['data'] as $page):$already = model('social')->findAccountBySID($page['id'], 'facebook', 'page')?>
+                                <?php
+                                $pageAvatar = $C->api('facebook')->getPageAvatar($page);
+                                ?>
+                                <div class="each-container">
+                                    <a href="" onclick="return Account.connectFacebook(this, 'page', '<?php echo $page['id']?>', '<?php echo $page['name']?>', '<?php echo $token?>', '<?php echo $pageAvatar?>')" class="<?php echo ($already) ? 'active' : null?>">
+
+                                        <img src="<?php echo $pageAvatar?>" class="avatar"/>
+
+                                        <div class="name truncate"><?php echo $page['name']?></div>
+                                        <i class="las la-check-circle "></i>
+                                        <div class="mt-2 activeness connect"><i class="la la-plus"></i> <?php _l('connect')?></div>
+                                        <div class="mt-2 activeness connected" >
+                                            <?php _l('connected')?><br/>
+                                            <span style="color: grey;font-size:11px">Click to refresh</span>
+                                        </div>
+
+                                    </a>
+                                </div>
+
+                            <?php endforeach?>
+                        <?php endif?>
+                    <?php elseif($type == 'group'):?>
+                        <?php if(isset($groups['data']) and is_array($groups['data'])):?>
+
+                            <?php foreach($groups['data'] as $group):$already = model('social')->findAccountBySID($group['id'], 'facebook', 'group')?>
+                                <?php
+                                $groupAvatar = $C->api('facebook')->getGroupAvatar($group);
+                                ?>
+
+                                <div class="each-container">
+                                    <?php if($group['installed']):?>
+                                        <a href="" onclick="return Account.connectFacebook(this, 'group', '<?php echo $group['id']?>', '<?php echo $group['name']?>', '<?php echo $token?>', '<?php echo $groupAvatar?>')" class="<?php echo ($already) ? 'active' : null?>">
+
+                                            <img src="<?php echo $groupAvatar?>" class="avatar"/>
+
+                                            <div class="name truncate"><?php echo $group['name']?></div>
+                                            <i class="las la-check-circle "></i>
+                                            <div class="mt-2 activeness connect"><i class="la la-plus"></i> <?php _l('connect')?></div>
+                                            <div class="mt-2 activeness connected" >
+                                                <?php _l('connected')?>
+                                                <span style="color: grey;font-size:11px">Click to refresh</span>
+                                            </div>
+                                        </a>
+                                    <?php else:?>
+                                        <a href="https://www.facebook.com/groups/<?php echo $group['id']?>/apps/store" target="_blank"  class="<?php echo ($already) ? 'active' : null?>">
+
+                                            <img src="<?php echo $groupAvatar?>" class="avatar"/>
+
+                                            <div class="name truncate"><?php echo $group['name']?></div>
+                                            <i class="las la-check-circle "></i>
+                                            <div class="mt-2 activeness connect"><i class="la la-plus"></i> <?php _l('connect')?></div>
+                                            <div class="mt-2 activeness connected" > <?php _l('connected')?></div>
+                                            <div class="cover-it">Timably App <br/> Not Installed<br/>
+                                                <span style="font-size:11px;color: #6D39E1;display: block" class="truncate"><?php echo $group['name']?></span><br/>
+                                                <span style="font-size:11px">Click to install</span> </div>
+                                        </a>
+                                    <?php endif?>
+                                </div>
+
+                            <?php endforeach?>
+                        <?php endif?>
+                    <?php else:?>
+                        <?php foreach($instagrams as $instagram):$already = model('social')->findAccountBySID($instagram['id'], 'instagram', '')?>
+
+                            <div class="each-container">
+                                <a href="" onclick="return Account.connectFacebook(this, 'instagram', '<?php echo $instagram['id']?>', '<?php echo $instagram['username']?>', '<?php echo $token?>', '<?php echo $instagram['avatar']?>')" class="<?php echo ($already) ? 'active' : null?>">
+
+                                    <img src="<?php echo $instagram['avatar']?>" class="avatar"/>
+
+                                    <div class="name truncate"><?php echo $instagram['username']?></div>
+                                    <i class="las la-check-circle "></i>
+                                    <div class="mt-2 activeness connect"><i class="la la-plus"></i> <?php _l('connect')?></div>
+                                    <div class="mt-2 activeness connected" > <?php _l('connected')?></div>
+                                </a>
+                            </div>
+
+                        <?php endforeach?>
+                    <?php endif?>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="vertifical-line">
+                <div class="triangle-left"></div>
+
+                <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Ftimably%2F&width=450&layout=standard&action=like&size=large&share=true&height=35&appId=249973445105807" width="450" height="35" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+
+            </div>
+        </div>
+    </div>
+</div>
