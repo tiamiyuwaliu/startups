@@ -63,9 +63,7 @@
 
 
 </div>
-<?php if(model('user')->isLoggedIn() and  $pageType != 'frontend'):?>
-    <a href="" class="feedback-btn">Give FeedBack</a>
-<?php endif?>
+
 <div id="backtotop"><a href="#"></a></div>
 
 <?php if(config('enable-gdpr', true)):?>
@@ -164,10 +162,7 @@
 </script>
 <script src="<?php echo assetUrl('styles/main/js/main.js')?>?time=<?php echo fileatime(path('styles/main/js/main.js'))?>"></script>
 <?php Hook::getInstance()->fire("footer.after.js")?>
-<?php if($pageType == 'frontend'):?>
-    <script src="<?php echo assetUrl('styles/main/js/frontend.js')?>"></script>
 
-<?php endif?>
 <?php if($pageType != 'frontend'):?>
     <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="jpb4ltq4ft2xnvi"></script>
@@ -200,29 +195,6 @@
             };
             document.body.appendChild(script);
         })(document, 'https://sdk.canva.com/designbutton/v2/api.js');
-    </script>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-    <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
-    <script type="text/javascript">
-        Paddle.Setup({
-            vendor: 135918,
-            eventCallback: function(data) {
-                // The data.event will specify the event type
-                if (data.event === "Checkout.Complete") {
-                    pageLoader(true);
-                    notify("Please wait while we validate your payment", 'success');
-                    setTimeout(function() {
-                        pageLoaded();
-                        notify("Thanks for making payment", 'success');
-                        window.location.href = buildLink('profile/billing');
-                    }, 30000)
-                }
-                else if (data.event === "Checkout.Close") {
-                    //console.log(data.eventData); // Data specifics on the event
-                }
-            }
-        });
     </script>
 
 <?php else:?>

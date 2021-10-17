@@ -379,8 +379,8 @@ class HomeController extends  Controller {
 
         if ($val = $this->request->input('val')) {
             return Email::getInstance()->setFrom($val['email'], $val['firstname'].' '.$val['lastname'])
-                ->setAddress('team@timably.com', 'Timably')
-                ->setSubject('Timably - New Contact Message')
+                ->setAddress('team@timably.com', 'SocialPost')
+                ->setSubject('SocialPost - New Contact Message')
                 ->setMessage($val['message'])
                 ->send();
         }

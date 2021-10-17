@@ -349,46 +349,8 @@ class FileController extends Controller {
 
         return null;
     }
-    public function graphics() {
-        $this->setActiveIconMenu('media');
-        $this->setTitle(l('graphics-template'));
-
-        return $this->render($this->view('files/graphics/index'), true);
-    }
-
-    public function saveGraphics() {
-        header('Content-Type: application/json');
-        $json = file_get_contents('php://input');
 
 
-
-// Converts it into a PHP object
-        $data = json_decode($json, true);
-        $fileLink = $data['public_png_url'];
-
-        $ext = 'png';
-        $user = $this->model('user')->getUser($data['user_uid']);
-        if (!$user) return false;
-
-        $this->model('user')->loginWithObject($user);
-        $this->workspaceId = $data['custom_field_1'];
-        $dir = "uploads/files/file/".model('user')->authOwnerId.'/';
-        if (!is_dir(path($dir))) mkdir(path($dir), 0777, true);
-        $file = $dir.md5($fileLink).'.'.$ext;
-        getFileViaCurl($fileLink, $file);
-
-        $val = array();
-        $upload = new Uploader(path($file), 'image', false, true);
-        $upload->setPath("files/images/".model('user')->authOwnerId.'/'.time().'/');
-        $result = $upload->resize()->result();
-        $val['file_name'] = str_replace('%w', 920, $result);
-        $val['resize_image'] = str_replace('%w', 200, $result);
-        $val['file_size'] = 0;
-        $val['file_type'] = 'image';
-        $val['via_design'] = 1;
-        $id = $this->model('file')->save($val);
-        Database::getInstance()->query("UPDATE files SET via_design=? WHERE id=?", 1, $id);
-    }
 
     public function load() {
         $offset = $this->request->input('offset', 0);

@@ -15,7 +15,7 @@ class WorkspaceController extends Controller {
                 $member = $this->model('workspace')->invite($val);
                 return json_encode(array(
                     'type' => 'function',
-                    'value' => 'Timably.userInvited',
+                    'value' => 'SocialPost.userInvited',
                     'message' => l('user-invited-success'),
                     'content' => array('content' => $this->view('workspace/member/display', array('user' => $member)), 'id' => $val['id'])
                 ));
@@ -44,7 +44,7 @@ class WorkspaceController extends Controller {
                     model('workspace')->deleteMember($id);
                     return json_encode(array(
                         'type' => 'function',
-                        'value' => 'Timably.workspaceMemberDeleted',
+                        'value' => 'SocialPost.workspaceMemberDeleted',
                         'content' => $id,
                         'message' => l('member-deleted-success')
                     ));

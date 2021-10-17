@@ -1,66 +1,49 @@
-<div class="user-data-page clearfix d-lg-flex">
-    <div class="illustration-wrapper d-flex align-items-center justify-content-between flex-column">
-        <h3 class="font-rubik">Already have an   <br>account? <a href="<?php echo url('login')?>">Log in</a></h3>
-        <div class="illustration-holder">
-            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.svg')?>" alt="" class="illustration">
-            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.1.svg')?>" alt="" class="shapes shape-one">
-            <img src="<?php echo assetUrl('styles/main/images/assets/ils_08.2.svg')?>" alt="" class="shapes shape-two">
-        </div>
-    </div> <!-- /.illustration-wrapper -->
+<form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
+    <h2>Congrats! You can try for 10 days</h2>
+    <p class="header-info pt-10 pb-30"></p>
 
-    <div class="form-wrapper">
-        <div class="d-flex justify-content-between">
-            <div class="logo"><a href="<?php echo url()?>"><img src="<?php echo url('styles/main/images/timably-logo.png')?>" alt="" style="width:150px"></a></div>
-            <a href="<?php echo url()?>" class="font-rubik go-back-button">Go to home</a>
-        </div>
-        <form action="<?php echo getFullUrl()?>" method="post" class="user-data-form mt-40 md-mt-40 general-form">
-            <h2>Congrats! You can try for 10 days</h2>
-            <p class="header-info pt-10 pb-30"></p>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="input-group-meta mb-40 sm-mb-40">
-                        <label>Full Name</label>
-                        <input name="val[full_name]" type="text" placeholder="John doe">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="input-group-meta mb-40 sm-mb-40">
-                        <label>Email</label>
-                        <input name="val[email]" type="email" placeholder="bolcovfed@ce.edu">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="input-group-meta mb-15">
-                        <label>Choose password</label>
-                        <input name="val[password]" type="password" placeholder="Enter Password" class="pass_log_id">
-                        <span class="placeholder_icon"><span class="passVicon"><img src="<?php echo assetUrl('styles/main/images/icon/view.svg')?>" alt=""></span></span>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <select class="form-control select-timezone" name="val[timezone]">
-                        <option value=""><?php _l('select-timezone')?></option>
-                        <?php foreach(getTimezones() as $key => $name):?>
-                            <option value="<?php echo $key?>"><?php echo $name?></option>
-                        <?php endforeach?>
-                    </select>
-
-                    <div class="captcha-container mt-3">
-                        <div class="g-recaptcha-pane" id="g-recaptcha-pane" data-sitekey="6Le2R34cAAAAAEBweIq9jFKOBShagmaTAQUaM1Z-"></div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <button class="theme-btn-one mt-10 mb-10">Create My Account</button>
-                </div>
-                <div class="social-login-container">
-                    <h6>SIGNUP WITH </h6>
-
-                    <a href="<?php echo url('facebook/auth')?>" class="facebook"><i class="lab la-facebook-f"></i></a>
-                    <a href="<?php echo url('twitter/auth')?>" class="twitter"><i class="lab la-twitter"></i></a>
-                    <a href="<?php echo url('google/auth')?>"  class="google"><i class="lab la-google"></i></a>
-                </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="input-group-meta mb-40 sm-mb-40">
+                <label>Full Name</label>
+                <input name="val[full_name]" type="text" placeholder="John doe">
             </div>
-        </form>
-    </div> <!-- /.form-wrapper -->
-</div> <!-- /.user-data-page -->
+        </div>
+        <div class="col-12">
+            <div class="input-group-meta mb-40 sm-mb-40">
+                <label>Email</label>
+                <input name="val[email]" type="email" placeholder="bolcovfed@ce.edu">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="input-group-meta mb-15">
+                <label>Choose password</label>
+                <input name="val[password]" type="password" placeholder="Enter Password" class="pass_log_id">
+                <span class="placeholder_icon"><span class="passVicon"><img src="<?php echo assetUrl('styles/main/images/icon/view.svg')?>" alt=""></span></span>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <select class="form-control select-timezone" name="val[timezone]">
+                <option value=""><?php _l('select-timezone')?></option>
+                <?php foreach(getTimezones() as $key => $name):?>
+                    <option value="<?php echo $key?>"><?php echo $name?></option>
+                <?php endforeach?>
+            </select>
+
+            <div class="captcha-container mt-3">
+                <div class="g-recaptcha-pane" id="g-recaptcha-pane" data-sitekey="6Le2R34cAAAAAEBweIq9jFKOBShagmaTAQUaM1Z-"></div>
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="theme-btn-one mt-10 mb-10">Create My Account</button>
+        </div>
+        <div class="social-login-container">
+            <h6>SIGNUP WITH </h6>
+
+            <a href="<?php echo url('facebook/auth')?>" class="facebook"><i class="lab la-facebook-f"></i></a>
+            <a href="<?php echo url('twitter/auth')?>" class="twitter"><i class="lab la-twitter"></i></a>
+            <a href="<?php echo url('google/auth')?>"  class="google"><i class="lab la-google"></i></a>
+        </div>
+    </div>
+</form>
