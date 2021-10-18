@@ -8,7 +8,6 @@
     <div class="pane-left" >
         <div id="side-filemanager">
             <div class="title-container">
-                <a href="" onclick="return Filemanager.showCollection(this, 'side')" class="mtitle new-folder-btn" title="<?php _l('browse-collections')?>"><i class="icons icon-folder"></i></a>
                 <div class="mini-media-upload-container">
                     <span class="dropdown">
                         <a href="" data-toggle="dropdown" style="position:relative;overflow: hidden;display: inline-block;padding-top: 0 !important;" title="<?php _l('design-with-canva')?>" class="mtitle"><img src="<?php echo assetUrl('assets/images/canva.png')?>" style="width:25px;height:25px;border-radius:100px"/></a>
@@ -35,37 +34,15 @@
                     <a href="" class="mtitle" style="display: inline-block;position: relative;bottom: 15px" data-toggle="modal"  data-target="#importImageModal" title="Import image from a link"><i class="las la-link"></i></a>
 
                 </div>
-               <div class="dropdown filter-media-container">
-                   <a href="" data-toggle="dropdown" class="mtitle filter-media-btn" title="<?php _l('filter-media')?>"><i class="las la-sliders-h"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="" class="dropdown-item active" onclick="return Filemanager.toggleMediaType(this,'all')"><i class="las la-images"></i> <?php _l('all')?></a>
-                        <a href="" class="dropdown-item" onclick="return Filemanager.toggleMediaType(this,'image')"><i class="las la-image"></i> <?php _l('images')?></a>
-                        <a href="" class="dropdown-item" onclick="return Filemanager.toggleMediaType(this,'video')"><i class="las la-video"></i> <?php _l('videos')?></a>
-                    </div>
-               </div>
 
-            </div>
-            <div class="side-collections-container">
-                <h6  class="clearfix head"><?php _l('collections')?> <a href="" class="float-right" data-toggle="modal" data-target="#addFolderModal"><i class="las la-plus-circle"></i></a> </h6>
-                <div class="collection-list">
-                    <a href="" onclick="return Filemanager.openCollection('')" class="each">
-                        <span class="line"></span>
-                        <i style="color: #7827EA " class="icons color icon-folder-alt"></i>
-                        <span class="text"><?php _l('all-collections')?></span>
-                        <span class="count"><?php echo model('file')->countMedia()?></span>
-                    </a>
-                    <?php foreach(model('file')->getFolders() as $folder):?>
-                        <?php echo view('files/collection', array('folder' => $folder));?>
-                    <?php endforeach?>
-                </div>
-                <a href="" data-toggle="modal" data-target="#addFolderModal" class="foot"><?php _l('new-collection')?></a>
+
             </div>
             <div class="scroll-paginate files-container"
                  data-container=".files-grid"
                  data-url="<?php echo url('files/load')?>"
                  data-offset="0"
             >
-                <div class="files-grid clearfix content-scroller the-content side-medias files-list" data-height="100">
+                <div class="files-grid clearfix content-scroller the-content side-medias files-list" data-height="150">
                     <?php $files = model('file')->getFiles(0); foreach($files as $file):?>
                         <?php echo view('files/display', array('file' => $file, 'min' => true));?>
                     <?php endforeach?>
@@ -77,12 +54,13 @@
     </div>
     <div class="pane-right">
         <?php if($C->request->input('all')):?>
-            <a href="<?php echo url('publishing')?>" style="min-width: auto;position:absolute;right: 150px;z-index:9;top: 10px" data-ajax="true" class="mtitle shadow-none btn btn-primary btn-sm" title="<?php _l('show-draft-scheduled')?>"><i class="las la-filter"></i></a>
+            <a href="<?php echo url('publishing')?>" style="min-width: auto;position:absolute;right: 170px;z-index:9;top: 30px" data-ajax="true" class="mtitle shadow-none btn btn-primary btn-sm" title="<?php _l('show-draft-scheduled')?>"><i class="las la-filter"></i></a>
         <?php else:?>
-            <a href="<?php echo url('publishing?all=1')?>" style="min-width: auto;position:absolute;right: 150px;z-index:9;top: 10px" data-ajax="true" class="mtitle shadow-none btn btn-light btn-sm" title="<?php _l('show-all-posts')?>"><i class="las la-filter"></i></a>
+            <a href="<?php echo url('publishing?all=1')?>" style="min-width: auto;position:absolute;right: 170px;z-index:9;top: 30px" data-ajax="true" class="mtitle shadow-none btn btn-light btn-sm" title="<?php _l('show-all-posts')?>"><i class="las la-filter"></i></a>
         <?php endif?>
-        <div id="calendar" data-url="<?php echo url('publishing/calendar/data?all='.$C->request->input('all', 0))?>"  style="width: 100%">
-            
+        <div style="padding: 20px;">
+            <div  id="calendar" data-url="<?php echo url('publishing/calendar/data?all='.$C->request->input('all', 0))?>"  style="width: 100%;background: #fff;border-radius: 10px;overflow: hidden">
+            </div>
         </div>
     </div>
 </div>

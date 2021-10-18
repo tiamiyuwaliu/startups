@@ -75,23 +75,8 @@
 
             </div>
             <div class=" mt-5">
-                <div class="clearfix">
-                    <div class="float-left" style="font-size:20px;">New Design templates</div>
-                    <div class="float-right">
-                        <a data-ajax="true" href="<?php echo url('graphics')?>">View more</a>
-                        <a href="" data-toggle="modal" data-target="#newDesignModal" class="btn btn-light shadow-none">Create new Design</a>
-                    </div>
-                </div>
-                <hr/>
 
-                <div class="files-list files-grid">
-                    <?php $graphics = model('admin')->getGraphics(null,null,null, 4);?>
 
-                    <?php foreach($graphics as $graphic):?>
-                        <?php echo view('files/graphics/display', array('graphic' => $graphic))?>
-                    <?php endforeach;?>
-                    <?php echo view('files/filler')?>
-                </div>
             </div>
         </div>
         <div class="col-md-5">

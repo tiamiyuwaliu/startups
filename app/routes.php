@@ -38,6 +38,7 @@ $request->any("accounts/linkedin", array('uses' => 'Account@linkedin', 'secure' 
 
 $request->any("profile", array('uses' => 'Profile@index', 'secure' => true));
 $request->any("profile/refer", array('uses' => 'Profile@index', 'secure' => true));
+$request->any("profile/password", array('uses' => 'Profile@index', 'secure' => true));
 $request->any("profile/billing", array('uses' => 'Profile@index', 'secure' => true));
 $request->any("delete/account", array('uses' => 'Profile@delete', 'secure' => true));
 $request->any("captions", array('uses' => 'Template@captions', 'secure' => true));

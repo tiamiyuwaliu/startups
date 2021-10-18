@@ -564,6 +564,14 @@ return array(
     'professional' => 'Professional',
     'my-profile' => 'My Profile',
     'remove-admin' => 'Remove admin',
-    'make-admin' => 'Make admin'
+    'make-admin' => 'Make admin',
+    'media-manager' => 'Media Manager',
+    'profile' => 'Profile',
+    'billing-plan' => 'Billing & Plan',
+    'content-categories' => 'Content Categories',
+    'workspace-settings' => 'Workspace settings',
+    'profile-information' => 'Profile Information',
+    'add-caption' => 'Add Caption',
+
 
 );

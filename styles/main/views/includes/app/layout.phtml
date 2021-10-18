@@ -12,99 +12,21 @@
                 </ul>
 
                 <ul class="main">
-                    <li class="dropright" style="display: none" >
-                        <a href=""   data-toggle="dropdown" title="<?php _l('new')?>" class=" mtitle-right  shadow-none add-button">
-                            <i class="las la-plus shadow-4" style="background:#ff4081;color:#fff"></i>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="" class="dropdown-item" onclick="return Timably.openPane('#new-compose-modal')"><?php _l('new-post')?></a>
-                            <a href="" class="dropdown-item" onclick="return Timably.openPane('#new-party-modal')"><?php _l('start-new-party')?></a>
-
-                            <div class="dropdown-divider"></div>
-                            <a href="" onclick="return Timably.openPane('#new-account-modal')" class="dropdown-item"><?php _l('connect-social-account')?></a>
-                        </div>
-                    </li>
 
                     <li><a href="<?php echo url('home')?>" data-ajax="true" class=" <?php echo ($C->activeIconMenu == 'home') ? 'active':null?>" title="<?php _l('home')?>">
                             <i class="las la-home"></i>
-                            <?php _l('home')?>
                         </a></li>
                     <li><a href="<?php echo url('publishing')?>" data-ajax="true" class=" <?php echo ($C->activeIconMenu == 'publishing') ? 'active':null?>" title="<?php _l('publishing')?>">
                             <i class="icons icon-paper-plane"></i>
-                            <?php _l('publish')?>
+
                         </a></li>
-                    <li class="dropright">
+                    <li>
                         <a href="<?php echo url('files')?>" data-ajax="true"  class=" <?php echo ($C->activeIconMenu == 'media') ? 'active':null?>" >
                             <i class="las la-images"></i>
-                            <?php _l('content-studio')?>
                         </a>
 
                     </li>
-                    <li class="dropright">
-                        <a data-toggle="dropdown" data-boundary="window" data-offset="-50,0" href   class="<?php echo ($C->activeIconMenu == 'organize') ? 'active':null?>" title="<?php _l('organize-events-task-reminder')?>">
-                            <i class="las la-calendar-check" style="font-size: 30px;position: relative;padding-top: 5px"></i>
-                            <?php _l('organize')?>
-                        </a>
-                        <div class="dropdown-menu sub-menus sub-menus-small" style="">
-                            <ul>
-                                <li>
-                                    <a data-ajax="true" href="<?php echo url('organize/events')?>">
-                                        <i class="las la-images"></i>
-                                        <span><?php _l('events')?></span>
-                                    </a>
-                                </li>
 
-                                <li>
-                                    <a data-ajax="true" href="<?php echo url('organize/tasks')?>">
-                                        <i class="las la-images"></i>
-                                        <span><?php _l('tasks')?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-ajax="true" href="<?php echo url('organize/reminder')?>">
-                                        <i class="icons icon-folder-alt"></i>
-                                        <span><?php _l('reminder')?></span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div style="position:absolute;top: 0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.8);text-align: center;padding: 100px 0 ;font-size:15px;color:grey">
-                                Coming soon
-                            </div>
-                        </div>
-                    </li>
-
-                    <li><a href="<?php echo url('captions')?>" data-ajax="true" title="<?php _l('library')?>" class="  <?php echo $C->activeIconMenu == 'library' ? 'active':null?>">
-                            <i class="icons icon-grid"></i>
-                            <?php _l('captions')?>
-                        </a> </li>
-
-
-
-
-
-                    <li><a href="<?php echo url('profile/refer')?>" data-ajax="true" class=" <?php echo ($C->activeIconMenu == 'refer') ? 'active':null?>" title="<?php _l('refer-earn')?>">
-                            <i class="las la-hand-holding-usd" style="font-size: 30px;position: relative;padding-top: 5px"></i>
-                            <?php _l('refer-earn')?>
-                        </a></li>
-
-                    <li><a href="" onclick="return Timably.loadQuickHelp('basic')" class=" <?php echo ($C->activeIconMenu == 'refer') ? 'active':null?>" title="<?php _l('refer-earn')?>">
-                            <i class="las la-school" style="font-size: 30px;position: relative;padding-top: 5px"></i>
-                            <?php _l('Quick <br/>Help')?>
-                        </a></li>
-
-                    <!--<li><a href="<?php echo url('bio')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'bio') ? 'active':null?>" title="<?php _l('linkin-bio')?>">
-                            <i class="icons icon-link"></i>
-                            <?php _l('linkin-bio')?>
-                        </a></li>-->
-                     <!--<li><a href="<?php echo url('insights')?>" data-ajax="true" class="mtitle-right <?php echo ($C->activeIconMenu == 'insights') ? 'active':null?>" title="<?php _l('insights')?>">
-                             <i class="icons icon-graph"></i>
-                             <?php _l('insights')?>
-                         </a></li>-->
-
-                    <!--<li><a href="<?php echo url('files')?>" data-ajax="true" title="<?php _l('file-manager')?>" class=" mtitle-right <?php echo $C->activeIconMenu == 'files' ? 'active':null?>">
-                            <i class="icons icon-folder-alt"></i>
-                            <?php _l('media')?>
-                        </a> </li>-->
 
                 </ul>
 
@@ -120,7 +42,6 @@
         <?php echo $content?>
         <?php echo view('posts/modal')?>
         <?php echo view('account/modal')?>
-        <?php echo view('templates/party/modal')?>
         <div class="photo-editor-container">
             <div class="editor">
             </div>
@@ -225,11 +146,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 <?php echo view('files/modal')?>
 <div class="modal fade" id="importImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

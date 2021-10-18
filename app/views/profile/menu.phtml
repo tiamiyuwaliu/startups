@@ -1,0 +1,30 @@
+<div class="pane-left account-menu-container" style="background: #fff" >
+    <div class="avatar" style="background-image:url(<?php echo model('user')->getAvatar()?>)"></div>
+    <h5><?php echo model('user')->authUser['full_name']?></h5>
+
+    <div class="main-menu">
+        <h6><?php _l('account')?></h6>
+        <?php
+            $page = $C->request->segment(0, 'profile');
+            $second  = $C->request->segment(1, 'profile');
+        ?>
+        <ul>
+            <li><a data-ajax="true" class="<?php echo ($page == 'profile' and $second == 'profile') ? 'active':null?>" href="<?php echo url('profile')?>"><i class="las la-user-circle"></i> <?php _l('profile')?></a> </li>
+
+            <li><a  data-ajax="true" class="<?php echo ($page == 'profile' and $second == 'password') ? 'active':null?>" href="<?php echo url('profile/password')?>"><i class="las la-user-circle"></i> <?php _l('change-password')?></a> </li>
+            <li><a  data-ajax="true" class="<?php echo ($page == 'profile' and $second == 'billing') ? 'active':null?>" href="<?php echo url('profile/billing')?>"><i class="las la-dollar-sign"></i> <?php _l('billing-plan')?></a> </li>
+            <li><a  data-ajax="true" class="<?php echo ($page == 'profile' and $second == 'refer') ? 'active':null?>" href="<?php echo url('profile/refer')?>"><i class="las la-dollar-sign"></i> <?php _l('refer-earn')?></a> </li>
+
+        </ul>
+
+        <h6><?php _l('workspace')?></h6>
+        <ul>
+            <li><a  data-ajax="true" class="<?php echo ($page == 'captions') ? 'active':null?>" href="<?php echo url('captions')?>"><i style="font-size: 20px" class="icons icon-grid"></i> <?php _l('captions')?></a> </li>
+            <li><a data-ajax="true"  class="<?php echo ($page == 'accounts') ? 'active':null?>" href="<?php echo url('accounts')?>"><i class="las la-users"></i> <?php _l('social-accounts')?></a> </li>
+            <li><a data-ajax="true" class="<?php echo ($page == 'categories') ? 'active':null?>" href="<?php echo url('categories')?>"><i class="las la-images"></i> <?php _l('content-categories')?></a> </li>
+            <li><a data-ajax="true" class="<?php echo ($page == 'team') ? 'active':null?>" href="<?php echo url('team')?>"><i class="las la-user-plus"></i> <?php _l('team-members')?></a> </li>
+            <li><a data-ajax="true" <?php echo ($page == 'workspace') ? 'active':null?> href="<?php echo url('workspace/settings')?>"><i class="las la-cog"></i> <?php _l('workspace-settings')?></a> </li>
+
+        </ul>
+    </div>
+</div>

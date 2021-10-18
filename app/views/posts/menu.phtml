@@ -4,9 +4,7 @@
         <li class="nav-item">
             <a  class="nav-link <?php echo ($page == 'calendar')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing')?>"  ><?php _l('calendar')?></a>
         </li>
-        <li class="nav-item">
-            <a  class="nav-link <?php echo ($page == 'parties' or $segment == 'templates' or $page == 'party')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/parties')?>"  ><?php _l('parties')?></a>
-        </li>
+
         <li class="nav-item">
             <a  class="nav-link <?php echo ($page == 'posts')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/posts')?>"  ><?php _l('drafts')?></a>
         </li>
@@ -16,7 +14,7 @@
         <li class="nav-item">
             <a  class="nav-link <?php echo ($page == 'history' and $segment = $C->request->segment(2) != 'scheduled')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/history/published')?>"  ><?php _l('history')?></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item hide">
             <a  class="nav-link <?php echo ($page == 'settings')? 'active': null?>" data-ajax="true" href="<?php echo url('publishing/settings')?>"  ><i class="las la-cog"></i></a>
         </li>
     </ul>
@@ -28,12 +26,4 @@
         <?php echo view('posts/account-picker', array('container' => 'calendar-accounts'))?>
     </div>
     <a href="" style="position:relative;height: 38px"  onclick="return Timably.openPane('#new-compose-modal')" class="btn btn-primary btn-sm  shadow-none"> <i class="las la-pen"></i> <?php _l('compose')?></a>
-    <?php if($page != 'parties'):?>
-        <div style="display: inline-block" class="dropdown">
-            <a href="" data-toggle="dropdown" class="btn btn-primary btn-sm shadow-none" style="min-width: auto;height: 38px"><i class="las la-angle-down"></i></a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a href="" onclick="return Timably.openPane('#new-party-modal')" class="dropdown-item"><?php _l('start-a-party')?></a>
-            </div>
-        </div>
-    <?php endif?>
 </div>

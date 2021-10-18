@@ -9,7 +9,6 @@ class TemplateController extends Controller {
         if ($val = $this->request->input('val')) {
             if (isset($val['create'])) {
                 $validator = Validator::getInstance()->scan($val, array(
-                    'title' => 'required',
                     'content' => 'required'
                 ));
 

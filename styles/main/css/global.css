@@ -131,7 +131,7 @@ a {
     border-radius: 5px;
     height: 3px;
     animation: loadingbar 1.5s linear infinite;
-    background-color: #7828EA;
+    background-color:#FF5722;
 }
 @keyframes loadingbar {
     from {left: -200px; width: 30%;}50% {width: 30%;}70% {width: 70%;}80% { left: 50%;}95% {left: 120%;}to {left: 100%;}
@@ -145,10 +145,10 @@ a {
 }
 
 .btn-primary, .badge-primary {
-    background:#7828EA !important;
+    background:#FF5722 !important;
 }
 .primary-color {
-    color: #7828EA !important;
+    color: #FF5722 !important;
 }
 .info-color {
     color: #2197F3 !important;
@@ -157,8 +157,8 @@ a {
     color: #424242 !important;
 }
 .btn-outline-primary {
-    border-color: #7828EA !important;
-    color: #7828EA !important;
+    border-color: #FF5722 !important;
+    color: #FF5722 !important;
 }
 .rounded-sm {
     border-radius:15px !important;
