@@ -1,4 +1,4 @@
-<div class="pane-container" style="height: calc(100vh - 63px)">
+<div class="pane-container pane-container-sm" style="height: calc(100vh - 63px)">
     <?php echo view('profile/menu')?>
     <div class="pane-right">
         <div class="content-top">
@@ -32,10 +32,11 @@
                 <div class="btn-group shadow-none">
                     <a href="" onclick="return Account.changeView(this, 'grid')" class="btn btn-light change-view-btn active shadow-none btn-sm"><i class="icons icon-grid"></i></a>
                     <a href="" onclick="return Account.changeView(this, 'list')"  class="btn btn-light change-view-btn shadow-none btn-sm"><i class="las la-list"></i></a>
-
                 </div>
+                <a href="" onclick="return Socialpost.openPane('#new-account-modal')" class="btn btn-primary shadow-none"  style="min-width: auto"><i class="las la-plus"></i> Connect account</a>
+
                 <div class="dropleft" style="display: inline-block">
-                    <a href="" data-toggle="dropdown" class="btn btn-primary shadow-none" style="min-width: auto"><i class="las la-bars"></i></a>
+                    <a href="" data-toggle="dropdown" class="btn btn-light shadow-none" style="min-width: auto"><i class="las la-bars"></i></a>
                     <div class="dropdown-menu-lg dropdown-menu">
                         <a href="" class="dropdown-item" onclick="return Account.multiAction('delete-action')"><i class="las la-trash-alt"></i> Delete accounts</a>
                     </div>

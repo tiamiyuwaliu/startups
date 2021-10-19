@@ -3,32 +3,24 @@
         <div class="content-top">
             <h5 class="pt-2"><?php _l('connect-your-account')?></h5>
             <div class="right-actions pt-2">
-                <a href="<?php echo url('accounts')?>" data-ajax="true" class="btn shadow-none"><?php _l('manage-accounts')?></a>
-                <a href="" onclick="return Timably.closePane(this)" class="btn shadow-none"><?php _l('go-back')?></a>
+                <a href="" onclick="return Socialpost.closePane(this)" class="btn shadow-none"><?php _l('go-back')?></a>
             </div>
         </div>
 
         <div class="content-body content-scroller content-body-with-tabs">
             <div class="row">
+                <div class="col-md-3"></div>
                 <div class="col-6">
                     <ul class="connect-account-btn">
                         <li><a href="" class="facebook-bg " data-toggle="modal" data-target="#newFacebookAccountModal "><i class="lab la-facebook-f"></i> <?php _l('add-facebook')?></a> </li>
                         <li><a href="" class="instagram-bg" data-toggle="modal" data-target="#newInstagramAccountModal"><i class="lab la-instagram"></i> <?php _l('add-instagram')?></a> </li>
                         <li><a href="<?php echo url('accounts/twitter?auth=true')?>" class="twitter-bg ajax-action" ><i class="lab la-twitter"></i> <?php _l('add-twitter')?></a> </li>
                         <li><a href="<?php echo url('accounts/linkedin?auth=true')?>" class="linkedin-bg ajax-action"><i class="lab la-linkedin-in"></i> <?php _l('add-linkedin')?></a> </li>
-                        <!--<li><a href="" class="google-bg"><i class="lab la-google"></i> <?php _l('add-google-bussiness')?></a> </li>
-                                <li><a href="" class="telegram-bg"><i class="lab la-telegram"></i> <?php _l('add-telegram')?></a> </li>-->
+                        <li><a href="" class="google-bg"><i class="lab la-google"></i> <?php _l('add-google-bussiness')?></a> </li>
+                                <li><a href="" class="telegram-bg"><i class="lab la-telegram"></i> <?php _l('add-telegram')?></a> </li>
                     </ul>
                 </div>
-                <div class="col-4">
-                    <div class="vertifical-line">
-                        <div class="triangle-left"></div>
-
-                        <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Ftimably%2F&width=450&layout=standard&action=like&size=large&share=true&height=35&appId=249973445105807" width="450" height="35" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-
-                        <a href="https://twitter.com/TwitterDev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @TwitterDev</a>
-                    </div>
-                </div>
+                <div class="col-md-3"></div>
             </div>
         </div>
     </div>

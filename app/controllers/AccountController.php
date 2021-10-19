@@ -1,6 +1,12 @@
 <?php
 class AccountController extends Controller {
 
+    public function __construct($request)
+    {
+        parent::__construct($request);
+        $this->setActiveIconMenu('accounts');
+    }
+
     public function index() {
         $this->setTitle(l('manage-accounts'));
 

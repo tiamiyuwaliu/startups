@@ -22,11 +22,12 @@
     background: #ffffff;
     border-radius: 0px 20px 20px 0;
     transition: width 0.3s ease-in;
-    padding: 30px 30px;
+    padding: 30px 0px;
     z-index: 99;
 }
 #admin-container .menu-pane .logo-container {
     position: relative;
+    padding: 0 30px;
 
 }
 #admin-container .menu-pane .logo-container img {
@@ -37,7 +38,7 @@
 }
 #admin-container .menu-pane #account-menu {
     position: absolute;
-    right: 0px;
+    right: 30px;
     top: 0px;
 }
 
@@ -69,7 +70,7 @@
     height: calc(100vh - 200px);
     overflow: auto;
     overflow-x: hidden;
-    padding: 30px 0;
+    padding: 30px 30px;
 
 }
 #admin-container .menu-pane .menu-container h6 {
@@ -83,6 +84,7 @@
 #admin-container .menu-pane .menu-container ul {
     padding: 0;
     margin: 0;
+    list-style: none;
 }
 #admin-container .menu-pane .menu-container ul a {
     display: block;

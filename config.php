@@ -5,7 +5,7 @@ return array(
      */
     'db_host' => 'localhost',
     'db_username' => 'root',
-    'db_name' => 'timably',
+    'db_name' => 'socialpilot',
     'db_password' => '',
     'c' => '',
 

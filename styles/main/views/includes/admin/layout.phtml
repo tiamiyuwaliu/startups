@@ -32,12 +32,15 @@
             <h6><?php _l('users')?></h6>
             <ul>
                 <li><a href="<?php echo url('admincp/users')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'users' ? 'active' : null?>"><i class="las la-user-friends"></i> <span><?php _l('manage-users')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/subscribers')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'subscribers' ? 'active' : null?>"><i class="las la-user-friends"></i> <span><?php _l('subscribers')?></span></a> </li>
+
             </ul>
 
             <h6><?php _l('manage')?></h6>
             <ul>
-                <li><a href="<?php echo url('admincp/graphics')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'graphics' ? 'active' : null?>"><i class="las la-images" ></i> <span><?php _l('graphics')?></span></a> </li>
-                <li><a href="<?php echo url('admincp/helps')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'helps' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('Helps')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/payments')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'payments' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('payments')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/packages')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'packages' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('packages')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/languages')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'languages' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('languages')?></span></a> </li>
 
             </ul>
 
@@ -45,12 +48,15 @@
             <ul>
                 <li><a href="<?php echo url('admincp/settings')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'settings' ? 'active' : null?>"><i class="las la-cog"></i> <span><?php _l('settings')?></span></a> </li>
                 <li><a href="<?php echo url('admincp/email/setup')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-setup' ? 'active' : null?>"><i class="las la-envelope"></i> <span><?php _l('email-setup')?></span></a> </li>
-                <li class="hide"><a href="<?php echo url('admincp/email/templates')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'email-templates' ? 'active' : null?>"><i class="las la-envelope-open-text"></i> <span><?php _l('email-templates')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/social')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'social' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('social-apps')?></span></a> </li>
+                <li><a href="<?php echo url('admincp/appearance')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'appearance' ? 'active' : null?>"><i class="las la-book-open"></i> <span><?php _l('appearance')?></span></a> </li>
+
             </ul>
 
             <h6><?php _l('others')?></h6>
             <ul>
                 <li><a href="<?php echo url('admincp/pages')?>" data-ajax="true" class="<?php echo $C->activeIconMenu == 'pages' ? 'active' : null?>"><i class="las la-pager"></i> <span><?php _l('pages')?></span></a> </li>
+
             </ul>
         </div>
 

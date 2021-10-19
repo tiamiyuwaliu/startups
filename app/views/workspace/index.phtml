@@ -10,7 +10,7 @@
     <div class="right-actions">
         <div class="btn-group shadow-none" style="margin-top:10px" >
             <?php if(model('user')->canDoTeam()):?>
-                <a href=""   onclick="return Timably.createWorkspace(<?php echo model('workspace')->canCreate()?>)"  class="btn btn-primary btn-sm  shadow-none"> <i class="las la-plus"></i> <?php _l('new-workspace')?></a>
+                <a href=""   onclick="return Socialpost.createWorkspace(<?php echo model('workspace')->canCreate()?>)"  class="btn btn-primary btn-sm  shadow-none"> <i class="las la-plus"></i> <?php _l('new-workspace')?></a>
 
             <?php else:?>
                 <?php if(model('user')->hasTried()):?>
@@ -42,7 +42,7 @@
 
                     <?php if(model('user')->canDoTeam() and model('user')->hasTried()):?>
                         <div class="each-container" >
-                            <a href="" onclick="return Timably.createWorkspace(<?php echo model('workspace')->canCreate()?>)" class="each each-add">
+                            <a href="" onclick="return Socialpost.createWorkspace(<?php echo model('workspace')->canCreate()?>)" class="each each-add">
                                 <i class="las la-plus"></i>
                                 <?php _l('create-new-workspace')?>
                             </a>

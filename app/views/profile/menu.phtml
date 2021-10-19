@@ -21,9 +21,11 @@
         <ul>
             <li><a  data-ajax="true" class="<?php echo ($page == 'captions') ? 'active':null?>" href="<?php echo url('captions')?>"><i style="font-size: 20px" class="icons icon-grid"></i> <?php _l('captions')?></a> </li>
             <li><a data-ajax="true"  class="<?php echo ($page == 'accounts') ? 'active':null?>" href="<?php echo url('accounts')?>"><i class="las la-users"></i> <?php _l('social-accounts')?></a> </li>
-            <li><a data-ajax="true" class="<?php echo ($page == 'categories') ? 'active':null?>" href="<?php echo url('categories')?>"><i class="las la-images"></i> <?php _l('content-categories')?></a> </li>
-            <li><a data-ajax="true" class="<?php echo ($page == 'team') ? 'active':null?>" href="<?php echo url('team')?>"><i class="las la-user-plus"></i> <?php _l('team-members')?></a> </li>
-            <li><a data-ajax="true" <?php echo ($page == 'workspace') ? 'active':null?> href="<?php echo url('workspace/settings')?>"><i class="las la-cog"></i> <?php _l('workspace-settings')?></a> </li>
+            <li><a data-ajax="true" class="<?php echo ($page == 'team') ? 'active':null?>" href="<?php echo url('team/members')?>"><i class="las la-user-plus"></i> <?php _l('team-members')?></a> </li>
+
+            <li><a data-ajax="true" class="<?php echo ($page == 'queue') ? 'active':null?>" href="<?php echo url('queue/settings')?>"><i class="las la-history"></i> <?php _l('queue-settings')?></a> </li>
+
+            <li><a data-ajax="true" class="<?php echo ($page == 'workspace') ? 'active':null?>" href="<?php echo url('workspace/settings')?>"><i class="las la-cog"></i> <?php _l('workspace-settings')?></a> </li>
 
         </ul>
     </div>

@@ -1,7 +1,7 @@
-<?php echo view('files/menu')?>
 
-<div class="pane-container">
-    <div class="pane-left" >
+
+<div class="pane-container" style="height: calc(100vh - 62px);">
+    <div class="pane-left" style="background: #fff" >
         <div class="pane-head clearfix p-3 pt-2">
             <h5 class="float-left"><?php _l('collections')?></h5>
             <a href="" class="float-right mtitle" data-toggle="modal" data-target="#addFolderModal" title="<?php _l('add-new-collection')?>" style="font-size: 25px"><i class="las la-plus"></i></a>
@@ -10,16 +10,11 @@
             <div class="collection-list">
                 <a href="<?php echo url('files')?>" data-ajax="true" class="each">
                     <span class="line"></span>
-                    <i style="color: #7827EA " class="icons color icon-folder-alt"></i>
+                    <i style="color: #ED6237 " class="icons color icon-folder-alt"></i>
                     <span class="text"><?php _l('all-media')?></span>
                     <span class="count"><?php echo model('file')->countMedia()?></span>
                 </a>
-                <a href="<?php echo url('files/design')?>" data-ajax="true" class="each">
-                    <span class="line"></span>
-                    <i style="color: #7827EA " class="icons color icon-folder-alt"></i>
-                    <span class="text"><?php _l('my-designs')?></span>
-                    <span class="count"><?php echo model('file')->countDesigns()?></span>
-                </a>
+
                 <?php foreach(model('file')->getFolders() as $folder):?>
                     <?php echo view('files/collection', array('folder' => $folder, 'page' => true));?>
                 <?php endforeach?>
@@ -30,11 +25,36 @@
     <div class="pane-right">
             <div class="pane-head">
                 <div class="float-left">
-                    <select onchange="return filterMediaList(this)" class="form-control">
-                        <option <?php echo ($C->request->input('type') == 'all') ? 'selected': null?> value="all"><?php _l('all-media')?></option>
-                        <option <?php echo ($C->request->input('type') == 'image') ? 'selected': null?> value="image"><?php _l('image')?></option>
-                        <option <?php echo ($C->request->input('type') == 'video') ? 'selected': null?> value="video"><?php _l('video')?></option>
-                    </select>
+                    <div class=" file-upload-btn-container ">
+
+                        <?php if(true):?>
+                            <a href="" style="" title="<?php _l('upload-from-computer')?>" class="btn btn-primary mtitle">
+
+                                <form method="post"  data-upload="#upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                                    <input type="hidden" name="val[upload]" value="1"/>
+                                    <input type="hidden" name="val[folder_id]" value="<?php echo $C->request->segment(1, 0)?>" class="file-folder-id-input"/>
+                                    <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                                    <i class="las la-cloud-upload-alt"></i> <?php _l('upload')?>
+                                </form>
+                            </a>
+                            <a href="" data-toggle="modal"  data-target="#importImageModal" title="<?php _l('upload-from-link')?>" class="mtitle"><i class="las la-link"></i></a>
+                            <a href="" onclick="return openGoogleDrivePicker()" title="<?php _l('import-from-google-drive')?>" class="mtitle"><i class="lab la-google-drive"></i></a>
+                            <a href="" onclick="return openDropboxPicker()" title="<?php _l('import-from-dropbox')?>" class="mtitle"><i class="lab la-dropbox"></i></a>
+                            <span class="dropdown">
+                                <a href="" data-toggle="dropdown" title="<?php _l('design-with-canva')?>" class="mtitle"><img src="<?php echo assetUrl('assets/images/canva.png')?>" style="width:25px;height:25px;border-radius:100px;position:relative;bottom:8px"/></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                   <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('FacebookPost')" class="dropdown-item">Facebook Post</a>
+                                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('InstagramPost')" class="dropdown-item">Instagram Post</a>
+                                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('TwitterPost')" class="dropdown-item">Twitter Post</a>
+                                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('LinkedInBanner')" class="dropdown-item">LinkedIn Post</a>
+                                             <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('PinterestGraphic')" class="dropdown-item">Pinterest Graphics</a>
+
+                                            <a href="" style="font-size: 15px !important;color: grey" onclick="return Filemanager.openCanva('SocialMedia')" class="dropdown-item">Custom Post</a>
+                                       </div>
+                            </span>
+                        <?php endif?>
+
+                    </div>
                 </div>
                 <div class="float-right dropdown">
                     <a href="" class="btn  btn-light shadow-none select-button" onclick="return selectAllFiles(this)"><i class="las la-check"></i> <?php _l('mark-all')?></a>

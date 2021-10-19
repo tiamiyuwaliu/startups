@@ -319,7 +319,7 @@ function reloadInit(paginate) {
         });
     })
     /**nolt('init', {
-        url: 'https://timably.nolt.io',
+        url: 'https://Socialpost.nolt.io',
         selector: '.feedback-btn'
     });
 
@@ -1665,7 +1665,7 @@ function openDropboxPicker() {
     });
     return false;
 }
-var Timably = {
+var Socialpost = {
     searchTimeout: null,
     loadQuickHelp: function(t) {
         $('.quick-help-container').fadeIn();
@@ -1683,10 +1683,10 @@ var Timably = {
     },
     searchQuickHelp: function(t) {
         var term = $(t).val();
-        if (term === '') return Timably.loadQuickHelp('basic');
-        clearTimeout(Timably.searchTimeout);
-        Timably.searchTimeout = setTimeout(function(){
-            Timably.loadQuickHelp('basic');
+        if (term === '') return Socialpost.loadQuickHelp('basic');
+        clearTimeout(Socialpost.searchTimeout);
+        Socialpost.searchTimeout = setTimeout(function(){
+            Socialpost.loadQuickHelp('basic');
         }, 500)
     },
     closeHelp: function() {
@@ -1718,8 +1718,8 @@ var Timably = {
         if (i !== '') {
             $('.header-search-result').show();
             $('.header-search-result').html("<div class='loader'><img src='"+buildLink('styles/main/images/loader-bar.gif')+"'/></div>")
-            if (Timably.searchTimeout) clearTimeout(Timably.searchTimeout);
-            Timably.searchTimeout = setTimeout(function(){
+            if (Socialpost.searchTimeout) clearTimeout(Socialpost.searchTimeout);
+            Socialpost.searchTimeout = setTimeout(function(){
                 $.ajax({
                     url: buildLink('search'),
                     data: {term : i},
@@ -1735,7 +1735,7 @@ var Timably = {
     closeWelcome: function() {
         $("#newWelcomeModal").modal('hide');
         setCookie("welcome-completed", 1);
-        Timably.openPane('#new-account-modal');
+        Socialpost.openPane('#new-account-modal');
         return false;
     },
     openPane: function(pane) {
@@ -1808,7 +1808,7 @@ var Timably = {
         var id = "time-"+Date.now()+$('.'+day).find('.each-time').length;
         $('.'+day).find('.add').after("<div class=\"time each-time shadow-1\">\n" +
             "                                    <input id='"+id+"' name=\"val["+day+"][]\" type='text' class='input-timepicker' value='01:00' min='01' max='24'/> \n" +
-            "                                    <a href=\"\" onclick=\"return Timably.removeTime(this)\"><i class=\"las la-times\"></i></a>\n" +
+            "                                    <a href=\"\" onclick=\"return Socialpost.removeTime(this)\"><i class=\"las la-times\"></i></a>\n" +
             "                                </div>");
         reloadInit()
         return false;
@@ -1833,10 +1833,10 @@ var Timably = {
         var c = $('.post-labels-container .each').length;
         $(".post-labels-container").prepend("<div class=\"each\">\n" +
             "                            <div class=\"color-container\">\n" +
-            "                                <input data-result=\"Timably.labelColorChanged\" type=\"text\" value=\"#ff9900\" class=\"color\" name=\"label["+c+"][color]\"/>\n" +
+            "                                <input data-result=\"Socialpost.labelColorChanged\" type=\"text\" value=\"#ff9900\" class=\"color\" name=\"label["+c+"][color]\"/>\n" +
             "                            </div>\n" +
             "                            <input name=\"label["+c+"][title]\" type=\"text\" class=\"label-text\" placeholder=\""+strings.label_title+"\" />\n" +
-            "                            <a href=\"\" onclick=\"return Timably.removeLabel(this)\" class=\"delete-btn\"><i class=\"las la-times\"></i></a>\n" +
+            "                            <a href=\"\" onclick=\"return Socialpost.removeLabel(this)\" class=\"delete-btn\"><i class=\"las la-times\"></i></a>\n" +
             "                        </div>");
         reloadInit();
         return false;
@@ -1932,7 +1932,7 @@ var PostEditor = {
         fp.setDate(data.time, true, 'm/d/Y h:i');
 
         $('.edit-post-input').val(data.id);
-        Timably.openPane('#new-compose-modal')
+        Socialpost.openPane('#new-compose-modal')
         return false;
     },
 
@@ -2229,9 +2229,9 @@ var PostEditor = {
 
     close: function(t) {
         if (t !== undefined){
-            Timably.closePane(t);
+            Socialpost.closePane(t);
         } else {
-            Timably.closePane($('.post-editor-close-btn'));
+            Socialpost.closePane($('.post-editor-close-btn'));
         }
         $('.selected-media-input').val('');
         var el = $("#compose-editor").emojioneArea();
@@ -2245,7 +2245,7 @@ var PostEditor = {
             $('.selected-media-input').val(medias.join(','));
             PostEditor.updateMediaPreview();
         }
-        Timably.openPane('#new-compose-modal');
+        Socialpost.openPane('#new-compose-modal');
         return false;
     }
 }
@@ -2338,7 +2338,7 @@ var Filemanager = {
             notify('Please select some graphics to continue', 'error')
         } else {
             $('.party-media-inputs').val(ids.join(','));
-            Timably.openPane('#new-party-modal');
+            Socialpost.openPane('#new-party-modal');
         }
         return false;
     },
@@ -2847,7 +2847,7 @@ var Parties = {
         }
     },
     created: function(c) {
-        Timably.closeAllPane();
+        Socialpost.closeAllPane();
         load_page(c)
     },
     makeAdmin: function(id, type) {

@@ -55,4 +55,41 @@ class WorkspaceController extends Controller {
 
         return $this->render($this->view('workspace/index', array('page' => $page)), true);
     }
+
+    public function settings() {
+        $this->setTitle(l('workspace-settings'));
+        if ($val = $this->request->input('val')) {
+            if ($val['action'] == 'save-workspace') {
+                $this->model('workspace')->save($val);
+                return json_encode(array(
+                    'type' => 'reload-modal',
+                    'content' => '#workspaceModal'.$val['id'],
+                    'message' => l('workspace-saved')
+                ));
+            }
+        }
+        return $this->render($this->view('workspace/settings'), true);
+    }
+
+    public function team() {
+        return $this->render($this->view('workspace/team'), true);
+
+    }
+
+    public function queue() {
+        $this->setTitle(l('queue-settings'));
+        if ($val = $this->request->input('val')) {
+            $color = $this->request->input('label');
+            $timetable = perfectSerialize($val);
+
+            Database::getInstance()->query("UPDATE workspace SET timetable=? WHERE id=?",
+                 $timetable,  $this->workspaceId);
+
+            return json_encode(array(
+                'type' => 'function',
+                'message' => l('queue-settings-saved')
+            ));
+        }
+        return $this->render($this->view('workspace/queue'), true);
+    }
 }

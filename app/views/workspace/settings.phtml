@@ -1,0 +1,55 @@
+<div class="pane-container pane-container-sm" style="height: calc(100vh - 63px)">
+    <?php $workspace = $C->workspace;?>
+    <?php echo view('profile/menu')?>
+    <div class="pane-right">
+
+        <div class="content-top">
+            <h3 class="mt-3"><?php _l('workspace-settings')?></h3>
+            <hr/>
+        </div>
+        <div class="row">
+
+            <div class="col-6">
+                <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                    <input type="hidden" name="val[action]" value="save-workspace"/>
+                    <input type="hidden" name="val[id]" value="<?php echo $workspace['id']?>"/>
+                    <div class="modal-body padding-lg" style="min-height: 450px">
+                        <div class="form-group">
+                            <label><?php _l('workspace-name')?></label>
+                            <input type="text" class="form-control" value="<?php echo $workspace['title']?>" name="val[title]"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('workspace-timezone')?></label>
+                            <select class="form-control" name="val[timezone]">
+                                <?php foreach(getTimezones() as $timezone => $title):?>
+                                    <option <?php echo ($timezone == $workspace['timezone']) ? 'selected':null?> value="<?php echo $timezone?>"><?php echo $title?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+
+
+                        <div class="custom-control custom-checkbox mtitle"  >
+                            <input <?php echo (!model('user')->canDoTeam()) ? 'disabled ': null?> <?php echo ($workspace['approval']) ? 'checked':null?> name="val[approval]" value="1" type="checkbox" class="custom-control-input mtitle" id="customCheck<?php echo $workspace['id']?>">
+                            <label class="custom-control-label mtitle" title="<?php echo (!model('user')->canDoTeam()) ? 'Feature only available for Business plan':null?>" for="customCheck<?php echo $workspace['id']?>"><?php _l('enable-post-approval')?></label>
+                        </div>
+
+
+                        <div class=" shadow-none mt-5">
+                            <div class="card-body p-0">
+                                <h6 class="card-title"><?php _l('remove-workspace')?></h6>
+                                <p class="card-text"><?php _l('remove-workspace-note')?></p>
+                                <?php if(model('workspace')->countWorkspace() > 1):?>
+                                    <a href="#" class="btn shadow-1"><?php _l('remove-this-workspace')?></a>
+                                <?php else:?>
+                                    <div class="alert alert-warning"><?php _l('workspace-cannot-be-deleted')?></div>
+                                <?php endif?>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-4"><?php _l('save')?></button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

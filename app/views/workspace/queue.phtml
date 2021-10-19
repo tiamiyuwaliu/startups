@@ -1,0 +1,44 @@
+<div class="pane-container pane-container-sm" style="height: calc(100vh - 63px)">
+    <?php $workspace = $C->workspace;?>
+    <?php echo view('profile/menu')?>
+    <div class="pane-right">
+
+        <div class="content-top">
+            <h3 class="mt-3"><?php _l('queue-settings')?></h3>
+            <hr/>
+        </div>
+
+
+        <form action="<?php echo getFullUrl()?>" method="post" class="general-form page-padding">
+            <div>
+                Set up a posting schedule in order to AutoSchedule  posts
+            </div>
+            <div class="queue-settings-container clearfix">
+                <?php $data = perfectUnserialize($C->workspace['timetable']);?>
+                <?php foreach(array('monday','tuesday','wednesday','thursday','friday','saturday','sunday') as $day):?>
+                    <div class="each">
+                        <div class="top"><?php _l($day)?></div>
+                        <div class="times <?php echo $day?>">
+                            <div onclick="return Socialpost.addNewTime('<?php echo $day?>')" class="time add">
+                                <i class="las la-plus"></i> <?php _l('add-time')?>
+                            </div>
+                            <?php if(isset($data[$day])):?>
+                                <?php $i = 0; foreach($data[$day] as $time):?>
+                                    <div class="time each-time shadow-1">
+                                        <input id='time-<?php echo time().$i?>' name="val[<?php echo $day?>][]" type='text' class='input-timepicker' value='<?php echo $time?>' min='01' max='24'/>
+                                        <a href="" onclick="return Socialpost.removeTime(this)"><i class="las la-times"></i></a>
+                                    </div>
+                                <?php endforeach?>
+                            <?php endif?>
+                        </div>
+                    </div>
+
+                <?php endforeach;?>
+
+            </div>
+
+            <hr/>
+            <button type="submit" class="btn btn-primary"><?php _l('save-settings')?></button>
+        </form>
+    </div>
+</div>

@@ -572,6 +572,13 @@ return array(
     'workspace-settings' => 'Workspace settings',
     'profile-information' => 'Profile Information',
     'add-caption' => 'Add Caption',
+    'queue-settings' => 'Queue settings',
+    'queue-settings-saved' => 'Queue settings saved successfully',
+    'packages' => 'Packages',
+    'subscribers' => 'Subscribers',
+    'payments' => 'Payments',
+    'social-apps' => 'Social Apps',
+    'appearance' => 'Appearance',
 
 
 );

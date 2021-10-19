@@ -60,6 +60,10 @@ $request->any("publishing/history/failed", array('uses' => 'Publishing@posts', '
 $request->any("publishing/calendar/data", array('uses' => 'Publishing@calendarData', 'secure' => true));
 
 $request->any("workspace", array('uses' => 'Workspace@index', 'secure' => true));
+$request->any("workspace/settings", array('uses' => 'Workspace@settings', 'secure' => true));
+$request->any("team/members", array('uses' => 'Workspace@team', 'secure' => true));
+$request->any("queue/settings", array('uses' => 'Workspace@queue', 'secure' => true));
+
 
 $request->any("admincp", array('uses' => 'Admin@index', 'secure' => true));
 $request->any("admincp/graphics", array('uses' => 'Admin@graphics', 'secure' => true));

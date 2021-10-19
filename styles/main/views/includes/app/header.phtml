@@ -10,44 +10,35 @@
         <li>
             <a href="" class="">Go Live</a>
         </li>
+        <li class="dropdown">
+            <a href="" class="" data-toggle="dropdown"><i class="icons icon-grid"></i></a>
+            <div class="dropdown-menu">
+                cjkdshj
+            </div>
+        </li>
         <li>
-            <a href="" class="">Comment Bot</a>
+            <a href="<?php echo url('files')?>" data-ajax="true" class="<?php echo ($C->activeIconMenu == 'files') ? 'active':null?>">Media</a>
 
         </li>
         <li>
-            <a href="" class="">Social accounts</a>
+            <a href="<?php echo url('accounts')?>" data-ajax="true" class="<?php echo ($C->activeIconMenu == 'accounts') ? 'active':null?>">Social accounts</a>
         </li>
 
     </ul>
 
     <ul class="clearfix">
-        <li >
-            <a href="<?php echo url('files')?>" data-ajax="true" class="notification-icon  mtitle-light" title="<?php _l('media-manager')?>"><i class="icons icon-folder-alt"></i></a>
-        </li>
+
         <li >
             <a href="" class="notification-icon  mtitle" title="Notifications"><i class="las la-bell"></i></a>
         </li>
         <li class="workspace-link-container dropdown">
-            <a href="" class="workspace-link clearfix mtitle" title="<?php _l('workspace')?>"   data-toggle="dropdown">
+            <a href="<?php echo url('workspace')?>" data-ajax="true" class="workspace-link clearfix mtitle" title="<?php _l('workspace')?>"   >
                 <span class="workspace-icon"><?php echo model('user')->extractLetters($C->workspace['title'])?></span>
                 <span class="workspace-info">
                     <span><?php echo strtoupper(l('workspace'))?></span>
                     <span><?php echo $C->workspace['title']?></span>
                 </span>
             </a>
-            <div class="dropdown-menu dropdown-menu-right workspace-dropdown" style="width: 250px">
-
-                <?php foreach(model('workspace')->allWorkspaces() as $workspace):?>
-                    <a onclick="return Timably.selectWorkspace(<?php echo $workspace['id']?>)" href="" class="dropdown-item <?php echo ($C->workspaceId == $workspace['id'])? 'selected':null?>" >
-                        <?php echo $workspace['title']?>
-                        <?php if($C->workspaceId == $workspace['id']):?>
-                            <i class="las la-check-circle float-right" style="font-size:20px"></i>
-                        <?php endif?>
-                    </a>
-                <?php endforeach;?>
-                <div class="dropdown-divider"></div>
-                <a href="<?php echo url('workspace')?>" data-ajax="true"  class="dropdown-item"><strong><?php _l('manage-workspace')?></strong></a>
-            </div>
         </li>
 
         <li>

@@ -3,7 +3,7 @@ class FileController extends Controller {
 
     public function index() {
         $this->setTitle(l('file-manager'));
-        $this->setActiveIconMenu('media');
+        $this->setActiveIconMenu('files');
 
         if ($val = $this->request->input('val')) {
             if (isset($val['upload'])) {
